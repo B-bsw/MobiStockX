@@ -1,0 +1,104 @@
+# ==============================================================================
+# MobiStockX - Root .gitignore
+# ==============================================================================
+
+# Operating System Files
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+Desktop.ini
+
+# IDE & Editor Files
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+*.swp
+*.swo
+*~
+
+# Eclipse / STS / NetBeans
+.apt_generated/
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans/
+.sts4-cache/
+bin/
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# Backend - Java / Gradle
+code/backend/.gradle/
+code/backend/build/
+code/backend/out/
+code/backend/bin/
+.gradle/
+build/
+out/
+
+# Gradle Wrapper (Ensure wrapper jar is retained)
+!gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.jar
+!**/gradle/wrapper/gradle-wrapper.jar
+
+# Backend - Maven (Fallback / Dual Support)
+target/
+code/backend/target/
+code/backend/.mvn/wrapper/maven-wrapper.jar
+!**/maven-wrapper.jar
+
+# Backend Logs & Crash Dumps
+*.log
+code/backend/*.log
+hs_err_pid*
+replay_pid*
+
+# Frontend - Node / Next.js
+code/frontend/node_modules/
+code/frontend/.next/
+code/frontend/out/
+code/frontend/build/
+code/frontend/coverage/
+code/frontend/.turbo/
+node_modules/
+.next/
+dist/
+
+# Frontend - Environment Variables (Secrets & Local Overrides)
+.env
+.env*.local
+code/frontend/.env*.local
+code/frontend/.env.local
+code/frontend/.env.development.local
+code/frontend/.env.test.local
+code/frontend/.env.production.local
+
+# Frontend - Package Managers & Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+code/frontend/npm-debug.log*
+code/frontend/yarn-debug.log*
+code/frontend/yarn-error.log*
+code/frontend/.pnpm-debug.log*
+
+# Frontend - TypeScript & Vercel
+*.tsbuildinfo
+code/frontend/*.tsbuildinfo
+.vercel/
+code/frontend/.vercel/
+
+# Database & Runtime Data
+*.db
+*.sqlite
+*.sqlite3
+*.mv.db
+*.trace.db
