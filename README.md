@@ -26,14 +26,46 @@
 **DevOps**
 `Docker` · `GitHub Actions` · `Cloudflare Tunnel`
 
-
 ## System Architecture
 
 ## Database Design (ER Diagram)
 
-## Installation & Setup
+## Installation & Setupg
+
+### Frontend
+
+```bash
+cd code/frontend
+cp .env.example .env
+npm install
+# http://localhost:3000
+```
+
+### Backend
+
+```bash
+cd code/backend
+
+export DB_URL=jdbc:postgresql://localhost:5432
+export DB_USERNAME=postgres
+export DB_PASSWORD=
+```
 
 ## How to Run
+
+### Frontend
+
+```bash
+cd code/frontend
+npm run dev
+```
+
+### Backend
+
+```bash
+cd code/backend
+./gradlew bootRun
+```
 
 ## API Documentation
 
