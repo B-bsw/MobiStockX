@@ -1,0 +1,542 @@
+Project MobiStockX_V2 {
+  database_type: 'MySQL'
+}
+
+Enum item_status_enum {
+  Available
+  Reserved
+  Sold
+  Damaged
+  Claiming
+}
+
+Enum item_condition_enum {
+  new
+  second_hand
+}
+
+Enum sale_status_enum {
+  Pending
+  Completed
+  Cancelled
+}
+
+Enum po_status_enum {
+  Pending
+  Received
+  Cancelled
+}
+
+Enum repair_status_enum {
+  received
+  quoting
+  in_progress
+  waiting_parts
+  completed
+  delivered
+  cancelled
+}
+
+Enum repair_image_type_enum {
+  received
+  completed
+}
+
+Enum claim_status_enum {
+  pending
+  in_review
+  resolved
+  rejected
+}
+
+Enum claim_resolution_enum {
+  unknown
+  replacement
+  refund
+  repair
+}
+
+Enum trade_in_type_enum {
+  trade_in
+  cash_buyback
+}
+
+Enum booking_status_enum {
+  pending
+  ready_for_pickup
+  completed
+  cancelled
+  refunded
+}
+
+Enum payment_order_type_enum {
+  sale
+  repair
+  booking
+  trade_in
+}
+
+Enum payment_method_enum {
+  cash
+  transfer
+  credit_card
+  installment
+  trade_in_credit
+}
+
+Enum payment_status_enum {
+  completed
+  refunded
+}
+
+Enum order_type_enum {
+  sale
+  repair
+  claim
+  purchase
+  trade_in
+  booking
+}
+
+Enum order_action_enum {
+  created
+  updated
+  deleted
+  status_changed
+}
+
+Enum user_role_enum {
+  admin
+  manager
+  cashier
+  technician
+}
+
+Table BRAND {
+  brand_id int [pk, increment]
+  brand_name varchar(255) [not null]
+  brand_country varchar(255)
+  image_url varchar(255)
+  create_at timestamp [default: `CURRENT_TIMESTAMP`]
+  update_at timestamp [default: `CURRENT_TIMESTAMP`]
+}
+
+Table CATEGORY {
+  category_id int [pk, increment]
+  category_name_th varchar(255) [not null]
+  category_name_en varchar(255)
+  is_serialized boolean [default: true]
+  create_at timestamp [default: `CURRENT_TIMESTAMP`]
+  update_at timestamp [default: `CURRENT_TIMESTAMP`]
+}
+
+Table PRODUCT_MODEL {
+  model_id int [pk, increment]
+  model_name varchar(255) [not null]
+  color varchar(50)
+  storage_capacity varchar(50)
+  model_made_in varchar(100)
+  model_warranty_duration int [default: 12]
+  is_serialized boolean [default: true]
+  stock_quantity int [default: 0]
+  standard_cost decimal(10, 2) [default: 0]
+  standard_price decimal(10, 2) [not null]
+  brand_id int [not null]
+  category_id int [not null]
+  image_url varchar(255)
+  create_at timestamp [default: `CURRENT_TIMESTAMP`]
+  update_at timestamp [default: `CURRENT_TIMESTAMP`]
+}
+
+Table PRODUCT_ITEM {
+  item_id int [pk, increment]
+  model_id int [not null]
+  item_serial_number varchar(100) [unique]
+  item_imei varchar(15) [unique]
+  item_condition item_condition_enum [default: 'new']
+  item_grade varchar(10)
+  battery_health int
+  cost_price decimal(10, 2) [not null]
+  selling_price decimal(10, 2) [not null]
+  item_status item_status_enum [default: 'Available']
+  supplier_id int
+  warranty_expire_date datetime
+  create_at timestamp [default: `CURRENT_TIMESTAMP`]
+  update_at timestamp [default: `CURRENT_TIMESTAMP`]
+}
+
+Table CUSTOMER {
+  customer_id int [pk, increment]
+  customer_fname varchar(255) [not null]
+  customer_lname varchar(255) [not null]
+  customer_phone varchar(20) [not null]
+  customer_tax_number varchar(20)
+  customer_id_card varchar(20)
+  customer_address text
+  create_at timestamp [default: `CURRENT_TIMESTAMP`]
+  update_at timestamp [default: `CURRENT_TIMESTAMP`]
+}
+
+Table SUPPLIER {
+  supplier_id int [pk, increment]
+  supplier_name varchar(255) [not null]
+  supplier_phone varchar(20)
+  supplier_email varchar(100)
+  supplier_address text
+  supplier_contact_person varchar(255)
+  image_url varchar(255)
+  create_at timestamp [default: `CURRENT_TIMESTAMP`]
+  update_at timestamp [default: `CURRENT_TIMESTAMP`]
+}
+
+Table PURCHASE_ORDER {
+  po_id int [pk, increment]
+  po_code varchar(50) [not null, unique]
+  supplier_id int [not null]
+  po_date datetime [not null, default: `CURRENT_TIMESTAMP`]
+  po_status po_status_enum [default: 'Pending']
+  total_amount decimal(10, 2) [not null]
+  created_by int [not null]
+  create_at timestamp [default: `CURRENT_TIMESTAMP`]
+  update_at timestamp [default: `CURRENT_TIMESTAMP`]
+}
+
+Table PURCHASE_ORDER_ITEM {
+  po_item_id int [pk, increment]
+  po_id int [not null]
+  model_id int [not null]
+  quantity int [not null]
+  unit_cost decimal(10, 2) [not null]
+  create_at timestamp [default: `CURRENT_TIMESTAMP`]
+  update_at timestamp [default: `CURRENT_TIMESTAMP`]
+}
+
+Table SALE_ORDER {
+  sale_id int [pk, increment]
+  sale_code varchar(50) [not null, unique]
+  customer_id int [not null]
+  sale_date datetime [not null, default: `CURRENT_TIMESTAMP`]
+  subtotal_amount decimal(10, 2) [not null]
+  discount_amount decimal(10, 2) [default: 0]
+  total_amount decimal(10, 2) [not null]
+  sale_status sale_status_enum [default: 'Pending']
+  created_by int [not null]
+  created_at timestamp [default: `CURRENT_TIMESTAMP`]
+  updated_at timestamp [default: `CURRENT_TIMESTAMP`]
+}
+
+Table SALE_ORDER_ITEM {
+  sale_item_id int [pk, increment]
+  sale_id int [not null]
+  model_id int [not null]
+  item_id int
+  quantity int [default: 1]
+  unit_cost decimal(10, 2) [not null]
+  unit_price decimal(10, 2) [not null]
+  discount_amount decimal(10, 2) [default: 0]
+  warranty_expire_date datetime
+  created_at timestamp [default: `CURRENT_TIMESTAMP`]
+  updated_at timestamp [default: `CURRENT_TIMESTAMP`]
+}
+
+Table TAX_INVOICE {
+  invoice_id int [pk, increment]
+  sale_id int [not null, unique]
+  invoice_number varchar(50) [not null, unique]
+  company_or_buyer_name varchar(255) [not null]
+  tax_id varchar(20) [not null]
+  branch_number varchar(10) [default: '00000']
+  address text [not null]
+  subtotal_amount decimal(10, 2) [not null]
+  vat_rate decimal(5, 2) [default: 7.00]
+  vat_amount decimal(10, 2) [not null]
+  grand_total decimal(10, 2) [not null]
+  issued_at datetime [default: `CURRENT_TIMESTAMP`]
+  pdf_url varchar(255)
+  created_at timestamp [default: `CURRENT_TIMESTAMP`]
+  updated_at timestamp [default: `CURRENT_TIMESTAMP`]
+}
+
+Table PRODUCT_WARRANTY {
+  warranty_id int [pk, increment]
+  sale_item_id int [not null, unique]
+  warranty_code varchar(50) [not null, unique]
+  item_imei varchar(15)
+  start_date date [not null]
+  expire_date date [not null]
+  terms_conditions text
+  warranty_status varchar(30) [default: 'active']
+  created_at timestamp [default: `CURRENT_TIMESTAMP`]
+  updated_at timestamp [default: `CURRENT_TIMESTAMP`]
+}
+
+Table SALE_ORDER_IMAGE {
+  image_id int [pk, increment]
+  sale_id int [not null]
+  image_url varchar(255) [not null]
+  image_caption varchar(255)
+  created_at timestamp [default: `CURRENT_TIMESTAMP`]
+}
+
+Table PAYMENT {
+  payment_id int [pk, increment]
+  order_type payment_order_type_enum [not null]
+  order_id int [not null]
+  payment_method payment_method_enum [not null]
+  amount decimal(10, 2) [not null]
+  payment_status payment_status_enum [default: 'completed']
+  reference_no varchar(100)
+  payment_date datetime [default: `CURRENT_TIMESTAMP`]
+  received_by int [not null]
+  created_at timestamp [default: `CURRENT_TIMESTAMP`]
+}
+
+Table BOOKING_ORDER {
+  booking_id int [pk, increment]
+  booking_code varchar(50) [not null, unique]
+  customer_id int [not null]
+  model_id int [not null]
+  deposit_amount decimal(10, 2) [not null]
+  target_date date
+  assigned_item_id int
+  booking_status booking_status_enum [default: 'pending']
+  related_sale_id int
+  created_by int [not null]
+  create_at timestamp [default: `CURRENT_TIMESTAMP`]
+  update_at timestamp [default: `CURRENT_TIMESTAMP`]
+}
+
+Table TRADE_IN_ORDER {
+  trade_in_id int [pk, increment]
+  trade_in_code varchar(50) [not null, unique]
+  customer_id int [not null]
+  device_brand varchar(100) [not null]
+  device_model varchar(100) [not null]
+  device_color varchar(50)
+  device_storage varchar(50)
+  device_imei varchar(15) [unique, not null]
+  battery_health int
+  condition_grade varchar(10)
+  seller_id_card varchar(20) [not null]
+  id_card_image_url varchar(255)
+  device_image_url varchar(255)
+  agreed_price decimal(10, 2) [not null]
+  trade_in_type trade_in_type_enum [default: 'trade_in']
+  related_sale_id int
+  received_item_id int
+  created_by int [not null]
+  create_at timestamp [default: `CURRENT_TIMESTAMP`]
+  update_at timestamp [default: `CURRENT_TIMESTAMP`]
+}
+
+Table SPARE_PART {
+  part_id int [pk, increment]
+  part_name varchar(255) [not null]
+  part_quantity int [default: 0]
+  cost_price decimal(10, 2) [default: 0]
+  selling_price decimal(10, 2) [default: 0]
+  image_url varchar(255)
+  create_at timestamp [default: `CURRENT_TIMESTAMP`]
+  update_at timestamp [default: `CURRENT_TIMESTAMP`]
+}
+
+Table SUPPLIER_SPARE_PART {
+  supplier_id int [not null]
+  part_id int [not null]
+  create_at timestamp [default: `CURRENT_TIMESTAMP`]
+  update_at timestamp [default: `CURRENT_TIMESTAMP`]
+
+  indexes {
+    (supplier_id, part_id) [pk]
+  }
+}
+
+Table REPAIR_ORDER {
+  repair_id int [pk, increment]
+  repair_code varchar(50) [not null, unique]
+  customer_id int [not null]
+  is_shop_device boolean [default: false]
+  item_id int
+  device_brand varchar(100) [not null]
+  device_model varchar(100) [not null]
+  device_color varchar(50)
+  device_imei varchar(15)
+  device_passcode varchar(50)
+  has_icloud_removed boolean [default: true]
+  checklist_json json
+  repair_problem_desc text [not null]
+  repair_technician_note text
+  estimated_cost decimal(10, 2)
+  repair_labor_cost decimal(10, 2) [default: 0]
+  repair_total_cost decimal(10, 2) [default: 0]
+  repair_status repair_status_enum [default: 'received']
+  warranty_days int [default: 30]
+  repair_date_received datetime [default: `CURRENT_TIMESTAMP`]
+  repair_date_completed datetime
+  technician_id int
+  created_by int [not null]
+  create_at timestamp [default: `CURRENT_TIMESTAMP`]
+  update_at timestamp [default: `CURRENT_TIMESTAMP`]
+}
+
+Table REPAIR_ORDER_PART {
+  repair_id int [not null]
+  part_id int [not null]
+  repair_part_quantity int [not null, default: 1]
+  repair_part_unit_cost decimal(10, 2) [default: 0]
+  repair_part_unit_price decimal(10, 2) [not null]
+  create_at timestamp [default: `CURRENT_TIMESTAMP`]
+  update_at timestamp [default: `CURRENT_TIMESTAMP`]
+
+  indexes {
+    (repair_id, part_id) [pk]
+  }
+}
+
+Table REPAIR_ORDER_IMAGE {
+  image_id int [pk, increment]
+  repair_id int [not null]
+  image_url varchar(255) [not null]
+  image_caption varchar(255)
+  image_type repair_image_type_enum [default: 'received']
+  create_at timestamp [default: `CURRENT_TIMESTAMP`]
+}
+
+Table CLAIM_ORDER {
+  claim_id int [pk, increment]
+  claim_code varchar(50) [not null, unique]
+  supplier_id int
+  customer_id int [not null]
+  item_id int [not null]
+  claim_problem_desc text
+  claim_date_received datetime [default: `CURRENT_TIMESTAMP`]
+  claim_date_returned datetime
+  claim_status claim_status_enum [default: 'pending']
+  claim_resolution claim_resolution_enum [default: 'unknown']
+  created_by int [not null]
+  create_at timestamp [default: `CURRENT_TIMESTAMP`]
+  update_at timestamp [default: `CURRENT_TIMESTAMP`]
+}
+
+Table ORDER_HISTORY_LOG {
+  log_id int [pk, increment]
+  order_type order_type_enum [not null]
+  order_id int [not null]
+  action order_action_enum [not null]
+  description text
+  old_data json
+  new_data json
+  action_by_user_id int [not null]
+  create_at timestamp [default: `CURRENT_TIMESTAMP`]
+}
+
+Table User {
+  user_id int [pk, increment]
+  username varchar(255) [not null, unique]
+  email varchar(255) [not null, unique]
+  password varchar(255) [not null]
+  full_name varchar(255) [not null]
+  phone varchar(20)
+  role user_role_enum [default: 'cashier']
+  is_active boolean [default: true]
+  created_at timestamp [default: `CURRENT_TIMESTAMP`]
+}
+
+Ref: PRODUCT_MODEL.brand_id > BRAND.brand_id
+Ref: PRODUCT_MODEL.category_id > CATEGORY.category_id
+Ref: PRODUCT_ITEM.model_id > PRODUCT_MODEL.model_id
+Ref: PRODUCT_ITEM.supplier_id > SUPPLIER.supplier_id
+
+Ref: PURCHASE_ORDER.supplier_id > SUPPLIER.supplier_id
+Ref: PURCHASE_ORDER.created_by > User.user_id
+Ref: PURCHASE_ORDER_ITEM.po_id > PURCHASE_ORDER.po_id
+Ref: PURCHASE_ORDER_ITEM.model_id > PRODUCT_MODEL.model_id
+
+Ref: SALE_ORDER.customer_id > CUSTOMER.customer_id
+Ref: SALE_ORDER.created_by > User.user_id
+Ref: SALE_ORDER_ITEM.sale_id > SALE_ORDER.sale_id
+Ref: SALE_ORDER_ITEM.model_id > PRODUCT_MODEL.model_id
+Ref: SALE_ORDER_ITEM.item_id > PRODUCT_ITEM.item_id
+Ref: SALE_ORDER_IMAGE.sale_id > SALE_ORDER.sale_id [delete: cascade]
+
+Ref: TAX_INVOICE.sale_id - SALE_ORDER.sale_id [delete: cascade]
+Ref: PRODUCT_WARRANTY.sale_item_id - SALE_ORDER_ITEM.sale_item_id [delete: cascade]
+
+Ref: PAYMENT.received_by > User.user_id
+
+Ref: BOOKING_ORDER.customer_id > CUSTOMER.customer_id
+Ref: BOOKING_ORDER.model_id > PRODUCT_MODEL.model_id
+Ref: BOOKING_ORDER.assigned_item_id > PRODUCT_ITEM.item_id
+Ref: BOOKING_ORDER.related_sale_id > SALE_ORDER.sale_id
+Ref: BOOKING_ORDER.created_by > User.user_id
+
+Ref: TRADE_IN_ORDER.customer_id > CUSTOMER.customer_id
+Ref: TRADE_IN_ORDER.related_sale_id > SALE_ORDER.sale_id
+Ref: TRADE_IN_ORDER.received_item_id > PRODUCT_ITEM.item_id
+Ref: TRADE_IN_ORDER.created_by > User.user_id
+
+Ref: SUPPLIER_SPARE_PART.supplier_id > SUPPLIER.supplier_id
+Ref: SUPPLIER_SPARE_PART.part_id > SPARE_PART.part_id
+
+Ref: REPAIR_ORDER.customer_id > CUSTOMER.customer_id
+Ref: REPAIR_ORDER.item_id > PRODUCT_ITEM.item_id
+Ref: REPAIR_ORDER.technician_id > User.user_id
+Ref: REPAIR_ORDER.created_by > User.user_id
+Ref: REPAIR_ORDER_PART.repair_id > REPAIR_ORDER.repair_id
+Ref: REPAIR_ORDER_PART.part_id > SPARE_PART.part_id
+Ref: REPAIR_ORDER_IMAGE.repair_id > REPAIR_ORDER.repair_id [delete: cascade]
+
+Ref: CLAIM_ORDER.supplier_id > SUPPLIER.supplier_id
+Ref: CLAIM_ORDER.customer_id > CUSTOMER.customer_id
+Ref: CLAIM_ORDER.item_id > PRODUCT_ITEM.item_id
+Ref: CLAIM_ORDER.created_by > User.user_id
+
+Ref: ORDER_HISTORY_LOG.action_by_user_id > User.user_id
+
+TableGroup Product_Catalog {
+  BRAND
+  CATEGORY
+  PRODUCT_MODEL
+  PRODUCT_ITEM
+}
+
+TableGroup Inventory_Inbound {
+  SUPPLIER
+  PURCHASE_ORDER
+  PURCHASE_ORDER_ITEM
+}
+
+TableGroup Sales_and_POS {
+  CUSTOMER
+  SALE_ORDER
+  SALE_ORDER_ITEM
+  TAX_INVOICE
+  PRODUCT_WARRANTY
+  SALE_ORDER_IMAGE
+  PAYMENT
+}
+
+TableGroup Booking_and_TradeIn {
+  BOOKING_ORDER
+  TRADE_IN_ORDER
+}
+
+TableGroup Repair_Service {
+  REPAIR_ORDER
+  REPAIR_ORDER_PART
+  REPAIR_ORDER_IMAGE
+}
+
+TableGroup Spare_Parts {
+  SPARE_PART
+  SUPPLIER_SPARE_PART
+}
+
+TableGroup Warranty_Claims {
+  CLAIM_ORDER
+}
+
+TableGroup System_Security {
+  User
+  ORDER_HISTORY_LOG
+}
