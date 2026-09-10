@@ -17,7 +17,7 @@ import lombok.Setter;
 import org.hibernate.annotations.ColumnTransformer;
 
 @Entity
-@Table(name = "\"user\"")
+@Table(name = "USERS")
 @Getter
 @Setter
 @NoArgsConstructor
