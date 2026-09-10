@@ -1,0 +1,719 @@
+{
+  "version": "3.0.0",
+  "darkMode": true,
+  "gridEnabling": false,
+  "currentViewName": null,
+  "defaultView": {
+    "detailLevel": "All",
+    "relationshipMode": "All",
+    "tablePositions": [
+      {
+        "name": "BRAND",
+        "schemaName": "public",
+        "x": 1844.229607335709,
+        "y": 1540.507552317892
+      },
+      {
+        "name": "CATEGORY",
+        "schemaName": "public",
+        "x": 1096,
+        "y": 488
+      },
+      {
+        "name": "PRODUCT_MODEL",
+        "schemaName": "public",
+        "x": 488,
+        "y": 1400
+      },
+      {
+        "name": "PRODUCT_ITEM",
+        "schemaName": "public",
+        "x": 1440,
+        "y": 1640
+      },
+      {
+        "name": "CUSTOMER",
+        "schemaName": "public",
+        "x": 1512,
+        "y": 1208
+      },
+      {
+        "name": "SUPPLIER",
+        "schemaName": "public",
+        "x": 1320,
+        "y": 2240
+      },
+      {
+        "name": "PURCHASE_ORDER",
+        "schemaName": "public",
+        "x": 1192,
+        "y": 880
+      },
+      {
+        "name": "PURCHASE_ORDER_ITEM",
+        "schemaName": "public",
+        "x": 48,
+        "y": 1080
+      },
+      {
+        "name": "SALE_ORDER",
+        "schemaName": "public",
+        "x": 1024,
+        "y": 1304
+      },
+      {
+        "name": "SALE_ORDER_ITEM",
+        "schemaName": "public",
+        "x": 888,
+        "y": 2384
+      },
+      {
+        "name": "SALE_ORDER_IMAGE",
+        "schemaName": "public",
+        "x": 1592,
+        "y": 472
+      },
+      {
+        "name": "PAYMENT",
+        "schemaName": "public",
+        "x": 2296,
+        "y": 328
+      },
+      {
+        "name": "BOOKING_ORDER",
+        "schemaName": "public",
+        "x": 888,
+        "y": 1856
+      },
+      {
+        "name": "TRADE_IN_ORDER",
+        "schemaName": "public",
+        "x": 576,
+        "y": 632
+      },
+      {
+        "name": "SPARE_PART",
+        "schemaName": "public",
+        "x": 1712,
+        "y": 2608
+      },
+      {
+        "name": "SUPPLIER_SPARE_PART",
+        "schemaName": "public",
+        "x": 520,
+        "y": 2488
+      },
+      {
+        "name": "REPAIR_ORDER",
+        "schemaName": "public",
+        "x": 2464,
+        "y": 992
+      },
+      {
+        "name": "REPAIR_ORDER_PART",
+        "schemaName": "public",
+        "x": 2672,
+        "y": 2224
+      },
+      {
+        "name": "REPAIR_ORDER_IMAGE",
+        "schemaName": "public",
+        "x": 2280,
+        "y": 2424
+      },
+      {
+        "name": "CLAIM_ORDER",
+        "schemaName": "public",
+        "x": 2024,
+        "y": 1800
+      },
+      {
+        "name": "ORDER_HISTORY_LOG",
+        "schemaName": "public",
+        "x": 936,
+        "y": 48
+      },
+      {
+        "name": "User",
+        "schemaName": "public",
+        "x": 1720,
+        "y": 824
+      }
+    ],
+    "tableGroupCollapseStates": [],
+    "stickyNoteLayouts": [],
+    "referencePaths": [
+      {
+        "firstFieldNames": [
+          "brand_id"
+        ],
+        "firstTableName": "PRODUCT_MODEL",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "brand_id"
+        ],
+        "secondTableName": "BRAND",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "category_id"
+        ],
+        "firstTableName": "PRODUCT_MODEL",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "category_id"
+        ],
+        "secondTableName": "CATEGORY",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "model_id"
+        ],
+        "firstTableName": "PRODUCT_ITEM",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "model_id"
+        ],
+        "secondTableName": "PRODUCT_MODEL",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "supplier_id"
+        ],
+        "firstTableName": "PRODUCT_ITEM",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "supplier_id"
+        ],
+        "secondTableName": "SUPPLIER",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "supplier_id"
+        ],
+        "firstTableName": "PURCHASE_ORDER",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "supplier_id"
+        ],
+        "secondTableName": "SUPPLIER",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "created_by"
+        ],
+        "firstTableName": "PURCHASE_ORDER",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "user_id"
+        ],
+        "secondTableName": "User",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "po_id"
+        ],
+        "firstTableName": "PURCHASE_ORDER_ITEM",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "po_id"
+        ],
+        "secondTableName": "PURCHASE_ORDER",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "model_id"
+        ],
+        "firstTableName": "PURCHASE_ORDER_ITEM",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "model_id"
+        ],
+        "secondTableName": "PRODUCT_MODEL",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "customer_id"
+        ],
+        "firstTableName": "SALE_ORDER",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "customer_id"
+        ],
+        "secondTableName": "CUSTOMER",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "created_by"
+        ],
+        "firstTableName": "SALE_ORDER",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "user_id"
+        ],
+        "secondTableName": "User",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "sale_id"
+        ],
+        "firstTableName": "SALE_ORDER_ITEM",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "sale_id"
+        ],
+        "secondTableName": "SALE_ORDER",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "model_id"
+        ],
+        "firstTableName": "SALE_ORDER_ITEM",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "model_id"
+        ],
+        "secondTableName": "PRODUCT_MODEL",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "item_id"
+        ],
+        "firstTableName": "SALE_ORDER_ITEM",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "item_id"
+        ],
+        "secondTableName": "PRODUCT_ITEM",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "sale_id"
+        ],
+        "firstTableName": "SALE_ORDER_IMAGE",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "sale_id"
+        ],
+        "secondTableName": "SALE_ORDER",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "received_by"
+        ],
+        "firstTableName": "PAYMENT",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "user_id"
+        ],
+        "secondTableName": "User",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "customer_id"
+        ],
+        "firstTableName": "BOOKING_ORDER",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "customer_id"
+        ],
+        "secondTableName": "CUSTOMER",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "model_id"
+        ],
+        "firstTableName": "BOOKING_ORDER",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "model_id"
+        ],
+        "secondTableName": "PRODUCT_MODEL",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "assigned_item_id"
+        ],
+        "firstTableName": "BOOKING_ORDER",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "item_id"
+        ],
+        "secondTableName": "PRODUCT_ITEM",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "related_sale_id"
+        ],
+        "firstTableName": "BOOKING_ORDER",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "sale_id"
+        ],
+        "secondTableName": "SALE_ORDER",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "created_by"
+        ],
+        "firstTableName": "BOOKING_ORDER",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "user_id"
+        ],
+        "secondTableName": "User",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "customer_id"
+        ],
+        "firstTableName": "TRADE_IN_ORDER",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "customer_id"
+        ],
+        "secondTableName": "CUSTOMER",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "related_sale_id"
+        ],
+        "firstTableName": "TRADE_IN_ORDER",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "sale_id"
+        ],
+        "secondTableName": "SALE_ORDER",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "received_item_id"
+        ],
+        "firstTableName": "TRADE_IN_ORDER",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "item_id"
+        ],
+        "secondTableName": "PRODUCT_ITEM",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "created_by"
+        ],
+        "firstTableName": "TRADE_IN_ORDER",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "user_id"
+        ],
+        "secondTableName": "User",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "supplier_id"
+        ],
+        "firstTableName": "SUPPLIER_SPARE_PART",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "supplier_id"
+        ],
+        "secondTableName": "SUPPLIER",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "part_id"
+        ],
+        "firstTableName": "SUPPLIER_SPARE_PART",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "part_id"
+        ],
+        "secondTableName": "SPARE_PART",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "customer_id"
+        ],
+        "firstTableName": "REPAIR_ORDER",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "customer_id"
+        ],
+        "secondTableName": "CUSTOMER",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "item_id"
+        ],
+        "firstTableName": "REPAIR_ORDER",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "item_id"
+        ],
+        "secondTableName": "PRODUCT_ITEM",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "technician_id"
+        ],
+        "firstTableName": "REPAIR_ORDER",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "user_id"
+        ],
+        "secondTableName": "User",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "created_by"
+        ],
+        "firstTableName": "REPAIR_ORDER",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "user_id"
+        ],
+        "secondTableName": "User",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "repair_id"
+        ],
+        "firstTableName": "REPAIR_ORDER_PART",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "repair_id"
+        ],
+        "secondTableName": "REPAIR_ORDER",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "part_id"
+        ],
+        "firstTableName": "REPAIR_ORDER_PART",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "part_id"
+        ],
+        "secondTableName": "SPARE_PART",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "repair_id"
+        ],
+        "firstTableName": "REPAIR_ORDER_IMAGE",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "repair_id"
+        ],
+        "secondTableName": "REPAIR_ORDER",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "supplier_id"
+        ],
+        "firstTableName": "CLAIM_ORDER",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "supplier_id"
+        ],
+        "secondTableName": "SUPPLIER",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "customer_id"
+        ],
+        "firstTableName": "CLAIM_ORDER",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "customer_id"
+        ],
+        "secondTableName": "CUSTOMER",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "item_id"
+        ],
+        "firstTableName": "CLAIM_ORDER",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "item_id"
+        ],
+        "secondTableName": "PRODUCT_ITEM",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "created_by"
+        ],
+        "firstTableName": "CLAIM_ORDER",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "user_id"
+        ],
+        "secondTableName": "User",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "action_by_user_id"
+        ],
+        "firstTableName": "ORDER_HISTORY_LOG",
+        "firstSchemaName": "public",
+        "firstRelation": "*",
+        "secondFieldNames": [
+          "user_id"
+        ],
+        "secondTableName": "User",
+        "secondSchemaName": "public",
+        "secondRelation": "1",
+        "checkPoints": []
+      }
+    ]
+  },
+  "views": {}
+}
