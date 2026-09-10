@@ -1,7 +1,8 @@
 package com.example.mobistock.domain.enums;
 
 public enum UserRole {
-    STAFF("staff");
+    STAFF("staff"),
+    CUSTOMER("customer");
 
     private final String databaseValue;
 
