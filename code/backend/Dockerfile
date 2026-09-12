@@ -4,7 +4,7 @@ WORKDIR /app
 
 RUN useradd --system --create-home --uid 1001 spring
 
-COPY --chown=spring:spring build/libs/*.jar app.jar
+COPY --chown=spring:spring build/libs/app.jar app.jar
 
 USER spring
 
