@@ -1,57 +1,53 @@
 package com.example.mobistock.domain.entity;
 
+import com.example.mobistock.domain.enums.ItemStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
-import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDateTime;
+
 @Entity
-@Table(name = "PRODUCT_MODEL")
+@Table(name = "PRODUCT_ITEM")
 @Getter
 @Setter
 @NoArgsConstructor
-public class ProductModel {
+public class ProductItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "model_id")
-    private Integer modelId;
+    @Column(name = "item_id")
+    private Integer itemId;
 
-    @Column(name = "model_name", nullable = false, length = 255)
-    private String modelName;
+    @Column(name = "item_serial_number", unique = true, length = 100)
+    private String serialNumber;
 
-    @Column(name = "model_made_in", length = 100)
-    private String madeIn;
+    @Column(name = "item_imei", unique = true, length = 15)
+    private String imei;
 
-    @Column(name = "model_warranty_duration")
-    private Integer warrantyDuration = 12;
+    @Column(name = "item_lot_number", length = 50)
+    private String lotNumber;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "item_status", nullable = false, length = 20)
+    private ItemStatus status = ItemStatus.Available;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "brand_id", nullable = false)
-    private Brand brand;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "category_id", nullable = false)
-    private Category category;
-
-    @Column(name = "image_url", length = 255)
-    private String imageUrl;
-
-    @OneToMany(mappedBy = "model")
-    private List<ProductItem> items;
+    @JoinColumn(name = "model_id", nullable = false)
+    private ProductModel model;
 
     @CreationTimestamp
     @Column(name = "create_at", nullable = false, updatable = false)
