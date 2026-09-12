@@ -16,6 +16,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import com.example.mobistock.domain.enums.repair.RepairImageType;
 
@@ -32,6 +34,7 @@ public class RepairOrderImage {
     private Integer imageId;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "repair_id", nullable = false)
     private RepairOrder repairOrder;
 
