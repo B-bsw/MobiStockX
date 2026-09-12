@@ -1,4 +1,4 @@
-package com.example.mobistock.domain.entity;
+package com.example.mobistock.domain.entity.supplier;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,47 +14,45 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.example.mobistock.domain.entity.order.ClaimOrder;
-import com.example.mobistock.domain.entity.repair.RepairOrder;
-import com.example.mobistock.domain.entity.saleOrder.SaleOrder;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "CUSTOMER")
+@Table(name = "SUPPLIER")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Customer {
+public class Supplier {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "customer_id")
-    private Integer customerId;
+    @Column(name = "supplier_id")
+    private Integer supplierId;
 
-    @Column(name = "customer_fname", nullable = false, length = 255)
-    private String firstName;
+    @Column(name = "supplier_name", nullable = false, length = 255)
+    private String supplierName;
 
-    @Column(name = "customer_lname", nullable = false, length = 255)
-    private String lastName;
-
-    @Column(name = "customer_phone", nullable = false, length = 20)
+    @Column(name = "supplier_phone", length = 20)
     private String phone;
 
-    @Column(name = "customer_tax_number", length = 20)
-    private String taxNumber;
+    @Column(name = "supplier_email", length = 100)
+    private String email;
 
-    @Column(name = "customer_address", columnDefinition = "TEXT")
+    @Column(name = "supplier_address", columnDefinition = "TEXT")
     private String address;
 
-    @OneToMany(mappedBy = "customer")
-    private List<SaleOrder> saleOrders = new ArrayList<>();
+    @Column(name = "supplier_contact_person", length = 255)
+    private String contactPerson;
 
-    @OneToMany(mappedBy = "customer")
-    private List<RepairOrder> repairOrders = new ArrayList<>();
+    @Column(name = "image_url", length = 255)
+    private String imageUrl;
 
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "supplier")
+    private List<SupplierSparePart> spareParts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "supplier")
     private List<ClaimOrder> claimOrders = new ArrayList<>();
 
     @CreationTimestamp

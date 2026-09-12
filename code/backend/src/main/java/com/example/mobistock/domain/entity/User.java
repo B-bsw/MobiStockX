@@ -1,7 +1,7 @@
 package com.example.mobistock.domain.entity;
 
-import com.example.mobistock.domain.enums.UserRole;
-import com.example.mobistock.domain.enums.UserRoleConverter;
+import com.example.mobistock.domain.enums.user.UserRole;
+import com.example.mobistock.domain.enums.user.UserRoleConverter;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
