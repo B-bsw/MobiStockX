@@ -65,5 +65,5 @@ jobs:
 
       - name: Deploy notification
         run: |
-          echo "✅ Docker image built and pushed successfully"
+          echo "Docker image built and pushed successfully"
           echo "Image tags: ${{ steps.meta.outputs.tags }}"
