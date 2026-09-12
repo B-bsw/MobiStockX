@@ -8,10 +8,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter @Setter @NoArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
 public class RepairOrderImageRequest {
-    @NotNull private Integer repairId;
-    @NotBlank @Size(max = 255) private String imageUrl;
-    @Size(max = 255) private String imageCaption;
+
+    @NotNull
+    private Integer repairId;
+
+    @NotBlank
+    @Size(max = 255)
+    private String imageUrl;
+
+    @Size(max = 255)
+    private String imageCaption;
+
     private RepairImageType imageType = RepairImageType.received;
 }

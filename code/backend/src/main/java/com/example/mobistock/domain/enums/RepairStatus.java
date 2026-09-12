@@ -5,5 +5,5 @@ public enum RepairStatus {
     in_progress,
     waiting_payment,
     completed,
-    cancelled
+    cancelled,
 }
