@@ -1,15 +1,24 @@
+FROM eclipse-temurin:21-jdk AS builder
+
+WORKDIR /app
+
+COPY gradlew .
+COPY gradle gradle
+COPY build.gradle settings.gradle ./
+
+RUN chmod +x gradlew
+RUN ./gradlew dependencies --no-daemon
+
+COPY src src
+
+RUN ./gradlew bootJar --no-daemon
+
 FROM eclipse-temurin:21-jre
 
 WORKDIR /app
 
-RUN useradd --system --create-home --uid 1001 spring
-
-COPY --chown=spring:spring build/libs/app.jar app.jar
-
-USER spring
+COPY --from=builder /app/build/libs/*.jar app.jar
 
 EXPOSE 8080
 
-ENV JAVA_OPTS=""
-
-ENTRYPOINT ["sh", "-c", "exec java $JAVA_OPTS -jar app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
