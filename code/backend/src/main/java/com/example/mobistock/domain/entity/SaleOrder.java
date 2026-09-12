@@ -60,6 +60,9 @@ public class SaleOrder {
     @OneToMany(mappedBy = "saleOrder")
     private List<SaleOrderItem> items = new ArrayList<>();
 
+    @OneToMany(mappedBy = "saleOrder")
+    private List<SaleOrderImage> images = new ArrayList<>();
+
     @Column(name = "create_by", length = 255)
     private String createdBy;
 
