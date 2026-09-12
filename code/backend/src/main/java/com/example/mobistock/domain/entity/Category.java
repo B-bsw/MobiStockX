@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,7 +35,7 @@ public class Category {
     private String categoryNameEn;
 
     @OneToMany(mappedBy = "category")
-    private List<ProductModel> productModels;
+    private List<ProductModel> productModels = new ArrayList<>();
 
     @CreationTimestamp
     @Column(name = "create_at", nullable = false, updatable = false)

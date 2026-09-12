@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,7 +38,7 @@ public class Brand {
     private String imageUrl;
 
     @OneToMany(mappedBy = "brand")
-    private List<ProductModel> productModels;
+    private List<ProductModel> productModels = new ArrayList<>();
 
     @CreationTimestamp
     @Column(name = "create_at", nullable = false, updatable = false)

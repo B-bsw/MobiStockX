@@ -11,6 +11,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -51,7 +52,7 @@ public class ProductModel {
     private String imageUrl;
 
     @OneToMany(mappedBy = "model")
-    private List<ProductItem> items;
+    private List<ProductItem> items = new ArrayList<>();
 
     @CreationTimestamp
     @Column(name = "create_at", nullable = false, updatable = false)

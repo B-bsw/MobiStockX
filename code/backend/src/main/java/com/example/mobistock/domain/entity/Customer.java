@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "CUSTOMER")
@@ -40,6 +43,9 @@ public class Customer {
 
     @Column(name = "customer_address", columnDefinition = "TEXT")
     private String address;
+
+    @OneToMany(mappedBy = "customer")
+    private List<SaleOrder> saleOrders = new ArrayList<>();
 
     @CreationTimestamp
     @Column(name = "create_at", nullable = false, updatable = false)
