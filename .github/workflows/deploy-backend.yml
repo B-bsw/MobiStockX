@@ -1,4 +1,4 @@
-name: CI/CD
+name: CI/CD backend
 
 on:
   push:
@@ -11,6 +11,7 @@ on:
 
 permissions:
   contents: read
+  packages: write
 
 jobs:
   ci:
@@ -40,33 +41,35 @@ jobs:
       - name: Test
         run: ./gradlew test
 
-      - name: Build
-        run: ./gradlew bootJar
+  build:
+    name: Build Docker Image
+    needs: ci
+    runs-on: ubuntu-latest
 
-      - name: Prepare JAR
-        run: |
-          JAR=$(find build/libs -maxdepth 1 -type f \
-            -name '*.jar' \
-            ! -name '*-plain.jar' \
-            | head -n 1)
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-          if [ -z "$JAR" ]; then
-            echo "No executable JAR found"
-            exit 1
-          fi
-
-          cp "$JAR" build/libs/app.jar
-
-      - name: Upload JAR
-        uses: actions/upload-artifact@v4
+      - name: Login to GHCR
+        uses: docker/login-action@v3
         with:
-          name: backend-jar
-          path: code/backend/build/libs/app.jar
-          if-no-files-found: error
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Push
+        uses: docker/build-push-action@v6
+        with:
+          context: code/backend
+          file: code/backend/Dockerfile
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/mobistock-backend:latest
+            ghcr.io/${{ github.repository_owner }}/mobistock-backend:${{ github.sha }}
 
   cd:
     name: Deploy
-    needs: ci
+    needs: build
     runs-on: self-hosted
 
     defaults:
@@ -77,11 +80,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Download JAR
-        uses: actions/download-artifact@v4
-        with:
-          name: backend-jar
-          path: code/backend/build/libs
+      - name: Login to GHCR
+        run: |
+          echo "${{ secrets.GHCR_TOKEN }}" | \
+            docker login ghcr.io \
+            -u "${{ github.actor }}" \
+            --password-stdin
+
+      - name: Pull image
+        run: docker compose pull
 
       - name: Deploy
         env:
@@ -89,4 +96,4 @@ jobs:
           DB_URL: ${{ secrets.DB_URL }}
           DB_USERNAME: ${{ secrets.DB_USERNAME }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-        run: docker compose up -d --build
+        run: docker compose up -d
