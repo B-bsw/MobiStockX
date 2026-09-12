@@ -75,7 +75,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Pull latest image
-        run: docker pull ghcr.io/${{ github.repository_owner }}/mobistock-backend:latest
+        run: docker pull ghcr.io/b-bsw/mobistock-backend:latest
 
       - name: Deploy
         env:
