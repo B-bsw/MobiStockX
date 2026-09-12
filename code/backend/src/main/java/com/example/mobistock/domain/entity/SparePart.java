@@ -41,6 +41,9 @@ public class SparePart {
     @OneToMany(mappedBy = "sparePart")
     private List<SupplierSparePart> suppliers = new ArrayList<>();
 
+    @OneToMany(mappedBy = "sparePart")
+    private List<RepairOrderPart> repairOrderParts = new ArrayList<>();
+
     @CreationTimestamp
     @Column(name = "create_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
