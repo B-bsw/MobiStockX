@@ -20,7 +20,7 @@ concurrency:
 jobs:
   build-and-deploy:
     name: Build and push Docker image
-    runs-on: ubuntu-latest
+    runs-on: self-host
     timeout-minutes: 20
     environment: production
     defaults:
