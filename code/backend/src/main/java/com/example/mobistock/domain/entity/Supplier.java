@@ -50,6 +50,9 @@ public class Supplier {
     @OneToMany(mappedBy = "supplier")
     private List<SupplierSparePart> spareParts = new ArrayList<>();
 
+    @OneToMany(mappedBy = "supplier")
+    private List<ClaimOrder> claimOrders = new ArrayList<>();
+
     @CreationTimestamp
     @Column(name = "create_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;

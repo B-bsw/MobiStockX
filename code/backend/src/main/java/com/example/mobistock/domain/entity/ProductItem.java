@@ -58,6 +58,9 @@ public class ProductItem {
     @OneToMany(mappedBy = "item")
     private List<RepairOrder> repairOrders = new ArrayList<>();
 
+    @OneToMany(mappedBy = "item")
+    private List<ClaimOrder> claimOrders = new ArrayList<>();
+
     @CreationTimestamp
     @Column(name = "create_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
