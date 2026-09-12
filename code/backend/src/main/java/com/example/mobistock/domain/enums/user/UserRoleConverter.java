@@ -1,4 +1,4 @@
-package com.example.mobistock.domain.enums;
+package com.example.mobistock.domain.enums.user;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;

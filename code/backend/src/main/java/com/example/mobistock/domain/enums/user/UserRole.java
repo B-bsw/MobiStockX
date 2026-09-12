@@ -1,4 +1,4 @@
-package com.example.mobistock.domain.enums;
+package com.example.mobistock.domain.enums.user;
 
 public enum UserRole {
     STAFF("staff"),
