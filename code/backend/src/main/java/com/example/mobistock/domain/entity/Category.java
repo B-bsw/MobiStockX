@@ -5,8 +5,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,11 +27,14 @@ public class Category {
     @Column(name = "category_id")
     private Integer categoryId;
 
-    @Column(name = "category_name_th", length = 255)
+    @Column(name = "category_name_th", nullable = false, length = 255)
     private String categoryNameTh;
 
     @Column(name = "category_name_en", length = 255)
     private String categoryNameEn;
+
+    @OneToMany(mappedBy = "category")
+    private List<ProductModel> productModels;
 
     @CreationTimestamp
     @Column(name = "create_at", nullable = false, updatable = false)
