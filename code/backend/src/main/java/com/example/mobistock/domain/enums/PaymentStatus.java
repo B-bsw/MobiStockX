@@ -1,7 +1,6 @@
 package com.example.mobistock.domain.enums;
 
-public enum SaleStatus {
-    PENDING,
+public enum PaymentStatus {
     COMPLETED,
-    CANCELLED
+    REFUNDED
 }
