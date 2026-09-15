@@ -13,15 +13,12 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CustomerResponse {
+public class CategoryResponse {
 
-    private Long customerId;
-    private String firstName;
-    private String lastName;
-    private String phone;
-    private String taxNumber;
-    private String idCard;
-    private String address;
+    private Long categoryId;
+    private String categoryNameTh;
+    private String categoryNameEn;
+    private Boolean isSerialized;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MobiStockX | Frontend API & Integration Guide</title>
+  <meta name="description" content="คู่มือการเชื่อมต่อ API และ Business Logic สำหรับทีม Frontend ระบบ MobiStockX">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-page: #f8f6f2;
+      --bg-surface: #ffffff;
+      --bg-surface-subtle: #f0ebe1;
+      --bg-code: #f3eee5;
+      --border: #e4ddd2;
+      --border-subtle: #d5ccc0;
+      --text-main: #2d2926;
+      --text-muted: #5e5751;
+      --text-subtle: #827a72;
+      
+      --accent: #2563eb;
+      --accent-soft: #ebf2fd;
+      --accent-border: #c5daf9;
+
+      --method-get-bg: #ebf5ee;
+      --method-get-text: #126330;
+      --method-get-border: #bce0c8;
+
+      --method-post-bg: #edf3fd;
+      --method-post-text: #1c4eb5;
+      --method-post-border: #c7dcf9;
+
+      --method-patch-bg: #f3eefb;
+      --method-patch-text: #5e2cae;
+      --method-patch-border: #ded1f7;
+
+      --radius: 6px;
+      --radius-sm: 4px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.5;
+      font-size: 0.9rem;
+    }
+
+    /* TOPBAR */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(248, 246, 242, 0.97);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 0.5rem 1.5rem;
+    }
+
+    .topbar-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .badge-sub {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: var(--radius-sm);
+      background: var(--accent-soft);
+      border: 1px solid var(--accent-border);
+      color: var(--accent);
+    }
+
+    .topbar-links {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .btn-link {
+      font-size: 0.78rem;
+      font-weight: 500;
+      padding: 0.35rem 0.75rem;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+
+    .btn-swagger {
+      background: #0284c7;
+      color: #ffffff;
+    }
+    .btn-swagger:hover {
+      background: #0369a1;
+    }
+
+    .btn-spec {
+      background: var(--bg-surface-subtle);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+    .btn-spec:hover {
+      background: #e5ded2;
+      color: var(--text-main);
+    }
+
+    /* LAYOUT */
+    .layout {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1.25rem 1.5rem 2rem 1.5rem;
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      gap: 1.5rem;
+    }
+
+    /* SIDEBAR */
+    aside {
+      position: sticky;
+      top: 4rem;
+      height: calc(100vh - 5rem);
+      overflow-y: auto;
+      padding-right: 0.35rem;
+    }
+
+    .sidebar-heading {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--text-subtle);
+      margin-bottom: 0.4rem;
+    }
+
+    .nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-bottom: 1.25rem;
+    }
+
+    .nav-item-link {
+      display: block;
+      padding: 0.35rem 0.65rem;
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 500;
+      transition: all 0.15s ease;
+      border-left: 2px solid transparent;
+    }
+
+    .nav-item-link:hover {
+      color: var(--text-main);
+      background: var(--bg-surface-subtle);
+    }
+
+    .nav-item-link.active {
+      color: var(--accent);
+      background: var(--accent-soft);
+      border-left-color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* MAIN CONTENT */
+    main {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .section-card {
+      display: none;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.015);
+    }
+
+    .section-card.active-tab {
+      display: block;
+      animation: tabFadeIn 0.18s ease-in-out;
+    }
+
+    @keyframes tabFadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* BOTTOM WORKFLOW NAVIGATION BUTTONS */
+    .workflow-nav-footer {
+      margin-top: 1.5rem;
+      padding-top: 1.15rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .btn-wf-nav {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.45rem 0.9rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-wf-prev {
+      background: #ede6dc;
+      color: var(--text-main);
+      border: 1px solid var(--border);
+    }
+
+    .btn-wf-prev:hover {
+      background: #e2dbce;
+    }
+
+    .btn-wf-next {
+      background: var(--accent);
+      color: #ffffff;
+      border: 1px solid var(--accent);
+      margin-left: auto;
+    }
+
+    .btn-wf-next:hover {
+      background: #1d4ed8;
+      color: #ffffff;
+    }
+
+    .section-header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .section-tag {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--accent);
+      margin-bottom: 0.15rem;
+    }
+
+    .section-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .section-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    /* DIAGRAM BOX */
+    .diagram-container {
+      background: #faf8f5;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .diagram-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-subtle);
+      margin-bottom: 0.75rem;
+    }
+
+    .diagram-svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* STEP FLOW BLOCKS */
+    .step-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .step-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--bg-surface);
+      overflow: hidden;
+    }
+
+    .step-card-header {
+      background: #f5f0e7;
+      padding: 0.55rem 1rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .step-num-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .step-pill {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 3px;
+      background: #e6dfd3;
+      color: #3f3934;
+    }
+
+    .step-heading {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .endpoint-pill {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.76rem;
+      padding: 2px 7px;
+      border-radius: 3px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .method {
+      font-weight: 700;
+      font-size: 0.68rem;
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+
+    .method-get { background: var(--method-get-bg); color: var(--method-get-text); border: 1px solid var(--method-get-border); }
+    .method-post { background: var(--method-post-bg); color: var(--method-post-text); border: 1px solid var(--method-post-border); }
+    .method-patch { background: var(--method-patch-bg); color: var(--method-patch-text); border: 1px solid var(--method-patch-border); }
+
+    .logic-callout {
+      background: #ffffff;
+      border: 1px solid #c7eed8;
+      border-left: 4px solid #10b981;
+      border-radius: var(--radius-sm);
+      padding: 0.85rem 1.1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+    }
+
+    .logic-info {
+      background: #ffffff;
+      border: 1px solid #bfdbfe;
+      border-left: 4px solid #3b82f6;
+      border-radius: var(--radius-sm);
+      padding: 0.85rem 1.1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+    }
+
+    .logic-header {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+    }
+
+    .logic-badge {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      padding: 2.5px 8px;
+      border-radius: 4px;
+    }
+
+    .logic-badge-green {
+      background: #ecfdf5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+    }
+
+    .logic-badge-blue {
+      background: #eff6ff;
+      color: #1e40af;
+      border: 1px solid #bfdbfe;
+    }
+
+    .logic-badge-amber {
+      background: #fffbeb;
+      color: #92400e;
+      border: 1px solid #fde68a;
+    }
+
+    .logic-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .logic-list {
+      margin: 0;
+      padding-left: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    .logic-list li strong {
+      color: var(--text-main);
+    }
+
+    .status-chip {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.74rem;
+      font-weight: 600;
+      padding: 1.5px 6px;
+      border-radius: 4px;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    .chip-avail {
+      background: #ecfdf5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+    }
+
+    .chip-sold {
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid #cbd5e1;
+    }
+
+    .chip-damaged {
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+
+    .chip-reserved {
+      background: #fffbeb;
+      color: #92400e;
+      border: 1px solid #fde68a;
+    }
+
+    /* CODE BLOCKS */
+    .code-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+
+    @media (max-width: 1024px) {
+      .layout { grid-template-columns: 1fr; }
+      .code-row { grid-template-columns: 1fr; }
+      aside { position: relative; top: 0; height: auto; }
+    }
+
+    .code-box {
+      background: var(--bg-code);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .code-box-header {
+      padding: 0.35rem 0.75rem;
+      background: #ede6dc;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--text-subtle);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-copy {
+      padding: 2px 6px;
+      font-size: 0.7rem;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-copy:hover {
+      background: #e2dbce;
+      color: var(--text-main);
+    }
+
+    pre code {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.76rem;
+      line-height: 1.48;
+      padding: 0.65rem 0.8rem;
+      overflow-x: auto;
+      display: block;
+      color: var(--text-main);
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.25rem;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-subtle);
+      background: #f3eee5;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="topbar-container">
+      <div class="brand-title">
+        MobiStockX <span class="badge-sub">Frontend Integration Guide</span>
+      </div>
+      <div class="topbar-links">
+        <a href="/swagger-ui.html" target="_blank" class="btn-link btn-swagger">Open Swagger UI</a>
+        <a href="/v3/api-docs" target="_blank" class="btn-link btn-spec">OpenAPI Spec JSON</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTAINER -->
+  <div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside>
+      <div class="sidebar-heading">ขั้นตอนทำงานจริง (Workflows)</div>
+      <ul class="nav-list">
+        <li><a href="#pos-flow" class="nav-item-link active">1. ขายของหน้าร้าน (คิดเงิน)</a></li>
+        <li><a href="#inbound-flow" class="nav-item-link">2. รับเครื่องใหม่เข้าสต็อก</a></li>
+        <li><a href="#stock-flow" class="nav-item-link">3. ดูสต็อก & แจ้งเครื่องเสีย</a></li>
+        <li><a href="#customer-flow" class="nav-item-link">4. สมัครสมาชิกลูกค้า</a></li>
+        <li><a href="#catalog-flow" class="nav-item-link">5. ตั้งค่ารุ่นและยี่ห้อมือถือ</a></li>
+      </ul>
+
+      <div class="sidebar-heading">ข้อตกลง & สูตรคำนวณ</div>
+      <ul class="nav-list">
+        <li><a href="#response-envelope" class="nav-item-link">หน้าตาข้อมูล API (กลาง)</a></li>
+        <li><a href="#business-rules" class="nav-item-link">สูตรคิดเงิน ภาษี & ประกัน</a></li>
+      </ul>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main>
+
+      <!-- ========================================================================= -->
+      <!-- FLOW 1: POS CHECKOUT -->
+      <!-- ========================================================================= -->
+      <section id="pos-flow" class="section-card">
+        <div class="section-header">
+          <div class="section-tag">ขั้นตอนที่ 01</div>
+          <h2 class="section-title">หน้าขายของหน้าร้าน (ยิงบาร์โค้ด &gt; เช็คลูกค้า &gt; คิดเงินจบการขาย)</h2>
+          <p class="section-desc">
+            เมื่อลูกค้ามาซื้อเครื่องที่ร้าน: 1. สแกนเลข IMEI บนกล่องเช็คของ &rarr; 2. หาเบอร์โทรลูกค้าเก่า/ใหม่ &rarr; 3. กดยืนยันจ่ายเงิน ระบบจะตัดสต็อก ออกใบกำกับภาษี และเปิดประกันให้ในคลิกเดียว
+          </p>
+        </div>
+
+        <!-- DIAGRAM 1: POS -->
+        <div class="diagram-container">
+          <div class="diagram-title">ลำดับการทำงาน (เข้าใจง่ายใน 3 สเต็ป)</div>
+          <svg class="diagram-svg" viewBox="0 0 850 180" xmlns="http://www.w3.org/2000/svg">
+            <style>
+              .d-box { fill: #ffffff; stroke: #cbd5e1; stroke-width: 1.5; rx: 6; }
+              .d-box-active { fill: #eff6ff; stroke: #3b82f6; stroke-width: 1.5; rx: 6; }
+              .d-box-done { fill: #ecfdf5; stroke: #10b981; stroke-width: 1.5; rx: 6; }
+              .d-text-title { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; fill: #1e293b; }
+              .d-text-sub { font-family: 'Fira Code', monospace; font-size: 11px; fill: #475569; }
+              .d-line { stroke: #94a3b8; stroke-width: 1.5; marker-end: url(#arrow); }
+            </style>
+            <defs>
+              <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 1 L 10 5 L 0 9 z" fill="#94a3b8"/>
+              </marker>
+            </defs>
+            
+            <!-- Step 1 -->
+            <rect x="20" y="45" width="220" height="75" class="d-box" />
+            <text x="35" y="73" class="d-text-title">Step 1: ค้นหาเลข IMEI เช็คของ</text>
+            <text x="35" y="95" class="d-text-sub">GET /items/imei/{imei}</text>
+            <text x="35" y="110" font-size="10" fill="#047857" font-family="sans-serif">พิมพ์เลข หรือยิงบาร์โค้ด</text>
+
+            <line x1="240" y1="82" x2="295" y2="82" class="d-line" />
+
+            <!-- Step 2 -->
+            <rect x="305" y="45" width="220" height="75" class="d-box" />
+            <text x="320" y="73" class="d-text-title">Step 2: เช็คเบอร์โทรลูกค้า</text>
+            <text x="320" y="95" class="d-text-sub">GET /customers/phone/{phone}</text>
+            <text x="320" y="110" font-size="10" fill="#64748b" font-family="sans-serif">เอา customerId มาใส่ในบิล</text>
+
+            <line x1="525" y1="82" x2="580" y2="82" class="d-line" />
+
+            <!-- Step 3 -->
+            <rect x="590" y="45" width="240" height="75" class="d-box-done" />
+            <text x="605" y="70" class="d-text-title" fill="#065f46">Step 3: กดยืนยันคิดเงิน (จบการขาย)</text>
+            <text x="605" y="90" class="d-text-sub" fill="#047857">POST /api/v1/sales</text>
+            <text x="605" y="108" font-size="10" fill="#047857" font-family="sans-serif">เงินสด/โอนสแกน QR + ออกบิล</text>
+          </svg>
+        </div>
+
+        <div class="step-list">
+
+          <!-- STEP 1.1 -->
+          <div class="step-card">
+            <div class="step-card-header">
+              <div class="step-num-title">
+                <span class="step-pill">1.1</span>
+                <span class="step-heading">ค้นหาเครื่องด้วยเลข IMEI (พิมพ์ค้นหา หรือยิงบาร์โค้ด)</span>
+              </div>
+              <div class="endpoint-pill">
+                <span class="method method-get">GET</span>
+                <span>/api/v1/products/items/imei/{imei}</span>
+              </div>
+            </div>
+            <div class="step-card-body">
+              <div class="logic-callout">
+                <div class="logic-header">
+                  <span class="logic-badge logic-badge-green">กฎก่อนคิดเงิน</span>
+                  <span class="logic-title">เช็คให้ชัวร์ว่าเครื่องพร้อมขาย</span>
+                </div>
+                <ul class="logic-list">
+                  <li><strong>ไม่ต้องมีเครื่องสแกนบาร์โค้ด:</strong> หน้าเว็บ Frontend ทำช่อง Input Text ให้พิมพ์เลข IMEI 15 หลักได้ตามปกติ หรือทำ Dropdown เลือกจากรายการสินค้าที่มีในร้านได้เลย</li>
+                  <li>ดูฟิลด์ <code>status</code> &mdash; ต้องมีค่าเป็น <span class="status-chip chip-avail">AVAILABLE</span> เท่านั้น (แปลว่าของยังอยู่ในร้าน)</li>
+                  <li>หากเป็น <span class="status-chip chip-sold">SOLD</span> (ขายไปแล้ว) หรือ <span class="status-chip chip-damaged">DAMAGED</span> (เครื่องเสีย) &mdash; <strong>ห้ามขาย</strong> ให้แจ้งเตือนพนักงานบนจอทันที</li>
+                </ul>
+              </div>
+              <div class="code-row">
+                <div class="code-box">
+                  <div class="code-box-header">
+                    <span>Request URL</span>
+                  </div>
+                  <pre><code>GET /api/v1/products/items/imei/358912345678901</code></pre>
+                </div>
+                <div class="code-box">
+                  <div class="code-box-header">
+                    <span>Response (200 OK)</span>
+                    <button class="btn-copy" onclick="copyCode(this)">Copy</button>
+                  </div>
+                  <pre><code>{
+  "success": true,
+  "data": {
+    "itemId": 1,
+    "modelId": 1,
+    "modelName": "iPhone 15 Pro",
+    "serialNumber": "SN-IP15P-001",
+    "imei": "358912345678901",
+    "condition": "NEW",
+    "costPrice": 36000.00,
+    "sellingPrice": 41900.00,
+    "status": "AVAILABLE"
+  }
+}</code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 1.2 -->
+          <div class="step-card">
+            <div class="step-card-header">
+              <div class="step-num-title">
+                <span class="step-pill">1.2</span>
+                <span class="step-heading">เช็คเบอร์โทรลูกค้า (ดูว่าเป็นลูกค้าเก่าหรือใหม่)</span>
+              </div>
+              <div class="endpoint-pill">
+                <span class="method method-get">GET</span>
+                <span>/api/v1/customers/phone/{phone}</span>
+              </div>
+            </div>
+            <div class="step-card-body">
+              <div class="logic-info">
+                <div class="logic-header">
+                  <span class="logic-badge logic-badge-blue">วิธีผูกลูกค้ากับบิล</span>
+                  <span class="logic-title">ค้นหาจากเบอร์โทรศัพท์ก่อนเสมอ</span>
+                </div>
+                <ul class="logic-list">
+                  <li><strong>ถ้าเป็นลูกค้าเก่า (200 OK):</strong> หยิบเอาค่า <code>customerId</code> ไปใส่ในบิลตอนคิดเงินได้เลย</li>
+                  <li><strong>ถ้าเป็นลูกค้าใหม่ (404 Not Found):</strong> ให้เปิดหน้าจอสมัครสมาชิกใหม่ก่อน แล้วค่อยเอา <code>customerId</code> ใหม่มาคิดเงิน</li>
+                </ul>
+              </div>
+              <div class="code-row">
+                <div class="code-box">
+                  <div class="code-box-header">
+                    <span>Request URL</span>
+                  </div>
+                  <pre><code>GET /api/v1/customers/phone/0812345678</code></pre>
+                </div>
+                <div class="code-box">
+                  <div class="code-box-header">
+                    <span>Response (200 OK)</span>
+                    <button class="btn-copy" onclick="copyCode(this)">Copy</button>
+                  </div>
+                  <pre><code>{
+  "success": true,
+  "data": {
+    "customerId": 1,
+    "firstName": "สมชาย",
+    "lastName": "ใจดี",
+    "phone": "0812345678",
+    "taxNumber": "1409900123456",
+    "address": "123 ถ.มิตรภาพ อ.เมือง จ.ขอนแก่น"
+  }
+}</code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 1.3 -->
+          <div class="step-card">
+            <div class="step-card-header">
+              <div class="step-num-title">
+                <span class="step-pill">1.3</span>
+                <span class="step-heading">กดยืนยันชำระเงินและออกเอกสาร (จบการขาย)</span>
+              </div>
+              <div class="endpoint-pill">
+                <span class="method method-post">POST</span>
+                <span>/api/v1/sales</span>
+              </div>
+            </div>
+            <div class="step-card-body">
+              <div class="logic-callout">
+                <div class="logic-header">
+                  <span class="logic-badge logic-badge-green">ระบบทำให้ครบในคลิกเดียว</span>
+                  <span class="logic-title">พอยิงเส้นนี้ปุ๊บ ระบบหลังบ้านจะจัดการให้ทุกอย่างทันที</span>
+                </div>
+                <ul class="logic-list">
+                  <li><strong>ไม่มี Hardware สแกนจ่าย / เครื่องรูดบัตร ทำอย่างไร:</strong>
+                    ทำ Dropdown ในหน้าเว็บให้พนักงานเลือกวิธีจ่ายเงินได้เลย:
+                    <br>&bull; <code>CASH</code>: รับเงินสด ทอนเงิน แล้วกดยืนยัน
+                    <br>&bull; <code>TRANSFER</code>: โชว์ QR Code พร้อมเพย์ของร้านบนหน้าจอ ให้ลูกค้าใช้มือถือตัวเองสแกนจ่าย พนักงานตรวจสลิปแล้วใส่เลขสลิปใน <code>referenceNo</code>
+                    <br>&bull; <code>CREDIT_CARD</code> หรือ <code>INSTALLMENT</code>: รูดบัตร/ผ่อน แล้วใส่เลขอ้างอิงสลิป
+                  </li>
+                  <li><strong>ตัดสต็อกทันที:</strong> สินค้าจะเปลี่ยนสถานะเป็น <span class="status-chip chip-sold">SOLD</span> ทันที เพื่อไม่ให้ใครเอาไปขายซ้ำ</li>
+                  <li><strong>คิดเงินเป๊ะ:</strong> คำนวณราคารวม หักส่วนลด และถอดภาษีมูลค่าเพิ่ม <code>VAT 7%</code> ให้เรียบร้อย</li>
+                  <li><strong>ออกเอกสารครบ:</strong> สร้างเลขที่ใบเสร็จ (saleCode), ออกใบกำกับภาษี (TaxInvoice) และเริ่มนับประกัน (ProductWarranty) ให้อัตโนมัติ</li>
+                </ul>
+              </div>
+              <div class="code-row">
+                <div class="code-box">
+                  <div class="code-box-header">
+                    <span>Request Body (JSON)</span>
+                    <button class="btn-copy" onclick="copyCode(this)">Copy</button>
+                  </div>
+                  <pre><code>{
+  "customerId": 1,
+  "cashierUserId": 1,
+  "items": [
+    {
+      "modelId": 1,
+      "productItemId": 1,
+      "unitPrice": 41900.00,
+      "discountAmount": 1000.00
+    }
+  ],
+  "payment": {
+    "paymentMethod": "TRANSFER",
+    "amount": 40900.00,
+    "referenceNo": "TXN-20260915-9988"
+  },
+  "taxInvoice": {
+    "isRequested": true,
+    "taxName": "สมชาย ใจดี",
+    "taxNumber": "1409900123456",
+    "taxAddress": "123 ถ.มิตรภาพ อ.เมือง จ.ขอนแก่น"
+  }
+}</code></pre>
+                </div>
+                <div class="code-box">
+                  <div class="code-box-header">
+                    <span>Response (201 Created)</span>
+                    <button class="btn-copy" onclick="copyCode(this)">Copy</button>
+                  </div>
+                  <pre><code>{
+  "success": true,
+  "message": "Checkout completed successfully",
+  "data": {
+    "saleId": 1,
+    "saleCode": "SO-20260915-001",
+    "saleDate": "2026-09-15T11:15:30",
+    "subtotalAmount": 41900.00,
+    "discountAmount": 1000.00,
+    "totalAmount": 40900.00,
+    "status": "PAID",
+    "customerId": 1,
+    "customerName": "สมชาย ใจดี",
+    "items": [
+      {
+        "saleItemId": 1,
+        "modelName": "iPhone 15 Pro",
+        "serialNumber": "SN-IP15P-001",
+        "imei": "358912345678901",
+        "unitPrice": 41900.00,
+        "discountAmount": 1000.00,
+        "subtotalAmount": 40900.00
+      }
+    ],
+    "payment": {
+      "paymentId": 1,
+      "paymentMethod": "TRANSFER",
+      "amount": 40900.00,
+      "status": "COMPLETED"
+    },
+    "taxInvoice": {
+      "invoiceId": 1,
+      "invoiceNumber": "INV-20260915-0001",
+      "taxName": "สมชาย ใจดี"
+    }
+  }
+}</code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- FOOTER NAV -->
+        <div class="workflow-nav-footer">
+          <div></div>
+          <button type="button" class="btn-wf-nav btn-wf-next" onclick="navigateToTab('inbound-flow')">
+            ไปขั้นตอนถัดไป: 2. รับเครื่องใหม่เข้าสต็อก &rarr;
+          </button>
+        </div>
+      </section>
+
+      <!-- ========================================================================= -->
+      <!-- FLOW 2: INVENTORY STOCK IN -->
+      <!-- ========================================================================= -->
+      <section id="inbound-flow" class="section-card">
+        <div class="section-header">
+          <div class="section-tag">ขั้นตอนที่ 02</div>
+          <h2 class="section-title">รับเครื่องใหม่เข้าสต็อก (ตอนของมาส่งที่ร้าน)</h2>
+          <p class="section-desc">
+            เวลาได้มือถือล็อตใหม่มาส่ง ให้เลือกรุ่น แล้วยิงบาร์โค้ด IMEI ทีละเครื่องเข้าระบบเพื่อบันทึกเป็นของในคลัง
+          </p>
+        </div>
+
+        <!-- DIAGRAM 2: INBOUND -->
+        <div class="diagram-container">
+          <div class="diagram-title">ลำดับการรับของเข้าคลัง</div>
+          <svg class="diagram-svg" viewBox="0 0 850 140" xmlns="http://www.w3.org/2000/svg">
+            <rect x="20" y="30" width="220" height="70" class="d-box" />
+            <text x="35" y="58" class="d-text-title">1. เลือกรุ่นสินค้า (Model)</text>
+            <text x="35" y="80" class="d-text-sub">GET /products/models</text>
+
+            <line x1="240" y1="65" x2="310" y2="65" class="d-line" />
+
+            <rect x="320" y="30" width="230" height="70" class="d-box-active" />
+            <text x="335" y="55" class="d-text-title" fill="#1d4ed8">2. สแกนยิง IMEI & Serial</text>
+            <text x="335" y="75" class="d-text-sub" fill="#2563eb">POST /products/items</text>
+            <text x="335" y="90" font-size="10" fill="#475569" font-family="sans-serif">ตรวจ Unique IMEI (15 หลัก)</text>
+
+            <line x1="550" y1="65" x2="620" y2="65" class="d-line" />
+
+            <rect x="630" y="30" width="200" height="70" class="d-box-done" />
+            <text x="645" y="58" class="d-text-title" fill="#065f46">3. ของพร้อมขายทันที</text>
+            <text x="645" y="78" class="d-text-sub" fill="#047857">status: "AVAILABLE"</text>
+          </svg>
+        </div>
+
+        <div class="step-card">
+          <div class="step-card-header">
+            <div class="step-num-title">
+              <span class="step-pill">2.1</span>
+              <span class="step-heading">บันทึกเครื่องใหม่เข้าสู่สต็อก (พิมพ์กรอกข้อมูล หรือยิงบาร์โค้ด)</span>
+            </div>
+            <div class="endpoint-pill">
+              <span class="method method-post">POST</span>
+              <span>/api/v1/products/items</span>
+            </div>
+          </div>
+          <div class="step-card-body">
+            <div class="logic-callout">
+              <div class="logic-header">
+                <span class="logic-badge logic-badge-green">กฎเหล็กการรับของ</span>
+                <span class="logic-title">ข้อควรระวังตอนบันทึก</span>
+              </div>
+              <ul class="logic-list">
+                <li><strong>ไม่ต้องมีเครื่องยิงบาร์โค้ด:</strong> พนักงานสามารถพิมพ์เลข IMEI 15 หลัก และ Serial Number ลงในฟอร์มของหน้าเว็บได้โดยตรง</li>
+                <li><code>imei</code> ต้องเป็นตัวเลข 15 หลัก และ <strong>ห้ามซ้ำกับเครื่องที่มีอยู่แล้วในระบบเด็ดขาด</strong></li>
+                <li><code>serialNumber</code> ต้องไม่ซ้ำกับในระบบ</li>
+                <li>สินค้าที่บันทึกสำเร็จจะกลายเป็นของพร้อมขายทันที สถานะคือ <span class="status-chip chip-avail">AVAILABLE</span></li>
+              </ul>
+            </div>
+            <div class="code-row">
+              <div class="code-box">
+                <div class="code-box-header">
+                  <span>Request Body (JSON)</span>
+                  <button class="btn-copy" onclick="copyCode(this)">Copy</button>
+                </div>
+                <pre><code>{
+  "modelId": 1,
+  "imei": "358912345678901",
+  "serialNumber": "SN-IP15P-001",
+  "condition": "NEW",
+  "costPrice": 36000.00,
+  "sellingPrice": 41900.00,
+  "grade": "A+",
+  "batteryHealth": 100
+}</code></pre>
+              </div>
+              <div class="code-box">
+                <div class="code-box-header">
+                  <span>Response (201 Created)</span>
+                  <button class="btn-copy" onclick="copyCode(this)">Copy</button>
+                </div>
+                <pre><code>{
+  "success": true,
+  "message": "Product item added to inventory successfully",
+  "data": {
+    "itemId": 1,
+    "modelId": 1,
+    "modelName": "iPhone 15 Pro",
+    "serialNumber": "SN-IP15P-001",
+    "imei": "358912345678901",
+    "condition": "NEW",
+    "costPrice": 36000.00,
+    "sellingPrice": 41900.00,
+    "status": "AVAILABLE"
+  }
+}</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FOOTER NAV -->
+        <div class="workflow-nav-footer">
+          <button type="button" class="btn-wf-nav btn-wf-prev" onclick="navigateToTab('pos-flow')">
+            &larr; ย้อนกลับ: 1. ขายของหน้าร้าน
+          </button>
+          <button type="button" class="btn-wf-nav btn-wf-next" onclick="navigateToTab('stock-flow')">
+            ไปขั้นตอนถัดไป: 3. ดูสต็อก & แจ้งเครื่องเสีย &rarr;
+          </button>
+        </div>
+      </section>
+
+      <!-- ========================================================================= -->
+      <!-- FLOW 3: STOCK & STATUS MANAGEMENT -->
+      <!-- ========================================================================= -->
+      <section id="stock-flow" class="section-card">
+        <div class="section-header">
+          <div class="section-tag">ขั้นตอนที่ 03</div>
+          <h2 class="section-title">ดูสต็อกของในร้าน & แจ้งเปลี่ยนสถานะเครื่อง</h2>
+          <p class="section-desc">
+            ใช้สำหรับเช็คว่าในร้านเหลือเครื่องอะไรบ้าง หรือถ้าเครื่องทำหล่น จอแตก เสีย ให้มากดเปลี่ยนสถานะที่นี่
+          </p>
+        </div>
+
+        <!-- DIAGRAM 3: STATUS -->
+        <div class="diagram-container">
+          <div class="diagram-title">แผนภาพสถานะของเครื่องในร้าน (Item Status)</div>
+          <svg class="diagram-svg" viewBox="0 0 850 140" xmlns="http://www.w3.org/2000/svg">
+            <rect x="40" y="35" width="180" height="60" class="d-box-done" />
+            <text x="65" y="70" class="d-text-title" fill="#065f46">AVAILABLE (พร้อมขาย)</text>
+
+            <line x1="220" y1="50" x2="330" y2="30" class="d-line" />
+            <line x1="220" y1="65" x2="330" y2="65" class="d-line" />
+            <line x1="220" y1="80" x2="330" y2="100" class="d-line" />
+
+            <rect x="340" y="10" width="180" height="40" class="d-box" />
+            <text x="360" y="35" class="d-text-title">SOLD (ขายสำเร็จ)</text>
+
+            <rect x="340" y="55" width="180" height="40" class="d-box" />
+            <text x="360" y="80" class="d-text-title">RESERVED (ติดจอง)</text>
+
+            <rect x="340" y="100" width="180" height="40" class="d-box" />
+            <text x="360" y="125" class="d-text-title" fill="#991b1b">DAMAGED (ชำรุด)</text>
+          </svg>
+        </div>
+
+        <div class="step-card">
+          <div class="step-card-header">
+            <div class="step-num-title">
+              <span class="step-pill">3.1</span>
+              <span class="step-heading">ปรับสถานะเครื่อง (เช่น แจ้งเครื่องเสีย / ติดจอง)</span>
+            </div>
+            <div class="endpoint-pill">
+              <span class="method method-patch">PATCH</span>
+              <span>/api/v1/products/items/{id}/status</span>
+            </div>
+          </div>
+          <div class="step-card-body">
+            <div class="logic-info">
+              <div class="logic-header">
+                <span class="logic-badge logic-badge-blue">ความหมายของสถานะ</span>
+                <span class="logic-title">เปลี่ยนเป็นอะไรได้บ้าง</span>
+              </div>
+              <ul class="logic-list">
+                <li>สถานะที่อนุญาตให้เปลี่ยน: <span class="status-chip chip-avail">AVAILABLE</span> (พร้อมขาย), <span class="status-chip chip-reserved">RESERVED</span> (มีลูกค้าจองไว้), <span class="status-chip chip-damaged">DAMAGED</span> (เครื่องชำรุด/ส่งซ่อม)</li>
+                <li>สถานะ <span class="status-chip chip-sold">SOLD</span> (ขายแล้ว) ห้ามมากดเปลี่ยนตรงนี้ ให้ไปทำผ่านหน้าขายของหน้าร้านเท่านั้น</li>
+              </ul>
+            </div>
+            <div class="code-row">
+              <div class="code-box">
+                <div class="code-box-header">
+                  <span>Request Body</span>
+                  <button class="btn-copy" onclick="copyCode(this)">Copy</button>
+                </div>
+                <pre><code>// ค่าสถานะที่ส่งได้: AVAILABLE, RESERVED, DAMAGED, CLAIMING
+{
+  "status": "DAMAGED"
+}</code></pre>
+              </div>
+              <div class="code-box">
+                <div class="code-box-header">
+                  <span>Response (200 OK)</span>
+                  <button class="btn-copy" onclick="copyCode(this)">Copy</button>
+                </div>
+                <pre><code>{
+  "success": true,
+  "message": "Item status updated successfully",
+  "data": {
+    "itemId": 1,
+    "status": "DAMAGED"
+  }
+}</code></pre>
+              </div>
+            </div>
+          </div>
+        <!-- FOOTER NAV -->
+        <div class="workflow-nav-footer">
+          <button type="button" class="btn-wf-nav btn-wf-prev" onclick="navigateToTab('inbound-flow')">
+            &larr; ย้อนกลับ: 2. รับเครื่องใหม่เข้าสต็อก
+          </button>
+          <button type="button" class="btn-wf-nav btn-wf-next" onclick="navigateToTab('customer-flow')">
+            ไปขั้นตอนถัดไป: 4. สมัครสมาชิกลูกค้า &rarr;
+          </button>
+        </div>
+      </section>
+
+      <!-- ========================================================================= -->
+      <!-- FLOW 4: CUSTOMERS -->
+      <!-- ========================================================================= -->
+      <section id="customer-flow" class="section-card">
+        <div class="section-header">
+          <div class="section-tag">ขั้นตอนที่ 04</div>
+          <h2 class="section-title">สมัครสมาชิกลูกค้าใหม่</h2>
+          <p class="section-desc">
+            บันทึกชื่อ เบอร์โทร และที่อยู่ของลูกค้า เพื่อเอาไว้ออกใบกำกับภาษีและเก็บประวัติการซื้อ
+          </p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-card-header">
+            <div class="step-num-title">
+              <span class="step-pill">4.1</span>
+              <span class="step-heading">ลงทะเบียนข้อมูลลูกค้าใหม่</span>
+            </div>
+            <div class="endpoint-pill">
+              <span class="method method-post">POST</span>
+              <span>/api/v1/customers</span>
+            </div>
+          </div>
+          <div class="step-card-body">
+            <div class="logic-info">
+              <div class="logic-header">
+                <span class="logic-badge logic-badge-blue">ข้อมูลลูกค้า</span>
+                <span class="logic-title">ข้อมูลที่จำเป็นต้องกรอก</span>
+              </div>
+              <ul class="logic-list">
+                <li><code>phone</code> ต้องเป็นเบอร์โทรศัพท์ 10 หลัก และใช้เป็นคีย์หลักในการค้นหาหน้าร้าน</li>
+                <li><code>taxNumber</code> และ <code>address</code> จำเป็นเมื่อลูกค้าต้องการเอกสารใบกำกับภาษีเต็มรูป</li>
+              </ul>
+            </div>
+            <div class="code-row">
+              <div class="code-box">
+                <div class="code-box-header">
+                  <span>Request Body</span>
+                  <button class="btn-copy" onclick="copyCode(this)">Copy</button>
+                </div>
+                <pre><code>{
+  "firstName": "สมชาย",
+  "lastName": "ใจดี",
+  "phone": "0812345678",
+  "taxNumber": "1409900123456",
+  "idCard": "1409900123456",
+  "address": "123 ถ.มิตรภาพ อ.เมือง จ.ขอนแก่น"
+}</code></pre>
+              </div>
+              <div class="code-box">
+                <div class="code-box-header">
+                  <span>Response (201 Created)</span>
+                  <button class="btn-copy" onclick="copyCode(this)">Copy</button>
+                </div>
+                <pre><code>{
+  "success": true,
+  "message": "Customer created successfully",
+  "data": {
+    "customerId": 1,
+    "firstName": "สมชาย",
+    "lastName": "ใจดี",
+    "phone": "0812345678",
+    "taxNumber": "1409900123456"
+  }
+}</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FOOTER NAV -->
+        <div class="workflow-nav-footer">
+          <button type="button" class="btn-wf-nav btn-wf-prev" onclick="navigateToTab('stock-flow')">
+            &larr; ย้อนกลับ: 3. ดูสต็อก & แจ้งเครื่องเสีย
+          </button>
+          <button type="button" class="btn-wf-nav btn-wf-next" onclick="navigateToTab('catalog-flow')">
+            ไปขั้นตอนถัดไป: 5. ตั้งค่ารุ่นและยี่ห้อมือถือ &rarr;
+          </button>
+        </div>
+      </section>
+
+      <!-- ========================================================================= -->
+      <!-- FLOW 5: CATALOG SETUP -->
+      <!-- ========================================================================= -->
+      <section id="catalog-flow" class="section-card">
+        <div class="section-header">
+          <div class="section-tag">ขั้นตอนที่ 05</div>
+          <h2 class="section-title">ตั้งค่ารุ่นและยี่ห้อมือถือ (ข้อมูลสินค้า)</h2>
+          <p class="section-desc">
+            ก่อนที่จะยิงเครื่องเข้าร้านได้ ต้องมาสร้างยี่ห้อ (Brand) และรุ่นมือถือ (Model) ตั้งราคากลางไว้ก่อน
+          </p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-card-header">
+            <div class="step-num-title">
+              <span class="step-pill">5.1</span>
+              <span class="step-heading">สร้างรุ่นสินค้า (Product Model)</span>
+            </div>
+            <div class="endpoint-pill">
+              <span class="method method-post">POST</span>
+              <span>/api/v1/products/models</span>
+            </div>
+          </div>
+          <div class="step-card-body">
+            <div class="code-row">
+              <div class="code-box">
+                <div class="code-box-header">
+                  <span>Request Body</span>
+                  <button class="btn-copy" onclick="copyCode(this)">Copy</button>
+                </div>
+                <pre><code>{
+  "brandId": 1,
+  "categoryId": 1,
+  "modelName": "iPhone 15 Pro",
+  "color": "Natural Titanium",
+  "storageCapacity": "256GB",
+  "standardCost": 35000.00,
+  "standardPrice": 41900.00,
+  "modelWarrantyDuration": 12,
+  "isSerialized": true
+}</code></pre>
+              </div>
+              <div class="code-box">
+                <div class="code-box-header">
+                  <span>Response (201 Created)</span>
+                  <button class="btn-copy" onclick="copyCode(this)">Copy</button>
+                </div>
+                <pre><code>{
+  "success": true,
+  "data": {
+    "modelId": 1,
+    "modelName": "iPhone 15 Pro",
+    "brandName": "Apple",
+    "categoryNameTh": "สมาร์ทโฟน",
+    "standardPrice": 41900.00
+  }
+}</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FOOTER NAV -->
+        <div class="workflow-nav-footer">
+          <button type="button" class="btn-wf-nav btn-wf-prev" onclick="navigateToTab('customer-flow')">
+            &larr; ย้อนกลับ: 4. สมัครสมาชิกลูกค้า
+          </button>
+          <button type="button" class="btn-wf-nav btn-wf-next" onclick="navigateToTab('response-envelope')">
+            ไปดู: หน้าตาข้อมูล API (กลาง) &rarr;
+          </button>
+        </div>
+      </section>
+
+      <!-- ========================================================================= -->
+      <!-- STANDARDS: RESPONSE ENVELOPE -->
+      <!-- ========================================================================= -->
+      <section id="response-envelope" class="section-card">
+        <div class="section-header">
+          <div class="section-tag">ข้อตกลง API</div>
+          <h2 class="section-title">หน้าตาข้อมูลที่ API ส่งกลับมา (ใช้เหมือนกันทุกเส้น)</h2>
+          <p class="section-desc">
+            ไม่ว่าจะยิงเส้นไหน ถ้าทำงานสำเร็จข้อมูลจริงจะอยู่ใน <code>data</code> เสมอ และถ้ากรอกอะไรผิด ระบบจะบอกชัดเจนใน <code>validationErrors</code>
+          </p>
+        </div>
+
+        <div class="code-row">
+          <div class="code-box">
+            <div class="code-box-header">
+              <span>เมื่อสำเร็จ (Success Envelope)</span>
+            </div>
+            <pre><code>{
+  "success": true,
+  "message": "Operation successful",
+  "data": { ... },
+  "timestamp": "2026-09-15T11:20:00"
+}</code></pre>
+          </div>
+          <div class="code-box">
+            <div class="code-box-header">
+              <span>เมื่อข้อมูลไม่ถูกต้อง (400 Bad Request)</span>
+            </div>
+            <pre><code>{
+  "status": 400,
+  "error": "Bad Request",
+  "message": "Validation failed",
+  "validationErrors": {
+    "phone": "เบอร์โทรศัพท์จำเป็นต้องระบุ",
+    "costPrice": "ราคาต้นทุนต้องมากกว่า 0"
+  },
+  "timestamp": "2026-09-15T11:20:00"
+}</code></pre>
+          </div>
+        </div>
+
+        <!-- FOOTER NAV -->
+        <div class="workflow-nav-footer">
+          <button type="button" class="btn-wf-nav btn-wf-prev" onclick="navigateToTab('catalog-flow')">
+            &larr; ย้อนกลับ: 5. ตั้งค่ารุ่นและยี่ห้อมือถือ
+          </button>
+          <button type="button" class="btn-wf-nav btn-wf-next" onclick="navigateToTab('business-rules')">
+            ไปดู: สูตรคิดเงิน ภาษี & ประกัน &rarr;
+          </button>
+        </div>
+      </section>
+
+      <!-- ========================================================================= -->
+      <!-- BUSINESS RULES -->
+      <!-- ========================================================================= -->
+      <section id="business-rules" class="section-card">
+        <div class="section-header">
+          <div class="section-tag">สูตรคำนวณ</div>
+          <h2 class="section-title">สูตรคิดเงิน ภาษี และวันรับประกัน</h2>
+          <p class="section-desc">
+            อธิบายวิธีที่ระบบหลังบ้านคำนวณตัวเลขให้อัตโนมัติ เพื่อให้หน้าบ้านแสดงผลได้ตรงกัน
+          </p>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 1rem; color: var(--text-muted); font-size: 0.92rem;">
+          <div style="background: #ffffff; border: 1px solid var(--border); border-left: 4px solid #10b981; padding: 1rem 1.25rem; border-radius: var(--radius-sm);">
+            <strong style="color: var(--text-main); font-size: 1rem;">1. วิธีคิดภาษี VAT 7% (รวมอยู่ในราคาสินค้าแล้ว):</strong><br><br>
+            - <strong>ราคาไม่รวมภาษี</strong> = <code>ยอดรวมสุทธิ &times; 100 / 107</code><br>
+            - <strong>ภาษีมูลค่าเพิ่ม (VAT 7%)</strong> = <code>ยอดรวมสุทธิ - ราคาไม่รวมภาษี</code><br>
+            <span style="font-size: 0.8rem; color: var(--text-subtle);">* ตัวอย่าง: ขาย 40,900 บาท &rarr; ราคาไม่รวมภาษี = 38,224.30 บาท, ภาษี VAT 7% = 2,675.70 บาท</span>
+          </div>
+          <div style="background: #ffffff; border: 1px solid var(--border); border-left: 4px solid #3b82f6; padding: 1rem 1.25rem; border-radius: var(--radius-sm);">
+            <strong style="color: var(--text-main); font-size: 1rem;">2. วิธีนับวันรับประกันสินค้า:</strong><br><br>
+            - <strong>วันหมดประกัน</strong> = วันที่ลูกค้าซื้อ (<code>saleDate</code>) + จำนวนเดือนประกันของรุ่นนั้นๆ (เช่น 12 เดือน)<br>
+            <span style="font-size: 0.8rem; color: var(--text-subtle);">* ใบรับประกันจะถูกสร้างให้อัตโนมัติเมื่อกดยืนยันขายสำเร็จ</span>
+          </div>
+        </div>
+
+        <!-- FOOTER NAV -->
+        <div class="workflow-nav-footer">
+          <button type="button" class="btn-wf-nav btn-wf-prev" onclick="navigateToTab('response-envelope')">
+            &larr; ย้อนกลับ: หน้าตาข้อมูล API (กลาง)
+          </button>
+          <button type="button" class="btn-wf-nav btn-wf-next" onclick="navigateToTab('pos-flow')">
+            กลับไปหน้าแรก: 1. ขายของหน้าร้าน &uarr;
+          </button>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    MobiStockX Backend &bull; CP353002 Principles of Software Design and Development &bull; Spring Boot 3.4.3 &bull; PostgreSQL
+  </footer>
+
+  <script>
+    function copyCode(btn) {
+      const code = btn.closest('.code-box').querySelector('pre code').innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        const original = btn.innerText;
+        btn.innerText = 'Copied';
+        setTimeout(() => { btn.innerText = original; }, 1500);
+      });
+    }
+
+    function navigateToTab(tabId) {
+      history.pushState(null, '', '#' + tabId);
+      switchTab(tabId);
+    }
+
+    function switchTab(targetId) {
+      const sections = document.querySelectorAll('.section-card');
+      let found = false;
+      sections.forEach(sec => {
+        if (sec.id === targetId) {
+          sec.classList.add('active-tab');
+          found = true;
+        } else {
+          sec.classList.remove('active-tab');
+        }
+      });
+
+      if (!found && sections.length > 0) {
+        sections[0].classList.add('active-tab');
+        targetId = sections[0].id;
+      }
+
+      document.querySelectorAll('.nav-item-link').forEach(link => {
+        if (link.getAttribute('href') === '#' + targetId) {
+          link.classList.add('active');
+        } else {
+          link.classList.remove('active');
+        }
+      });
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    document.querySelectorAll('.nav-item-link').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = link.getAttribute('href').replace('#', '');
+        navigateToTab(targetId);
+      });
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const hash = window.location.hash.replace('#', '') || 'pos-flow';
+      switchTab(hash);
+    });
+
+    window.addEventListener('hashchange', () => {
+      const hash = window.location.hash.replace('#', '') || 'pos-flow';
+      switchTab(hash);
+    });
+  </script>
+</body>
+</html>
