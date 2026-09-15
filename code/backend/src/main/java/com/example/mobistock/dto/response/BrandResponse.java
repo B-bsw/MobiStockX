@@ -13,15 +13,12 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CustomerResponse {
+public class BrandResponse {
 
-    private Long customerId;
-    private String firstName;
-    private String lastName;
-    private String phone;
-    private String taxNumber;
-    private String idCard;
-    private String address;
+    private Long brandId;
+    private String brandName;
+    private String brandCountry;
+    private String imageUrl;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
