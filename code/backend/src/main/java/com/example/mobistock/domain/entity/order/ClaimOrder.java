@@ -1,7 +1,7 @@
 package com.example.mobistock.domain.entity.order;
 
 import com.example.mobistock.domain.entity.Customer;
-import com.example.mobistock.domain.entity.product.ProductItem;
+import com.example.mobistock.domain.entity.ProductItem;
 import com.example.mobistock.domain.entity.supplier.Supplier;
 import com.example.mobistock.domain.enums.claim.ClaimResolution;
 import com.example.mobistock.domain.enums.claim.ClaimStatus;

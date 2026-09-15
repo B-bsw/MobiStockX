@@ -1,7 +1,7 @@
 package com.example.mobistock.domain.entity.repair;
 
 import com.example.mobistock.domain.entity.Customer;
-import com.example.mobistock.domain.entity.product.ProductItem;
+import com.example.mobistock.domain.entity.ProductItem;
 import com.example.mobistock.domain.enums.repair.RepairStatus;
 
 import jakarta.persistence.Column;
