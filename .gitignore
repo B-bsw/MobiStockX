@@ -102,3 +102,4 @@ code/frontend/.vercel/
 *.sqlite3
 *.mv.db
 *.trace.db
+.vercel
