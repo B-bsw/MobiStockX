@@ -44,7 +44,6 @@ export default function Page() {
           </div>
 
           <div className="flex h-[45px] items-center rounded-full border border-[#E5E7EB] px-2">
-
             <button
               onClick={() => setActiveCategory("ทั้งหมด")}
               className={`rounded-full px-8 py-1 text-[18px] transition-all duration-300 ${
