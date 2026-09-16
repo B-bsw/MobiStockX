@@ -1,4 +1,5 @@
 //โยย่า
+
 "use client";
 
 import { useState } from "react";
@@ -8,6 +9,7 @@ export default function Page() {
   const [activeCategory, setActiveCategory] = useState("ทั้งหมด");
 
     return (
+      
     <div className="min-h-screen bg-[#dae8ff] p-6">
 
       <div className="min-h-[calc(100vh-64px)] rounded-[20px] bg-white shadow-md">
