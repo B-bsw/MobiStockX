@@ -1,13 +1,15 @@
+'use client'
+
+import Image from "next/image"
+import logo from "@/../public/img/logo.jpg"
+
 export default function LoginPage() {
   return (
     <main className="min-h-screen w-full bg-white">
       <div className="flex min-h-screen w-full">
+        {/*logo*/}
         <section className="hidden w-1/2 items-center justify-center bg-[#78B8F2] md:flex">
-          <div className="flex h-[92px] w-[92px] items-center justify-center rounded-[18px] bg-white/90">
-            <div className="flex h-[72px] w-[72px] items-center justify-center rounded-[14px] bg-[#6AAEF0]">
-              <span className="text-4xl text-white">Logo</span>
-            </div>
-          </div>
+          <Image src={logo} className="scale-50" alt="logo"/>
         </section>
 
         <section className="flex min-h-screen w-full items-center justify-center bg-white px-6 md:w-1/2 md:px-10 lg:px-16">

@@ -16,6 +16,7 @@ Enum item_condition_enum {
 }
 
 Enum sale_status_enum {
+
   Pending
   Completed
   Cancelled
