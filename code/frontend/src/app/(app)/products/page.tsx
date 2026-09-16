@@ -11,7 +11,7 @@ export default function Page() {
     <div className="min-h-screen bg-[#dae8ff] p-6">
 
       <div className="min-h-[calc(100vh-64px)] rounded-[20px] bg-white shadow-md">
-
+        
         <div className="flex items-center justify-between border-b border-[#EBEBEB] px-10 py-5">
 
           <div>
@@ -22,7 +22,7 @@ export default function Page() {
               มีสินค้าทั้งหมด 8 รายการ
             </p>
           </div>
-
+          
           <button className="rounded-full bg-[#7FBFFF] px-7 py-2 text-[20px] text-white">
             + เพิ่มสินค้า
           </button>
@@ -44,6 +44,7 @@ export default function Page() {
           </div>
 
           <div className="flex h-[45px] items-center rounded-full border border-[#E5E7EB] px-2">
+
             <button
               onClick={() => setActiveCategory("ทั้งหมด")}
               className={`rounded-full px-8 py-1 text-[18px] transition-all duration-300 ${
