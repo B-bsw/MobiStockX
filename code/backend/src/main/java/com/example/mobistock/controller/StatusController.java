@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class StatusController {
 
-    @GetMapping("/health")
+    @GetMapping("/status")
     public Map<String, String> status() {
-        return Collections.singletonMap("status", "Ok");
+        return Collections.singletonMap("status", "OK");
     }
 }

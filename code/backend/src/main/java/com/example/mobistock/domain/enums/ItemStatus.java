@@ -5,11 +5,5 @@ public enum ItemStatus {
     RESERVED,
     SOLD,
     DAMAGED,
-    CLAIMING,
-
-    Available,
-    Reserved,
-    Sold,
-    Damaged,
-    Claiming
+    CLAIMING
 }
