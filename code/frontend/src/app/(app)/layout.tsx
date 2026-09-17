@@ -30,7 +30,7 @@ export default function DashboardLayout({
         <nav className="flex-1 space-y-2">
           <Link
             href="/"
-            className="flex h-[60px] items-center gap-5 rounded-[25px] bg-white/25 px-7 text-white"
+            className="flex h-15 items-center gap-5 rounded-[25px] bg-white/25 px-7 text-white"
           >
             <LayoutDashboard size={26} />
             <span className="text-[20px]">แดชบอร์ด</span>
@@ -38,7 +38,7 @@ export default function DashboardLayout({
 
           <Link
             href="/products"
-            className="flex h-[60px] items-center gap-5 rounded-[25px] px-7 text-white transition hover:bg-white/15"
+            className="flex h-15 items-center gap-5 rounded-[25px] px-7 text-white transition hover:bg-white/15"
           >
             <Smartphone size={26} />
             <span className="text-[20px]">สินค้า</span>
@@ -46,7 +46,7 @@ export default function DashboardLayout({
 
           <Link
             href="/products/add"
-            className="flex h-[60px] items-center gap-5 rounded-[25px] px-7 text-white transition hover:bg-white/15"
+            className="flex h-15 items-center gap-5 rounded-[25px] px-7 text-white transition hover:bg-white/15"
           >
             <PlusSquare size={26} />
             <span className="text-[20px]">เพิ่มสินค้า</span>
@@ -54,7 +54,7 @@ export default function DashboardLayout({
 
           <Link
             href="/stock"
-            className="flex h-[60px] items-center gap-5 rounded-[25px] px-7 text-white transition hover:bg-white/15"
+            className="flex h-15 items-center gap-5 rounded-[25px] px-7 text-white transition hover:bg-white/15"
           >
             <Package size={26} />
             <span className="text-[20px]">จัดการสต๊อก</span>
@@ -62,7 +62,7 @@ export default function DashboardLayout({
 
           <Link
             href="/pos"
-            className="flex h-[60px] items-center gap-5 rounded-[25px] px-7 text-white transition hover:bg-white/15"
+            className="flex h-15 items-center gap-5 rounded-[25px] px-7 text-white transition hover:bg-white/15"
           >
             <ShoppingCart size={26} />
             <span className="text-[20px]">ขายสินค้า/POS</span>
@@ -70,7 +70,7 @@ export default function DashboardLayout({
 
           <Link
             href="/receive"
-            className="flex h-[60px] items-center gap-5 rounded-[25px] px-7 text-white transition hover:bg-white/15"
+            className="flex h-15 items-center gap-5 rounded-[25px] px-7 text-white transition hover:bg-white/15"
           >
             <PackagePlus size={26} />
             <span className="text-[20px]">รับสินค้าเข้า</span>
@@ -79,7 +79,7 @@ export default function DashboardLayout({
 
         <div className="border-t border-white/30 pt-7">
           <div className="mb-6 flex items-center gap-5 px-2">
-            <div className="h-[60px] w-[60px] shrink-0 rounded-full bg-white/25" />
+            <div className="h-15 w-15 shrink-0 rounded-full bg-white/25" />
 
             <div>
               <p className="text-[19px] text-white">
@@ -94,7 +94,7 @@ export default function DashboardLayout({
 
           <Link
             href="/auth/login"
-            className="flex h-[58px] w-full items-center gap-5 rounded-[25px] bg-white/25 px-7 text-white transition hover:bg-white/35"
+            className="flex h-14.5 w-full items-center gap-5 rounded-[25px] bg-white/25 px-7 text-white transition hover:bg-white/35"
           >
             <LogOut size={26} />
             <span className="text-[20px]">ออกจากระบบ</span>
