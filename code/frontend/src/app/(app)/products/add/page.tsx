@@ -107,9 +107,9 @@ export default function AddProductPage() {
 
   return (
     /* สีพื้นหลังสีฟ้า */
-    <div className="min-h-screen bg-[#dae8ff]">
+    <div>
       {/* กรอบสีขาวหลัก */}
-      <div className="max-h-[calc(100vh-48px)] min-h-[calc(100vh-64px)] overflow-y-auto rounded-[20px] bg-white shadow-md">
+      <div className="max-h-dvh min-h-[calc(100vh-64px)] overflow-y-auto rounded-[20px] bg-white shadow-md">
         {/* หัวข้อด้านบน */}
         <div className="flex items-center justify-between border-b border-[#EBEBEB] px-10 py-5">
           <div>
