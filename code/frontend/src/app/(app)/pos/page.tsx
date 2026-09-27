@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { PosHeader } from "@/components/pos/pos-header";
+import { PosHeader } from "@/components/headers/posHeader";
 import { PosCatalog } from "@/components/pos/pos-catalog";
 import { PosCart } from "@/components/pos/pos-cart";
 import { posProducts } from "@/datas/pos/data";
@@ -51,6 +51,7 @@ export default function Page() {
   return (
     <div className="flex min-h-[calc(100dvh-48px)] flex-col overflow-hidden rounded-[20px] bg-white shadow-md">
       <PosHeader activeTab={activeTab} onTabChange={setActiveTab} />
+
       {activeTab === "sale" ? (
         <div className="grid flex-1 grid-cols-1 lg:grid-cols-[minmax(0,1.88fr)_minmax(300px,1fr)]">
           <PosCatalog
@@ -60,6 +61,7 @@ export default function Page() {
             onSearchChange={setSearch}
             onAdd={addProduct}
           />
+
           <PosCart
             items={items}
             received={received}

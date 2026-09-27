@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ReceiveHeader } from "@/components/receive/receive-header";
+import { ReceiveHeader } from "@/components/headers/receiveHeader";
 import { ReceiveForm } from "@/components/receive/receive-form";
 import { ReceiveHistory } from "@/components/receive/receive-history";
 import { initialReceiveHistory } from "@/datas/receive/data";
