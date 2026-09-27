@@ -1,4 +1,4 @@
-import Link from "next/link"
+import Link from "next/link";
 import {
   LayoutDashboard,
   Smartphone,
@@ -7,24 +7,20 @@ import {
   ShoppingCart,
   PackagePlus,
   LogOut,
-} from "lucide-react"
+} from "lucide-react";
 
 export default function DashboardLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <div className="flex min-h-screen bg-white">
       <aside className="hidden w-[320px] shrink-0 flex-col bg-[#78B8F2] px-5 py-8 md:flex">
         <div className="mb-12 text-center">
-          <h1 className="text-[24px] font-semibold text-white">
-            Mobistock
-          </h1>
+          <h1 className="text-[24px] font-semibold text-white">Mobistock</h1>
 
-          <p className="text-[15px] text-white/80">
-            ระบบจัดการคลังสินค้า
-          </p>
+          <p className="text-[15px] text-white/80">ระบบจัดการคลังสินค้า</p>
         </div>
 
         <nav className="flex-1 space-y-2">
@@ -82,13 +78,9 @@ export default function DashboardLayout({
             <div className="h-15 w-15 shrink-0 rounded-full bg-white/25" />
 
             <div>
-              <p className="text-[19px] text-white">
-                Piyada ketmala
-              </p>
+              <p className="text-[19px] text-white">Piyada ketmala</p>
 
-              <p className="text-[14px] text-white/80">
-                ผู้ดูแลระบบ
-              </p>
+              <p className="text-[14px] text-white/80">ผู้ดูแลระบบ</p>
             </div>
           </div>
 
@@ -102,9 +94,9 @@ export default function DashboardLayout({
         </div>
       </aside>
 
-      <main className="min-w-0 flex-1">
+      <main className="min-w-0 flex-1 min-h-screen bg-[#dae8ff] p-6">
         {children}
       </main>
     </div>
-  )
+  );
 }

@@ -23,7 +23,7 @@ export default function Page() {
   });
 
   return (
-    <div className="min-h-screen bg-[#dae8ff] p-6">
+    <>
       <div className="min-h-[calc(100vh-48px)] rounded-[20px] bg-white shadow-md">
         <ProductsHeader totalProducts={products.length} />
         <ProductsFilters
@@ -34,6 +34,6 @@ export default function Page() {
         />
         <ProductsTable products={filteredProducts} search={search} />
       </div>
-    </div>
+    </>
   );
 }
