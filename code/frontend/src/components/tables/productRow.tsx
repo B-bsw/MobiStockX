@@ -75,6 +75,7 @@ export function ProductActions({
           variant="ghost"
           title="แก้ไข"
           aria-label={`แก้ไข ${product.modelName}`}
+          className="text-muted-foreground hover:bg-[#DCEEFF] hover:text-[#2580D9]"
           onClick={() => actions.onEdit?.(product)}
         >
           <Pencil aria-hidden="true" />
