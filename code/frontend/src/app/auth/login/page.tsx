@@ -2,6 +2,29 @@
 
 import Image from "next/image"
 import logo from "@/../public/img/logo.jpg"
+// import { useState } from "react"
+// import axios from "axios"
+// const [username, setUsername] = setState("");
+// const [password, setPassword] = setState("");
+// const [loading, setLoading] = useState(false);
+// const [error, setError] = useState("");
+
+// const handleLogin = async() => {
+//   e.preventDefault();
+  
+//   setloading(true);
+//   setError("");
+
+//   try {
+//     const response = await axios.post("https://1")  
+//   } catch(error) {
+//     setError("no");
+//     } finally {
+//       setLoading(false);
+//     }
+//   }
+
+// }
 
 export default function LoginPage() {
   return (
