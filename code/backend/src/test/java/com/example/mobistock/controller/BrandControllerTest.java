@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(BrandController.class)
 @AutoConfigureMockMvc(addFilters = false)
-@Import(com.example.mobistock.exception.GlobalExceptionHandler.class)
+@Import({com.example.mobistock.exception.GlobalExceptionHandler.class, com.example.mobistock.support.TestSecurityBeans.class})
 class BrandControllerTest {
 
     @Autowired
