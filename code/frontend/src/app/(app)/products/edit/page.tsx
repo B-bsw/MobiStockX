@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import axios from "axios";
+import { api } from "@/lib/api";
 
 interface Category {
   categoryId: number;
@@ -79,9 +79,9 @@ function EditProductForm() {
         setError("");
 
         const [productRes, brandRes, categoryRes] = await Promise.all([
-          axios.get(`/api/v1/products/models/${modelId}`),
-          axios.get("/api/v1/brands"),
-          axios.get("/api/v1/categories"),
+          api.get(`/products/models/${modelId}`),
+          api.get("/brands"),
+          api.get("/categories"),
         ]);
 
         const product = productRes.data.data;
@@ -140,7 +140,7 @@ function EditProductForm() {
     try {
       setSaving(true);
 
-      await axios.put(`/api/v1/products/models/${modelId}`, {
+      await api.put(`/products/models/${modelId}`, {
         modelName: name,
         color: color || null,
         storageCapacity: storage || null,

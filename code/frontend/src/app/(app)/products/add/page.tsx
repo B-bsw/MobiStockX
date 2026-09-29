@@ -2,7 +2,7 @@
 
 import { useRef, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import axios from "axios";
+import { api } from "@/lib/api";
 
 interface Category {
   categoryId: number;
@@ -66,8 +66,8 @@ export default function AddProductPage() {
     const getOptions = async () => {
       try {
         const [brandRes, categoryRes] = await Promise.all([
-          axios.get("/api/v1/brands"),
-          axios.get("/api/v1/categories"),
+          api.get("/brands"),
+          api.get("/categories"),
         ]);
 
         setBrands(brandRes.data.data ?? []);
@@ -112,7 +112,7 @@ export default function AddProductPage() {
     try {
       setSaving(true);
 
-      await axios.post("/api/v1/products/models", {
+      await api.post("/products/models", {
         modelName: name,
         color: color || null,
         storageCapacity: storage || null,

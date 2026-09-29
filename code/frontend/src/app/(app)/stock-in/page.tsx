@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { api } from "@/lib/api";
 import { formatMoney } from "@/lib/format";
 import {
   ITEM_STATUS_LABEL,
@@ -30,7 +30,7 @@ export default function Page() {
         setLoading(true);
         setError("");
 
-        const response = await axios.get("/api/v1/products/items", {
+        const response = await api.get("/products/items", {
           params: { size: 200 },
         });
 
