@@ -1,7 +1,11 @@
 export interface ReceiveLine {
   id: string;
-  productId: string;
+  modelId: string;
   quantity: string;
+  costPrice: string;
+  sellingPrice: string;
+  grade: string;
+  serialNumber: string;
   supplier: string;
   invoice: string;
   note: string;
