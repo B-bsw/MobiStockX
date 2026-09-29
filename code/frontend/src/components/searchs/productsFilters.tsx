@@ -1,4 +1,7 @@
-import { Search } from "lucide-react";
+"use client";
+
+import { SearchInput } from "@/components/ui/search-input";
+import { Segmented } from "@/components/ui/segmented";
 
 interface ProductsFiltersProps {
   search: string;
@@ -16,34 +19,24 @@ export function ProductsFilters({
   onCategoryChange,
 }: ProductsFiltersProps) {
   return (
-    <div className="flex items-center gap-5 px-10 py-4">
-      <div className="flex h-[45px] flex-1 items-center rounded-full border border-[#EBEBEB] px-6">
-        <span className="text-[20px] text-gray-500">
-          <Search size={20} />
-        </span>
-        <input
-          type="text"
-          placeholder="ค้นหาสินค้า"
-          value={search}
-          onChange={(event) => onSearchChange(event.target.value)}
-          className="ml-4 flex-1 bg-transparent text-[16px] text-black outline-none placeholder:text-gray-300"
-        />
-      </div>
-      <div className="flex h-[45px] items-center rounded-full border border-[#E5E7EB] px-2">
-        {categories.map((category) => (
-          <button
-            key={category}
-            onClick={() => onCategoryChange(category)}
-            className={`rounded-full px-8 py-1 text-[18px] transition-all duration-300 ${
-              activeCategory === category
-                ? "bg-[#78B8F2] text-white"
-                : "text-gray-500 hover:bg-gray-100"
-            }`}
-          >
-            {category}
-          </button>
-        ))}
-      </div>
+    <div className="flex flex-col gap-3 border-b px-4 py-3 lg:flex-row lg:items-center lg:gap-4 lg:px-6">
+      <SearchInput
+        label="ค้นหาสินค้า"
+        placeholder="ค้นหาชื่อรุ่นหรือแบรนด์"
+        value={search}
+        onValueChange={onSearchChange}
+        className="lg:max-w-sm lg:flex-1"
+      />
+      <Segmented
+        label="กรองตามหมวดหมู่"
+        value={activeCategory}
+        onValueChange={onCategoryChange}
+        options={categories.map((category) => ({
+          value: category,
+          label: category,
+        }))}
+        className="lg:ml-auto"
+      />
     </div>
   );
 }
