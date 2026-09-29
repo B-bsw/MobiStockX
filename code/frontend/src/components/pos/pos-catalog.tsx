@@ -6,11 +6,12 @@ interface PosCatalogProps {
   products: PosProduct[];
   items: CartItem[];
   search: string;
+  loading?: boolean;
   onSearchChange: (value: string) => void;
   onAdd: (product: PosProduct) => void;
 }
 
-export function PosCatalog({ products, items, search, onSearchChange, onAdd }: PosCatalogProps) {
+export function PosCatalog({ products, items, search, loading = false, onSearchChange, onAdd }: PosCatalogProps) {
   return (
     <section className="min-w-0 bg-[#F8F9FB] px-6 py-7 xl:px-7" aria-label="รายการสินค้าสำหรับขาย">
       <div className="flex h-[55px] items-center gap-4 rounded-full border border-[#EBEBEB] bg-white px-7">
@@ -34,7 +35,12 @@ export function PosCatalog({ products, items, search, onSearchChange, onAdd }: P
           />
         ))}
       </div>
-      {products.length === 0 && <p className="py-16 text-center text-gray-500">ไม่พบสินค้าที่ค้นหา</p>}
+      {loading && <p className="py-16 text-center text-gray-500">กำลังโหลดสินค้า...</p>}
+      {!loading && products.length === 0 && (
+        <p className="py-16 text-center text-gray-500">
+          {search.trim() !== "" ? "ไม่พบสินค้าที่ค้นหา" : "ไม่มีสินค้าที่มีสต๊อกพร้อมขาย"}
+        </p>
+      )}
     </section>
   );
 }
