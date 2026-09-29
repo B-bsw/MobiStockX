@@ -2,6 +2,9 @@ import type { ProductModel } from "../../types/products/types";
 
 interface ProductRowProps {
   product: ProductModel;
+  deleting?: boolean;
+  onEdit?: (product: ProductModel) => void;
+  onDelete?: (product: ProductModel) => void;
 }
 
 const formatMoney = (value: number) =>
@@ -10,7 +13,12 @@ const formatMoney = (value: number) =>
     maximumFractionDigits: 2,
   });
 
-export function ProductRow({ product }: ProductRowProps) {
+export function ProductRow({
+  product,
+  deleting = false,
+  onEdit,
+  onDelete,
+}: ProductRowProps) {
   const spec =
     [product.storageCapacity, product.color]
       .filter((value) => value && value !== "-")
@@ -43,12 +51,19 @@ export function ProductRow({ product }: ProductRowProps) {
       </span>
 
       <div className="flex gap-2">
-        <button className="rounded-full bg-[#DCEEFF] px-5 py-1 text-[14px] text-[#2580D9]">
+        <button
+          onClick={() => onEdit?.(product)}
+          className="rounded-full bg-[#DCEEFF] px-5 py-1 text-[14px] text-[#2580D9]"
+        >
           แก้ไข
         </button>
 
-        <button className="rounded-full bg-[#FFE4E4] px-5 py-1 text-[14px] text-[#E53935]">
-          ลบ
+        <button
+          onClick={() => onDelete?.(product)}
+          disabled={deleting}
+          className="rounded-full bg-[#FFE4E4] px-5 py-1 text-[14px] text-[#E53935] disabled:opacity-50"
+        >
+          {deleting ? "กำลังลบ..." : "ลบ"}
         </button>
       </div>
     </div>

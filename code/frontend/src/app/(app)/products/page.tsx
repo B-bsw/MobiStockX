@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import axios from "axios";
 import { ProductsFilters } from "@/components/searchs/productsFilters";
 import { ProductsHeader } from "@/components/headers/productsHeader";
@@ -8,12 +9,15 @@ import { ProductsTable } from "@/components/tables/productsTable";
 import type { Category, ProductModel } from "@/types/products/types";
 
 export default function Page() {
+  const router = useRouter();
+
   const [activeCategory, setActiveCategory] = useState("ทั้งหมด");
   const [search, setSearch] = useState("");
   const [products, setProducts] = useState<ProductModel[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [deletingId, setDeletingId] = useState<number | null>(null);
 
   useEffect(() => {
     const getData = async () => {
@@ -38,6 +42,28 @@ export default function Page() {
     getData();
   }, []);
 
+  const handleDelete = async (product: ProductModel) => {
+    const confirmed = window.confirm(
+      `ต้องการลบ ${product.modelName} ใช่หรือไม่?`,
+    );
+    if (!confirmed) return;
+
+    try {
+      setDeletingId(product.modelId);
+      setError("");
+
+      await axios.delete(`/api/v1/products/models/${product.modelId}`);
+
+      setProducts((prev) =>
+        prev.filter((item) => item.modelId !== product.modelId),
+      );
+    } catch {
+      setError("ลบสินค้าไม่สำเร็จ สินค้านี้อาจถูกใช้งานอยู่ในระบบ");
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
   const filteredProducts = products.filter((product) => {
     const keyword = search.toLowerCase();
 
@@ -55,7 +81,10 @@ export default function Page() {
 
   return (
     <div className="min-h-[calc(100vh-48px)] rounded-[20px] bg-white shadow-md">
-      <ProductsHeader totalProducts={products.length} />
+      <ProductsHeader
+        totalProducts={products.length}
+        onAdd={() => router.push("/products/add")}
+      />
       <ProductsFilters
         search={search}
         activeCategory={activeCategory}
@@ -63,11 +92,23 @@ export default function Page() {
         onSearchChange={setSearch}
         onCategoryChange={setActiveCategory}
       />
+
+      {error && products.length > 0 && (
+        <div className="mx-6 mb-4 rounded-[20px] bg-[#FFE4E4] px-7 py-3 text-[16px] text-[#E53935]">
+          {error}
+        </div>
+      )}
+
       <ProductsTable
         products={filteredProducts}
         search={search}
         loading={loading}
-        error={error}
+        error={products.length === 0 ? error : ""}
+        deletingId={deletingId}
+        onEdit={(product) =>
+          router.push(`/products/edit?id=${product.modelId}`)
+        }
+        onDelete={handleDelete}
       />
     </div>
   );

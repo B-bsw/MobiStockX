@@ -6,6 +6,9 @@ interface ProductsTableProps {
   search: string;
   loading?: boolean;
   error?: string;
+  deletingId?: number | null;
+  onEdit?: (product: ProductModel) => void;
+  onDelete?: (product: ProductModel) => void;
 }
 
 export function ProductsTable({
@@ -13,6 +16,9 @@ export function ProductsTable({
   search,
   loading = false,
   error = "",
+  deletingId = null,
+  onEdit,
+  onDelete,
 }: ProductsTableProps) {
   return (
     <div className="mx-6 overflow-hidden rounded-[20px] border border-[#E5E7EB]">
@@ -36,7 +42,13 @@ export function ProductsTable({
           </div>
         ) : products.length > 0 ? (
           products.map((product) => (
-            <ProductRow key={product.modelId} product={product} />
+            <ProductRow
+              key={product.modelId}
+              product={product}
+              deleting={deletingId === product.modelId}
+              onEdit={onEdit}
+              onDelete={onDelete}
+            />
           ))
         ) : (
           <div className="flex h-[200px] items-center justify-center text-[16px] text-gray-500">
