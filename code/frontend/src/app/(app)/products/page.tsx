@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import axios from "axios";
+import { api } from "@/lib/api";
 import { ProductsFilters } from "@/components/searchs/productsFilters";
 import { ProductsHeader } from "@/components/headers/productsHeader";
 import { ProductsTable } from "@/components/tables/productsTable";
@@ -26,8 +26,8 @@ export default function Page() {
         setError("");
 
         const [productRes, categoryRes] = await Promise.all([
-          axios.get("/api/v1/products/models", { params: { size: 100 } }),
-          axios.get("/api/v1/categories"),
+          api.get("/products/models", { params: { size: 100 } }),
+          api.get("/categories"),
         ]);
 
         setProducts(productRes.data.data.content ?? []);
@@ -52,7 +52,7 @@ export default function Page() {
       setDeletingId(product.modelId);
       setError("");
 
-      await axios.delete(`/api/v1/products/models/${product.modelId}`);
+      await api.delete(`/products/models/${product.modelId}`);
 
       setProducts((prev) =>
         prev.filter((item) => item.modelId !== product.modelId),

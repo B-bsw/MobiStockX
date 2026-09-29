@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { api } from "@/lib/api";
 import { ReceiveHeader } from "@/components/headers/receiveHeader";
 import { ReceiveForm } from "@/components/receive/receive-form";
 import { ReceiveHistory } from "@/components/receive/receive-history";
@@ -22,8 +22,8 @@ export default function Page() {
         setError("");
 
         const [modelRes, itemRes] = await Promise.all([
-          axios.get("/api/v1/products/models", { params: { size: 100 } }),
-          axios.get("/api/v1/products/items", { params: { size: 50 } }),
+          api.get("/products/models", { params: { size: 100 } }),
+          api.get("/products/items", { params: { size: 50 } }),
         ]);
 
         setModels(modelRes.data.data.content ?? []);

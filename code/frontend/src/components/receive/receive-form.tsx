@@ -2,7 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import { Plus } from "lucide-react";
-import axios from "axios";
+import { api } from "@/lib/api";
 import { suppliers } from "@/datas/receive/data";
 import type { ReceiveLine } from "@/types/receive/types";
 import type { ProductModel } from "@/types/products/types";
@@ -103,7 +103,7 @@ export function ReceiveForm({ models, onReceived }: ReceiveFormProps) {
         const serial = line.serialNumber.trim();
 
         try {
-          await axios.post("/api/v1/products/items", {
+          await api.post("/products/items", {
             modelId: Number(line.modelId),
             serialNumber:
               serial === ""

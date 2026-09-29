@@ -48,6 +48,9 @@ public class DataSeeder implements CommandLineRunner {
     private final CustomerRepository customerRepository;
     private final AppUserRepository appUserRepository;
     private final SaleOrderRepository saleOrderRepository;
+    private final org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
+
+    private static final String DEFAULT_SEED_PASSWORD = "Mobistock@123";
 
     @Override
     @Transactional
@@ -94,7 +97,7 @@ public class DataSeeder implements CommandLineRunner {
         AppUser admin = AppUser.builder()
                 .username("admin")
                 .email("admin@mobistockx.co.th")
-                .password("$2a$10$7EqJtq98hPqEX7fNZaFWoOhiM9F4bM6Qk8u2zZ7v7l7FzFpZ4eX6e")
+                .password(passwordEncoder.encode(DEFAULT_SEED_PASSWORD))
                 .fullName("ผู้ดูแลระบบ สูงสุด")
                 .phone("0819998888")
                 .role(UserRole.ADMIN)
@@ -104,7 +107,7 @@ public class DataSeeder implements CommandLineRunner {
         AppUser manager = AppUser.builder()
                 .username("somchai.m")
                 .email("somchai.m@mobistockx.co.th")
-                .password("$2a$10$7EqJtq98hPqEX7fNZaFWoOhiM9F4bM6Qk8u2zZ7v7l7FzFpZ4eX6e")
+                .password(passwordEncoder.encode(DEFAULT_SEED_PASSWORD))
                 .fullName("สมชาย มีทรัพย์")
                 .phone("0891234567")
                 .role(UserRole.MANAGER)
@@ -114,7 +117,7 @@ public class DataSeeder implements CommandLineRunner {
         AppUser cashier = AppUser.builder()
                 .username("kanda.c")
                 .email("kanda.c@mobistockx.co.th")
-                .password("$2a$10$7EqJtq98hPqEX7fNZaFWoOhiM9F4bM6Qk8u2zZ7v7l7FzFpZ4eX6e")
+                .password(passwordEncoder.encode(DEFAULT_SEED_PASSWORD))
                 .fullName("กานดา ใจซื่อ")
                 .phone("0865554321")
                 .role(UserRole.CASHIER)
@@ -124,7 +127,7 @@ public class DataSeeder implements CommandLineRunner {
         AppUser technician = AppUser.builder()
                 .username("teerapat.t")
                 .email("teerapat.t@mobistockx.co.th")
-                .password("$2a$10$7EqJtq98hPqEX7fNZaFWoOhiM9F4bM6Qk8u2zZ7v7l7FzFpZ4eX6e")
+                .password(passwordEncoder.encode(DEFAULT_SEED_PASSWORD))
                 .fullName("ธีรภัทร ช่างทอง")
                 .phone("0958887777")
                 .role(UserRole.TECHNICIAN)

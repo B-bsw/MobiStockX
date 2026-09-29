@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { api } from "@/lib/api";
 import { formatDateTime, formatMoney } from "@/lib/format";
 import { SALE_STATUS_LABEL, type SaleOrder } from "@/types/sales/types";
 
@@ -23,7 +23,7 @@ export default function Page() {
         setLoading(true);
         setError("");
 
-        const response = await axios.get("/api/v1/sales", {
+        const response = await api.get("/sales", {
           params: { size: 100 },
         });
 

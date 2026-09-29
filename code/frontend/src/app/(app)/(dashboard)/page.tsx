@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { api } from "@/lib/api";
 import Link from "next/link";
 import { formatMoney } from "@/lib/format";
 import type { ProductModel } from "@/types/products/types";
@@ -24,9 +24,9 @@ export default function Home() {
         setError("");
 
         const [modelRes, saleRes, itemRes] = await Promise.all([
-          axios.get("/api/v1/products/models", { params: { size: 200 } }),
-          axios.get("/api/v1/sales", { params: { size: 200 } }),
-          axios.get("/api/v1/products/items", { params: { size: 200 } }),
+          api.get("/products/models", { params: { size: 200 } }),
+          api.get("/sales", { params: { size: 200 } }),
+          api.get("/products/items", { params: { size: 200 } }),
         ]);
 
         setModels(modelRes.data.data.content ?? []);

@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { api } from "@/lib/api";
 import { PosHeader } from "@/components/headers/posHeader";
 import { PosCatalog } from "@/components/pos/pos-catalog";
 import { PosCart } from "@/components/pos/pos-cart";
 import { PosHistory } from "@/components/pos/pos-history";
-import { CASHIER_USER_ID } from "@/lib/config";
+import { useAuth } from "@/lib/auth-context";
 import type { CartItem, PosProduct, PosTab } from "@/types/pos/types";
 import type { ProductModel } from "@/types/products/types";
 import type {
@@ -31,6 +31,7 @@ function toPosProduct(model: ProductModel): PosProduct {
 }
 
 export default function Page() {
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState<PosTab>("sale");
   const [search, setSearch] = useState("");
   const [items, setItems] = useState<CartItem[]>([]);
@@ -56,9 +57,9 @@ export default function Page() {
         setLoadError("");
 
         const [modelRes, customerRes, saleRes] = await Promise.all([
-          axios.get("/api/v1/products/models", { params: { size: 100 } }),
-          axios.get("/api/v1/customers", { params: { size: 100 } }),
-          axios.get("/api/v1/sales", { params: { size: 50 } }),
+          api.get("/products/models", { params: { size: 100 } }),
+          api.get("/customers", { params: { size: 100 } }),
+          api.get("/sales", { params: { size: 50 } }),
         ]);
 
         const models: ProductModel[] = modelRes.data.data.content ?? [];
@@ -119,7 +120,7 @@ export default function Page() {
   }
 
   async function checkout() {
-    if (items.length === 0 || customerId === "") return;
+    if (items.length === 0 || customerId === "" || !user) return;
 
     const total = items.reduce(
       (sum, item) => sum + item.product.price * item.quantity,
@@ -131,9 +132,9 @@ export default function Page() {
     setIsError(false);
 
     try {
-      const response = await axios.post("/api/v1/sales", {
+      const response = await api.post("/sales", {
         customerId: Number(customerId),
-        cashierUserId: CASHIER_USER_ID,
+        cashierUserId: user.userId,
         discountAmount: 0,
         items: items.map((item) => ({
           modelId: item.product.id,
