@@ -1,8 +1,9 @@
 interface ProductsHeaderProps {
   totalProducts: number;
+  onAdd?: () => void;
 }
 
-export function ProductsHeader({ totalProducts }: ProductsHeaderProps) {
+export function ProductsHeader({ totalProducts, onAdd }: ProductsHeaderProps) {
   return (
     <div className="flex items-center justify-between border-b border-[#EBEBEB] px-10 py-5">
       <div>
@@ -12,8 +13,10 @@ export function ProductsHeader({ totalProducts }: ProductsHeaderProps) {
         </p>
       </div>
 
-      {/* ปุ่มเพิ่มสินค้า */}
-      <button className="rounded-full bg-[#7FBFFF] px-7 py-2 text-[20px] text-white">
+      <button
+        onClick={onAdd}
+        className="rounded-full bg-[#7FBFFF] px-7 py-2 text-[20px] text-white"
+      >
         + เพิ่มสินค้า
       </button>
     </div>

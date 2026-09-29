@@ -54,7 +54,7 @@ export default function LoginPage() {
 
               <input
                 type="email"
-                className="h-[40px] w-full rounded-full bg-[#eeeeee] px-5 text-sm outline-none transition focus:ring-2 focus:ring-[#78B8F2]"
+                className="h-[40px] w-full rounded-full bg-[#eeeeee] px-5 text-sm text-black outline-none transition focus:ring-2 focus:ring-[#78B8F2]"
               />
             </div>
 
@@ -65,7 +65,7 @@ export default function LoginPage() {
 
               <input
                 type="password"
-                className="h-[40px] w-full rounded-full bg-[#eeeeee] px-5 text-sm outline-none transition focus:ring-2 focus:ring-[#78B8F2]"
+                className="h-[40px] w-full rounded-full bg-[#eeeeee] px-5 text-sm text-black outline-none transition focus:ring-2 focus:ring-[#78B8F2]"
               />
             </div>
 
