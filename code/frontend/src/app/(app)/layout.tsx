@@ -9,16 +9,29 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
   return (
     <AuthProvider>
       <TooltipProvider>
-        <SidebarProvider style={{ "--sidebar-width": "20rem" } as CSSProperties}>
+        <SidebarProvider style={{ "--sidebar-width": "17rem" } as CSSProperties}>
           <AppSidebar />
-          <main className="min-h-screen min-w-0 flex-1 bg-[#dae8ff] p-4 md:p-6">
-            <SidebarTrigger
-              aria-label="เปิดหรือปิดเมนู"
-              title="เปิดหรือปิดเมนู"
-              className="mb-3 size-9 rounded-lg bg-white text-[#2580D9] hover:bg-white/80"
-            />
-            <AuthGuard>{children}</AuthGuard>
-          </main>
+
+          <div className="flex min-w-0 flex-1 flex-col">
+            {/* Stays put so the menu toggle is reachable from anywhere in a
+                long table, which is most of this app. */}
+            <header className="sticky top-0 z-[var(--z-sticky)] flex h-14 shrink-0 items-center gap-2 border-b bg-background px-2 sm:px-4">
+              <SidebarTrigger
+                size="icon-touch"
+                variant="ghost"
+                aria-label="เปิดหรือปิดเมนู"
+                title="เปิดหรือปิดเมนู (Ctrl+B)"
+                className="text-muted-foreground hover:text-foreground"
+              />
+              <span className="truncate text-sm font-semibold text-foreground md:hidden">
+                Mobistock
+              </span>
+            </header>
+
+            <main className="min-w-0 flex-1 p-3 sm:p-4 lg:p-6">
+              <AuthGuard>{children}</AuthGuard>
+            </main>
+          </div>
         </SidebarProvider>
       </TooltipProvider>
     </AuthProvider>

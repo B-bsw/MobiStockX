@@ -1,3 +1,5 @@
+import type { BadgeTone } from "@/components/ui/badge";
+
 export type ItemStatus =
   | "AVAILABLE"
   | "RESERVED"
@@ -29,10 +31,14 @@ export const ITEM_STATUS_LABEL: Record<ItemStatus, string> = {
   CLAIMING: "เคลมอยู่",
 };
 
-export const ITEM_STATUS_STYLE: Record<ItemStatus, string> = {
-  AVAILABLE: "bg-[#DDF6E2] text-[#249447]",
-  RESERVED: "bg-[#FFF4D6] text-[#B4820A]",
-  SOLD: "bg-[#DCEEFF] text-[#2580D9]",
-  DAMAGED: "bg-[#FFE4E4] text-[#E53935]",
-  CLAIMING: "bg-[#F3E8FF] text-[#7C3AED]",
+/**
+ * Badge tone per status. Each tone resolves to a token pair that clears
+ * 4.5:1, which the hand-written hex classes this replaced did not.
+ */
+export const ITEM_STATUS_TONE: Record<ItemStatus, BadgeTone> = {
+  AVAILABLE: "success",
+  RESERVED: "warning",
+  SOLD: "info",
+  DAMAGED: "danger",
+  CLAIMING: "violet",
 };
