@@ -3,7 +3,6 @@
 import { useRef, useState } from "react";
 
 export default function AddProductPage() {
-
   /* ส้วนข้อมูลสินค้า */
   const [name, setName] = useState("");
   const [brand, setBrand] = useState("");
@@ -30,7 +29,9 @@ export default function AddProductPage() {
 
   const minStockRef = useRef<HTMLInputElement>(null);
 
-  const scrollToField = (ref: React.RefObject<HTMLInputElement | HTMLSelectElement | null>) => {
+  const scrollToField = (
+    ref: React.RefObject<HTMLInputElement | HTMLSelectElement | null>,
+  ) => {
     const field = ref.current;
     if (!field) return;
 
@@ -105,16 +106,12 @@ export default function AddProductPage() {
   };
 
   return (
-
     /* สีพื้นหลังสีฟ้า */
-    <div className="min-h-screen bg-[#dae8ff] p-6">
-
+    <div>
       {/* กรอบสีขาวหลัก */}
-      <div className="max-h-[calc(100vh-48px)] min-h-[calc(100vh-64px)] overflow-y-auto rounded-[20px] bg-white shadow-md">
-
+      <div className="max-h-dvh min-h-[calc(100vh-64px)] overflow-y-auto rounded-[20px] bg-white shadow-md">
         {/* หัวข้อด้านบน */}
         <div className="flex items-center justify-between border-b border-[#EBEBEB] px-10 py-5">
-
           <div>
             <h1 className="text-[24px] font-medium text-gray-900">
               เพิ่มสินค้าใหม่
@@ -128,26 +125,19 @@ export default function AddProductPage() {
           <button className="rounded-full border border-[#D1D5DB] px-7 py-2 text-[18px] text-gray-600">
             ← กลับรายการสินค้า
           </button>
-
         </div>
-
 
         {/* เนื้อหาด้านใน */}
         <div className="space-y-5 p-5">
-
-
           {/* ช่องกรอกข้อมูลสินค้า */}
           <div className="rounded-[20px] border border-[#E5E7EB] p-7">
-
             <h2 className="mb-5 text-[20px] font-medium text-gray-900">
               ข้อมูลสินค้า
             </h2>
 
             <div className="grid grid-cols-2 gap-x-6 gap-y-4">
-
               {/* ชื่อสินค้า */}
               <div className="col-span-2">
-
                 <label className="mb-2 block text-[15px] text-gray-600">
                   ชื่อสินค้า *
                 </label>
@@ -157,7 +147,7 @@ export default function AddProductPage() {
                   type="text"
                   placeholder="กรอกชื่อสินค้า"
                   value={name}
-                  onChange={(e) => setName(e.target.value)}   
+                  onChange={(e) => setName(e.target.value)}
                   className={`h-[52px] w-full rounded-full border px-6 text-[16px] outline-none focus:border-[#7FBFFF] ${
                     submitted && !name
                       ? "border-red-500"
@@ -170,13 +160,10 @@ export default function AddProductPage() {
                     กรุณากรอกชื่อสินค้า
                   </p>
                 )}
-
               </div>
-
 
               {/* แบรนด์ */}
               <div>
-
                 <label className="mb-2 block text-[15px] text-gray-600">
                   แบรนด์ *
                 </label>
@@ -199,13 +186,10 @@ export default function AddProductPage() {
                     กรุณากรอกแบรนด์
                   </p>
                 )}
-
               </div>
-
 
               {/* รุ่น / สี / ความจุ */}
               <div>
-
                 <label className="mb-2 block text-[15px] text-gray-600">
                   รุ่น / สี / ความจุ *
                 </label>
@@ -228,13 +212,10 @@ export default function AddProductPage() {
                     กรุณากรอกรุ่น / สี / ความจุ
                   </p>
                 )}
-
               </div>
-
 
               {/* SKU */}
               <div>
-
                 <label className="mb-2 block text-[15px] text-gray-600">
                   รหัส SKU *
                 </label>
@@ -257,13 +238,10 @@ export default function AddProductPage() {
                     กรุณากรอกรหัส SKU
                   </p>
                 )}
-
               </div>
-
 
               {/* หมวดหมู่ */}
               <div>
-
                 <label className="mb-2 block text-[15px] text-gray-600">
                   หมวดหมู่ *
                 </label>
@@ -289,26 +267,17 @@ export default function AddProductPage() {
                     กรุณาเลือกหมวดหมู่
                   </p>
                 )}
-
               </div>
-
             </div>
-
           </div>
-
 
           {/* ช่องกรอกาคา */}
           <div className="rounded-[20px] border border-[#E5E7EB] p-7">
-
-            <h2 className="mb-5 text-[20px] font-medium text-gray-900">
-              ราคา
-            </h2>
+            <h2 className="mb-5 text-[20px] font-medium text-gray-900">ราคา</h2>
 
             <div className="grid grid-cols-2 gap-6">
-
               {/* ราคาขาย */}
               <div>
-
                 <label className="mb-2 block text-[15px] text-gray-600">
                   ราคาขาย *
                 </label>
@@ -331,13 +300,10 @@ export default function AddProductPage() {
                     กรุณากรอกราคาขาย
                   </p>
                 )}
-
               </div>
-
 
               {/* ราคาต้นทุน */}
               <div>
-
                 <label className="mb-2 block text-[15px] text-gray-600">
                   ราคาต้นทุน *
                 </label>
@@ -360,26 +326,19 @@ export default function AddProductPage() {
                     กรุณากรอกราคาต้นทุน
                   </p>
                 )}
-
               </div>
-
             </div>
-
           </div>
-
 
           {/* ช่องกรอกการจัดการสต๊อก */}
           <div className="rounded-[20px] border border-[#E5E7EB] p-7">
-
             <h2 className="mb-5 text-[20px] font-medium text-gray-900">
               การจัดการสต๊อก
             </h2>
 
             <div className="grid grid-cols-2 gap-6">
-
               {/* จำนวนสต๊อกเริ่มต้น */}
               <div>
-
                 <label className="mb-2 block text-[15px] text-gray-600">
                   จำนวนสต๊อกเริ่มต้น *
                 </label>
@@ -402,13 +361,10 @@ export default function AddProductPage() {
                     กรุณากรอกจำนวนสต๊อก
                   </p>
                 )}
-
               </div>
-
 
               {/* จำนวนขั้นต่ำที่แจ้งเตือน */}
               <div>
-
                 <label className="mb-2 block text-[15px] text-gray-600">
                   จำนวนขั้นต่ำที่แจ้งเตือน *
                 </label>
@@ -431,32 +387,25 @@ export default function AddProductPage() {
                     กรุณากรอกจำนวนขั้นต่ำที่แจ้งเตือน
                   </p>
                 )}
-
               </div>
-
             </div>
-
           </div>
-
 
           {/* ปุ่มด้านล่าง */}
           <div className="flex justify-end gap-4 pb-2">
-
             <button className="rounded-full border border-[#D1D5DB] px-8 py-2 text-[18px] text-gray-600">
               ยกเลิก
             </button>
 
-            <button onClick={handleSubmit} className="rounded-full bg-[#7FBFFF] px-8 py-2 text-[18px] text-white">
+            <button
+              onClick={handleSubmit}
+              className="rounded-full bg-[#7FBFFF] px-8 py-2 text-[18px] text-white"
+            >
               เพิ่มสินค้า
             </button>
-
           </div>
-
-
         </div>
-
       </div>
-
     </div>
   );
 }
