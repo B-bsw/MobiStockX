@@ -9,6 +9,7 @@ import {
   Package,
   ShoppingCart,
   PackagePlus,
+  ReceiptText,
   LogOut,
   X,
 } from "lucide-react";
@@ -22,19 +23,22 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { ROLE_LABEL, useAuth } from "@/lib/auth-context";
 
 const navigation = [
   { href: "/", label: "แดชบอร์ด", icon: LayoutDashboard },
   { href: "/products", label: "สินค้า", icon: Smartphone },
   { href: "/products/add", label: "เพิ่มสินค้า", icon: PlusSquare },
-  { href: "/stock", label: "จัดการสต๊อก", icon: Package },
+  { href: "/stock-in", label: "จัดการสต๊อก", icon: Package },
   { href: "/pos", label: "ขายสินค้า/POS", icon: ShoppingCart },
   { href: "/receive", label: "รับสินค้าเข้า", icon: PackagePlus },
+  { href: "/sales", label: "ประวัติการขาย", icon: ReceiptText },
 ];
 
 export function AppSidebar() {
   const pathname = usePathname();
   const { setOpenMobile } = useSidebar();
+  const { user, logout } = useAuth();
   const activeHref = navigation
     .filter(
       ({ href }) =>
@@ -94,20 +98,25 @@ export function AppSidebar() {
               aria-hidden="true"
             />
             <div className="min-w-0">
-              <p className="truncate text-[19px]">Piyada ketmala</p>
-              <p className="text-[14px] text-white/80">ผู้ดูแลระบบ</p>
+              <p className="truncate text-[19px]">
+                {user?.fullName ?? "ยังไม่เข้าสู่ระบบ"}
+              </p>
+              <p className="text-[14px] text-white/80">
+                {user ? ROLE_LABEL[user.role] : "-"}
+              </p>
             </div>
           </div>
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton
-                asChild
                 className="h-14.5 gap-5 rounded-[25px] bg-white/25 px-7 text-[20px] hover:bg-white/35 [&_svg]:size-[26px]"
+                onClick={() => {
+                  setOpenMobile(false);
+                  logout();
+                }}
               >
-                <Link href="/auth/login" onClick={() => setOpenMobile(false)}>
-                  <LogOut aria-hidden="true" />
-                  <span>ออกจากระบบ</span>
-                </Link>
+                <LogOut aria-hidden="true" />
+                <span>ออกจากระบบ</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
