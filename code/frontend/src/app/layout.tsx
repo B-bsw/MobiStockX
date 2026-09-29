@@ -12,14 +12,9 @@ export const metadata: Metadata = {
   description: "ระบบจัดการคลังสินค้า",
 };
 
-export default function RootLayout({
-  children,
-}: LayoutProps<"/">) {
+export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html
-      lang="th"
-      className={`${inter.variable} h-full antialiased`}
-    >
+    <html lang="th" className={`${inter.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col font-[var(--font-inter)]">
         {children}
       </body>
