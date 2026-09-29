@@ -1,6 +1,6 @@
 "use client";
 
-import { PackageOpen, SearchX } from "lucide-react";
+import { PackageOpen, SearchX, TriangleAlert } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { DataTable, type Column } from "@/components/ui/data-table";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -87,7 +87,10 @@ export function ProductsTable({
           <Badge
             tone={quantity === 0 ? "danger" : quantity <= 3 ? "warning" : "success"}
           >
-            {quantity === 0 ? "หมด" : quantity}
+            <span className="flex items-center gap-1">
+              {quantity === 0 ? "หมด" : quantity}
+              {quantity <= 3 && <TriangleAlert size={14} aria-hidden="true" />}
+            </span>
           </Badge>
         );
       },
