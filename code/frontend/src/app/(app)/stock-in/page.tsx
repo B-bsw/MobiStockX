@@ -5,7 +5,12 @@ import { PackageOpen, SearchX } from "lucide-react";
 import { api } from "@/lib/api";
 import { formatMoney } from "@/lib/format";
 import { Badge } from "@/components/ui/badge";
-import { CardField, CardFields, DataTable, type Column } from "@/components/ui/data-table";
+import {
+  CardField,
+  CardFields,
+  DataTable,
+  type Column,
+} from "@/components/ui/data-table";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Panel, PanelHeader } from "@/components/ui/panel";
 import { SearchInput } from "@/components/ui/search-input";
@@ -151,7 +156,7 @@ export default function Page() {
         loading={loading}
         error={error}
         minWidthClass="min-w-[58rem]"
-        maxHeightClass="max-h-[36rem]"
+        maxHeightClass="max-h-full"
         mobileCard={(item) => (
           <div>
             <div className="flex items-start justify-between gap-3">

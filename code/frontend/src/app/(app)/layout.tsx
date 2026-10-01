@@ -9,13 +9,15 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
   return (
     <AuthProvider>
       <TooltipProvider>
-        <SidebarProvider style={{ "--sidebar-width": "17rem" } as CSSProperties}>
+        <SidebarProvider
+          style={{ "--sidebar-width": "17rem" } as CSSProperties}
+        >
           <AppSidebar />
 
           <div className="flex min-w-0 flex-1 flex-col">
             {/* Stays put so the menu toggle is reachable from anywhere in a
                 long table, which is most of this app. */}
-            <header className="sticky top-0 z-[var(--z-sticky)] flex h-14 shrink-0 items-center gap-2 border-b bg-background px-2 sm:px-4">
+            <header className="sticky top-0 z-(--z-sticky) flex h-14 shrink-0 items-center gap-2 border-b bg-background px-2 sm:px-4">
               <SidebarTrigger
                 size="icon-touch"
                 variant="ghost"
