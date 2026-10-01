@@ -156,7 +156,7 @@ export default function Page() {
         loading={loading}
         error={error}
         minWidthClass="min-w-[58rem]"
-        maxHeightClass="max-h-full"
+        maxHeightClass="max-h-144"
         mobileCard={(item) => (
           <div>
             <div className="flex items-start justify-between gap-3">

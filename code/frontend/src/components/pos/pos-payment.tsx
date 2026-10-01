@@ -43,7 +43,7 @@ export function PosPayment({
   const enoughCash = !isCash || Number(received) >= total;
 
   return (
-    <div className="border-t border-[#EBEBEB] px-7 pb-6 pt-3 text-[#808080]">
+    <div className="shrink-0 border-t border-[#EBEBEB] px-7 pb-6 pt-3 text-[#808080]">
       <div className="flex justify-between text-[17px]">
         <span>ยอดรวม</span>
         <span className="text-black">{formatMoney(total)}</span>
