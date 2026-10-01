@@ -52,7 +52,7 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen w-full bg-white">
+    <main className="min-h-screen w-full bg-[#78B8F2]">
       <div className="flex min-h-screen w-full">
         <section className="hidden w-1/2 items-center justify-center bg-[#78B8F2] md:flex">
           <div className=" flex flex-col items-center">
@@ -70,7 +70,7 @@ export default function LoginPage() {
           </div>
         </section>
 
-        <section className="flex min-h-screen w-full items-center justify-center  bg-white px-6 py-36 md:w-1/2 md:px-10 lg:px-16">
+        <section className="flex min-h-screen w-full items-center justify-center rounded-2xl  bg-white px-6 py-36 md:w-1/2 md:px-10 lg:px-16">
           <div className="relative w-full max-w-[320px]">
             <div className="absolute bottom-full left-1/2 mb-10 -translate-x-1/2 flex flex-col w-full items-center md:hidden">
               <div className="font-bold text-2xl">MobistockX</div>

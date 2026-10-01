@@ -28,6 +28,8 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { ROLE_LABEL, useAuth } from "@/lib/auth-context";
+import Image from "next/image";
+import logo from "@/../public/logo.png";
 
 interface NavItem {
   href: string;
@@ -78,14 +80,19 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="offcanvas">
       <SidebarHeader className="relative gap-0 px-4 pb-4 pt-5">
-        <Link
-          href="/"
-          onClick={() => setOpenMobile(false)}
-          className="w-fit rounded-md text-lg font-semibold tracking-tight text-sidebar-foreground"
-        >
-          Mobistock
-        </Link>
-        <p className="text-sm text-sidebar-muted">ระบบจัดการคลังสินค้า</p>
+        <div className="flex items-center">
+          <Image src={logo} alt="logo" width={60} height={60} />
+          <div>
+            <Link
+              href="/"
+              onClick={() => setOpenMobile(false)}
+              className="w-fit rounded-md text-lg font-semibold tracking-tight text-sidebar-foreground"
+            >
+              Mobistock
+            </Link>
+            <p className="text-sm text-sidebar-muted">ระบบจัดการคลังสินค้า</p>
+          </div>
+        </div>
         <button
           type="button"
           aria-label="ปิดเมนู"
