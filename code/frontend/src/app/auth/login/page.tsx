@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import logo from "@/../public/img/logo.jpg";
+import logo from "@/../public/logo.png";
 import { api, setToken } from "@/lib/api";
 
 export default function LoginPage() {
@@ -54,7 +54,15 @@ export default function LoginPage() {
     <main className="min-h-screen w-full bg-white">
       <div className="flex min-h-screen w-full">
         <section className="hidden w-1/2 items-center justify-center bg-[#78B8F2] md:flex">
-          <Image src={logo} className="scale-50" alt="logo" />
+          <div className=" flex flex-col items-center">
+            <Image src={logo} alt="logo" width={250} height={250} />
+            <div className="flex flex-col items-center text-white">
+              <div className="font-bold text-2xl">MobistockX</div>
+              <div className="font-medium">
+                ระบบจัดการคลังสินค้าโทรศัพท์มือถือ
+              </div>
+            </div>
+          </div>
         </section>
 
         <section className="flex min-h-screen w-full items-center justify-center bg-white px-6 md:w-1/2 md:px-10 lg:px-16">
