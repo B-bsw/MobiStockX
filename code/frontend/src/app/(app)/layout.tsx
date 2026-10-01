@@ -15,7 +15,6 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
           <AppSidebar />
 
           <div className="relative isolate flex min-w-0 flex-1 flex-col bg-white dark:bg-background">
-
             <svg
               aria-hidden="true"
               className="pointer-events-none absolute inset-x-0 top-0 h-[65dvh] w-full text-[#dce7ff] dark:text-[#26354f]"
