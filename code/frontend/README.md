@@ -50,9 +50,11 @@ Configure these GitHub repository secrets before running the workflow:
 To obtain the IDs, link the frontend locally and inspect the generated file:
 
 ```bash
+
 cd code/frontend
 npx vercel link
 cat .vercel/project.json
+
 ```
 
 The `.vercel` directory is ignored by Git and must not be committed. Add all
