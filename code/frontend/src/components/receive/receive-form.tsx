@@ -56,8 +56,7 @@ export function ReceiveForm({ models, onReceived }: ReceiveFormProps) {
           ? {
               ...line,
               modelId,
-              costPrice:
-                line.costPrice || String(model?.standardCost ?? ""),
+              costPrice: line.costPrice || String(model?.standardCost ?? ""),
               sellingPrice:
                 line.sellingPrice || String(model?.standardPrice ?? ""),
             }
@@ -142,7 +141,7 @@ export function ReceiveForm({ models, onReceived }: ReceiveFormProps) {
   }
 
   return (
-    <section className="rounded-[20px] border border-[#EBEBEB] bg-white px-[18px] pb-6 pt-5">
+    <section className="rounded-[20px] border border-[#EBEBEB] bg-white px-4.5 pb-6 pt-5">
       <h2 className="mb-4 px-1.5 text-[18px] text-black">
         บันทึกการรับสินค้าใหม่
       </h2>
@@ -170,17 +169,20 @@ export function ReceiveForm({ models, onReceived }: ReceiveFormProps) {
             type="button"
             disabled={saving}
             onClick={() => {
-              setLines((current) => [...current, createLine(crypto.randomUUID())]);
+              setLines((current) => [
+                ...current,
+                createLine(crypto.randomUUID()),
+              ]);
               setMessage("");
             }}
-            className="flex h-[49px] items-center justify-center gap-2 rounded-full border border-[#EBEBEB] px-5 text-[20px] text-[#808080] hover:bg-gray-50 disabled:opacity-50"
+            className="flex h-12.25 items-center justify-center gap-2 rounded-full border border-[#EBEBEB] px-5 text-[20px] text-[#808080] hover:bg-gray-50 disabled:opacity-50"
           >
             <Plus size={24} aria-hidden="true" /> เพิ่มรายการ
           </button>
           <button
             type="submit"
             disabled={saving || models.length === 0}
-            className="h-[49px] rounded-full bg-[#7FBFFF] px-7 text-[20px] text-white transition hover:bg-[#68AEF4] disabled:opacity-50"
+            className="h-12.25 rounded-full bg-[#7FBFFF] px-7 text-[20px] text-white transition hover:bg-[#68AEF4] disabled:opacity-50"
           >
             {saving ? "กำลังบันทึก..." : "ยืนยันการรับสินค้า"}
           </button>
