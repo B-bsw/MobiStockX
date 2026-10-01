@@ -27,7 +27,7 @@ export function ReceiveItemRow({
   onRemove,
 }: ReceiveItemRowProps) {
   return (
-    <div className="rounded-[20px] border border-[#EBEBEB] bg-[#F8F9FB] p-3">
+    <div className="rounded-[20px] border border-[#EBEBEB] bg-white p-3">
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-[2fr_0.7fr_1fr_1fr_1.2fr]">
         <div className="min-w-0">
           <label htmlFor={`model-${line.id}`} className={labelClass}>
