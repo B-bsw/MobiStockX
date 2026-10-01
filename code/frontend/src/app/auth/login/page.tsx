@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import logo from "@/../public/logo.png";
+import { Alert } from "@/components/ui/alert";
 import { api, setToken } from "@/lib/api";
 
 export default function LoginPage() {
@@ -126,9 +127,9 @@ export default function LoginPage() {
               </div>
 
               {error && (
-                <p role="alert" className="mb-4 text-sm text-[#E53935]">
+                <Alert tone="danger" className="mb-4">
                   {error}
-                </p>
+                </Alert>
               )}
 
               <button
