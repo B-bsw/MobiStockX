@@ -76,7 +76,7 @@ export function AppSidebar() {
   ).sort((a, b) => b.href.length - a.href.length)[0]?.href;
 
   return (
-    <Sidebar collapsible="offcanvas" className="border-none">
+    <Sidebar collapsible="offcanvas">
       <SidebarHeader className="relative gap-0 px-4 pb-4 pt-5">
         <Link
           href="/"
@@ -109,8 +109,7 @@ export function AppSidebar() {
                     <SidebarMenuButton
                       asChild
                       isActive={activeHref === href}
-                      // The active pill inverts to the light surface; hover is a
-                      // 10% white wash. Both keep label text above 5:1.
+                      // Active and hover colors come from the sidebar theme.
                       className="h-11 gap-3 rounded-lg px-3 text-sm data-active:bg-sidebar-primary data-active:font-semibold data-active:text-sidebar-primary-foreground [&_svg]:size-4.5"
                     >
                       <Link
