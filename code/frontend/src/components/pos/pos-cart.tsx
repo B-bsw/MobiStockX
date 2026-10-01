@@ -43,10 +43,10 @@ export function PosCart({
 
   return (
     <aside
-      className="flex min-h-[650px] flex-col border-t border-[#EBEBEB] bg-white lg:border-l lg:border-t-0"
+      className="flex min-h-[650px] flex-col border-t border-[#EBEBEB] bg-white lg:min-h-0 lg:border-l lg:border-t-0"
       aria-label="ตะกร้าสินค้า"
     >
-      <div className="border-b border-[#EBEBEB] px-6 py-4">
+      <div className="shrink-0 border-b border-[#EBEBEB] px-6 py-4">
         <h2 className="text-[17px] text-black">รายการสินค้า</h2>
         <p className="text-[14px] text-[#808080]" aria-live="polite">
           {count} รายการในตะกร้า
@@ -54,7 +54,7 @@ export function PosCart({
       </div>
 
       {items.length === 0 ? (
-        <div className="flex min-h-[300px] flex-1 items-center justify-center text-center text-[17px] leading-snug text-[#808080]">
+        <div className="flex min-h-[300px] flex-1 items-center justify-center text-center text-[17px] leading-snug text-[#808080] lg:min-h-0">
           <p>
             ตะกร้าว่าง
             <br />
@@ -62,7 +62,7 @@ export function PosCart({
           </p>
         </div>
       ) : (
-        <div className="flex-1 space-y-4 p-5">
+        <div className="max-h-[40dvh] min-h-0 flex-1 space-y-4 overflow-y-auto p-5 lg:max-h-none">
           {items.map(({ product, quantity }) => (
             <div key={product.id} className="border-b border-[#EBEBEB] pb-4">
               <div className="flex items-start justify-between gap-2">

@@ -9,7 +9,7 @@ interface PosHistoryProps {
 export function PosHistory({ sales, loading = false }: PosHistoryProps) {
   if (loading) {
     return (
-      <div className="flex min-h-[500px] flex-1 items-center justify-center bg-[#F8F9FB] text-[#808080]">
+      <div className="flex min-h-[500px] flex-1 items-center justify-center bg-[#F8F9FB] text-[#808080] lg:min-h-0">
         กำลังโหลดประวัติการขาย...
       </div>
     );
@@ -17,14 +17,14 @@ export function PosHistory({ sales, loading = false }: PosHistoryProps) {
 
   if (sales.length === 0) {
     return (
-      <div className="flex min-h-[500px] flex-1 items-center justify-center bg-[#F8F9FB] text-[#808080]">
+      <div className="flex min-h-[500px] flex-1 items-center justify-center bg-[#F8F9FB] text-[#808080] lg:min-h-0">
         ยังไม่มีประวัติการขาย
       </div>
     );
   }
 
   return (
-    <div className="flex-1 bg-[#F8F9FB] p-6">
+    <div className="flex-1 bg-[#F8F9FB] p-6 lg:min-h-0 lg:overflow-y-auto">
       <div className="overflow-hidden rounded-[20px] border border-[#EBEBEB] bg-white">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[820px] text-left">
