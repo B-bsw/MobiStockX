@@ -79,7 +79,7 @@ public class ProductModelServiceImpl implements ProductModelService {
     @Override
     @Transactional(readOnly = true)
     public ProductModelResponse getProductModelById(Long modelId) {
-        ProductModel model = productModelRepository.findById(modelId)
+        ProductModel model = productModelRepository.findWithRefsByModelId(modelId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product model not found with id: " + modelId));
         return stockMapper.toProductModelResponse(model);
     }

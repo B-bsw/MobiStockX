@@ -37,6 +37,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -158,8 +159,8 @@ class SaleServiceImplTest {
 
         when(customerRepository.findById(1L)).thenReturn(Optional.of(mockCustomer));
         when(appUserRepository.findById(1L)).thenReturn(Optional.of(mockCashier));
-        when(productModelRepository.findById(10L)).thenReturn(Optional.of(mockModel));
-        when(productItemRepository.findById(100L)).thenReturn(Optional.of(mockItem));
+        when(productModelRepository.findAllById(Set.of(10L))).thenReturn(List.of(mockModel));
+        when(productItemRepository.findAllById(Set.of(100L))).thenReturn(List.of(mockItem));
         when(saleOrderRepository.save(any(SaleOrder.class))).thenAnswer(invocation -> {
             SaleOrder order = invocation.getArgument(0);
             order.setSaleId(999L);
@@ -174,7 +175,9 @@ class SaleServiceImplTest {
         assertEquals(ItemStatus.SOLD, mockItem.getStatus());
         assertNotNull(mockItem.getWarrantyExpireDate());
 
-        verify(productItemRepository).save(mockItem);
+        // item / model เป็น managed entity — การเปลี่ยน state ถูก flush ด้วย dirty checking
+        // ตอน commit ไม่ต้องเรียก save() เอง (ยืนยัน state ที่ assert ไว้ข้างบนแทน)
+        verify(productItemRepository, never()).save(any(ProductItem.class));
         verify(saleOrderRepository).save(any(SaleOrder.class));
     }
 
@@ -214,8 +217,8 @@ class SaleServiceImplTest {
 
         when(customerRepository.findById(1L)).thenReturn(Optional.of(mockCustomer));
         when(appUserRepository.findById(1L)).thenReturn(Optional.of(mockCashier));
-        when(productModelRepository.findById(10L)).thenReturn(Optional.of(mockModel));
-        when(productItemRepository.findById(100L)).thenReturn(Optional.of(mockItem));
+        when(productModelRepository.findAllById(Set.of(10L))).thenReturn(List.of(mockModel));
+        when(productItemRepository.findAllById(Set.of(100L))).thenReturn(List.of(mockItem));
 
         assertThrows(BadRequestException.class, () -> saleService.createSaleOrder(request));
         verify(saleOrderRepository, never()).save(any());
@@ -242,8 +245,8 @@ class SaleServiceImplTest {
 
         when(customerRepository.findById(1L)).thenReturn(Optional.of(mockCustomer));
         when(appUserRepository.findById(1L)).thenReturn(Optional.of(mockCashier));
-        when(productModelRepository.findById(10L)).thenReturn(Optional.of(mockModel));
-        when(productItemRepository.findById(100L)).thenReturn(Optional.of(mockItem));
+        when(productModelRepository.findAllById(Set.of(10L))).thenReturn(List.of(mockModel));
+        when(productItemRepository.findAllById(Set.of(100L))).thenReturn(List.of(mockItem));
 
         assertThrows(BadRequestException.class, () -> saleService.createSaleOrder(request));
         verify(saleOrderRepository, never()).save(any());

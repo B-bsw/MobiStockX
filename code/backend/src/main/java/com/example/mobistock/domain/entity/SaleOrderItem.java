@@ -8,6 +8,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
@@ -27,7 +28,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "SALE_ORDER_ITEM")
+@Table(name = "SALE_ORDER_ITEM", indexes = {
+        // batch fetch items ของหลาย order: WHERE sale_id IN (?, ?, ...)
+        @Index(name = "idx_sale_order_item_sale", columnList = "sale_id"),
+        @Index(name = "idx_sale_order_item_model", columnList = "model_id"),
+        @Index(name = "idx_sale_order_item_item", columnList = "item_id")
+})
 public class SaleOrderItem extends BaseEntity {
 
     @Id

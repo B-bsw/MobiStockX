@@ -7,6 +7,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -24,7 +25,11 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "PRODUCT_WARRANTY")
+@Table(name = "PRODUCT_WARRANTY", indexes = {
+        // findByItemImei + batch fetch warranty ของหลาย sale item
+        @Index(name = "idx_warranty_imei", columnList = "item_imei"),
+        @Index(name = "idx_warranty_sale_item", columnList = "sale_item_id")
+})
 public class ProductWarranty extends BaseEntity {
 
     @Id
