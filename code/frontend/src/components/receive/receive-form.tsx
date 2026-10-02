@@ -141,61 +141,74 @@ export function ReceiveForm({ models, onReceived }: ReceiveFormProps) {
   }
 
   return (
-    <section className="rounded-[20px] border border-[#EBEBEB] bg-white px-4.5 pb-6 pt-5">
-      <h2 className="mb-4 px-1.5 text-[18px] text-black">
-        บันทึกการรับสินค้าใหม่
-      </h2>
-      <form onSubmit={submit}>
-        <div className="space-y-3">
-          {lines.map((line) => (
-            <ReceiveItemRow
-              key={line.id}
-              line={line}
-              models={models}
-              removable={lines.length > 1}
-              onChange={(id, field, value) =>
-                field === "modelId"
-                  ? selectModel(id, value)
-                  : changeLine(id, field, value)
-              }
-              onRemove={(id) =>
-                setLines((current) => current.filter((item) => item.id !== id))
-              }
-            />
-          ))}
-        </div>
-        <div className="mt-5 flex flex-wrap gap-5 px-1">
-          <button
-            type="button"
-            disabled={saving}
-            onClick={() => {
-              setLines((current) => [
-                ...current,
-                createLine(crypto.randomUUID()),
-              ]);
-              setMessage("");
-            }}
-            className="flex h-12.25 items-center justify-center gap-2 rounded-full border border-[#EBEBEB] px-5 text-[20px] text-[#808080] hover:bg-gray-50 disabled:opacity-50"
-          >
-            <Plus size={24} aria-hidden="true" /> เพิ่มรายการ
-          </button>
-          <button
-            type="submit"
-            disabled={saving || models.length === 0}
-            className="h-12.25 rounded-full bg-[#7FBFFF] px-7 text-[20px] text-white transition hover:bg-[#68AEF4] disabled:opacity-50"
-          >
-            {saving ? "กำลังบันทึก..." : "ยืนยันการรับสินค้า"}
-          </button>
-        </div>
-        {message && (
-          <p
-            role="status"
-            className={`mt-3 px-2 text-sm ${isError ? "text-[#E53935]" : "text-[#249447]"}`}
-          >
-            {message}
-          </p>
-        )}
-      </form>
-    </section>
-  );
+  <section className="border-b border-[#EBEBEB] bg-white px-6 py-6 xl:px-10">
+    <h2 className="mb-2 text-[20px] font-semibold text-[#292929]">
+      บันทึกการรับสินค้าใหม่
+    </h2>
+
+    <p className="mb-6 text-[16px] text-[#606060]">
+      เพิ่มรายการสินค้าและรายละเอียดสำหรับนำเข้าคลัง
+    </p>
+
+    <form onSubmit={submit}>
+      <div className="space-y-4">
+        {lines.map((line) => (
+          <ReceiveItemRow
+            key={line.id}
+            line={line}
+            models={models}
+            removable={lines.length > 1}
+            onChange={(id, field, value) =>
+              field === "modelId"
+                ? selectModel(id, value)
+                : changeLine(id, field, value)
+            }
+            onRemove={(id) =>
+              setLines((current) =>
+                current.filter((item) => item.id !== id),
+              )
+            }
+          />
+        ))}
+      </div>
+
+      <div className="mt-6 flex flex-wrap gap-4">
+        <button
+          type="button"
+          disabled={saving}
+          onClick={() => {
+            setLines((current) => [
+              ...current,
+              createLine(crypto.randomUUID()),
+            ]);
+            setMessage("");
+          }}
+          className="flex h-12 items-center justify-center gap-2 rounded-full border border-[#EBEBEB] px-5 text-[18px] text-[#808080] transition hover:bg-gray-50 disabled:opacity-50"
+        >
+          <Plus size={22} aria-hidden="true" />
+          เพิ่มรายการ
+        </button>
+
+        <button
+          type="submit"
+          disabled={saving || models.length === 0}
+          className="h-12 rounded-full bg-[#7FBFFF] px-7 text-[18px] text-white transition hover:bg-[#68AEF4] disabled:opacity-50"
+        >
+          {saving ? "กำลังบันทึก..." : "ยืนยันการรับสินค้า"}
+        </button>
+      </div>
+
+      {message && (
+        <p
+          role="status"
+          className={`mt-3 text-sm ${
+            isError ? "text-[#E53935]" : "text-[#249447]"
+          }`}
+        >
+          {message}
+        </p>
+      )}
+    </form>
+  </section>
+);
 }
