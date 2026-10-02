@@ -4,7 +4,6 @@
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="title" value="MobiStock X - Entity Relationship Diagram (PostgreSQL Schema)" style="text;html=1;fontSize=16;fontStyle=1;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="1"><mxGeometry x="500" y="20" width="600" height="30" as="geometry" /></mxCell>
 
         <!-- Brand -->
         <mxCell id="t_brand" value="brand&#xa;--&#xa;PK: brand_id (BIGSERIAL)&#xa;brand_name (VARCHAR)&#xa;brand_country (VARCHAR)&#xa;image_url (VARCHAR)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">

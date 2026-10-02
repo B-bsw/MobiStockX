@@ -4,7 +4,6 @@
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="t" value="MobiStock X - Component &amp; Deployment Architecture" style="text;html=1;fontSize=16;fontStyle=1;align=center;verticalAlign=middle;fontColor=#000000;" vertex="1" parent="1"><mxGeometry x="400" y="20" width="450" height="30" as="geometry" /></mxCell>
         <mxCell id="n_client" value="«device»&#xa;Client Workstation / Tablet" style="shape=cube;whiteSpace=wrap;html=1;size=15;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;verticalAlign=top;spacingTop=20;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="60" y="80" width="220" height="200" as="geometry" /></mxCell>
         <mxCell id="a_browser" value="«artifact»&#xa;Web Browser (SPA Client)" style="shape=module;align=center;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="n_client"><mxGeometry x="25" y="70" width="170" height="90" as="geometry" /></mxCell>
         <mxCell id="n_fe" value="«environment»&#xa;Frontend Host (Next.js 16)&#xa;Port: 3000" style="shape=cube;whiteSpace=wrap;html=1;size=15;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;verticalAlign=top;spacingTop=20;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="360" y="80" width="240" height="230" as="geometry" /></mxCell>
