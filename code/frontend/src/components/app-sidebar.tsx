@@ -80,7 +80,7 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="offcanvas">
       <SidebarHeader className="relative gap-0 px-4 pb-4 pt-5">
-        <div className="flex items-center">
+        <div className="flex items-center gap-4">
           <Image src={logo} alt="logo" width={60} height={60} />
           <div>
             <Link
@@ -103,7 +103,7 @@ export function AppSidebar() {
         </button>
       </SidebarHeader>
 
-      <SidebarContent className="gap-0 px-2">
+      <SidebarContent className="gap-0 px-6">
         <nav aria-label="เมนูหลัก">
           {NAV_GROUPS.map((group) => (
             <SidebarGroup key={group.label} className="px-0 py-1.5">
@@ -136,7 +136,7 @@ export function AppSidebar() {
         </nav>
       </SidebarContent>
 
-      <SidebarFooter className="gap-0 px-2 pb-4 pt-2">
+      <SidebarFooter className="gap-0 px-4 pb-4 pt-2">
         <div className="mb-2 flex items-center gap-3 border-t border-sidebar-border px-3 pt-4">
           <span
             aria-hidden="true"
