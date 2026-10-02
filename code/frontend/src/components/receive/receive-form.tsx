@@ -1,13 +1,18 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+
 import { Plus } from "lucide-react";
 
 import { api } from "@/lib/api";
+
 import { suppliers } from "@/datas/receive/data";
 
 import type { ReceiveLine } from "@/types/receive/types";
+
 import type { ProductModel } from "@/types/products/types";
+
+import { PanelSection } from "@/components/ui/panel";
 
 import { ReceiveItemRow } from "./receive-item-row";
 
@@ -59,7 +64,10 @@ export function ReceiveForm({
     );
   }
 
-  function selectModel(id: string, modelId: string) {
+  function selectModel(
+    id: string,
+    modelId: string,
+  ) {
     const model = models.find(
       (item) => String(item.modelId) === modelId,
     );
@@ -82,6 +90,29 @@ export function ReceiveForm({
           : line,
       ),
     );
+  }
+
+  function addLine() {
+    setMessage("");
+
+    setLines((current) => [
+      ...current,
+      createLine(crypto.randomUUID()),
+    ]);
+  }
+
+  function removeLine(id: string) {
+    setMessage("");
+
+    setLines((current) => {
+      if (current.length <= 1) {
+        return current;
+      }
+
+      return current.filter(
+        (line) => line.id !== id,
+      );
+    });
   }
 
   async function submit(
@@ -136,12 +167,14 @@ export function ReceiveForm({
         try {
           await api.post("/products/items", {
             modelId: Number(line.modelId),
+
             serialNumber:
               serial === ""
                 ? null
                 : quantity === 1
                   ? serial
                   : `${serial}-${index + 1}`,
+
             imei: null,
             condition: "NEW",
             grade: line.grade || null,
@@ -178,125 +211,97 @@ export function ReceiveForm({
   }
 
   return (
-    <section className="bg-white px-6 py-6 xl:px-10">
-      {/* หัวข้อ */}
-      <div className="mb-7">
-        <h2 className="text-[20px] font-semibold text-[#292929]">
-          บันทึกการรับสินค้าใหม่
-        </h2>
-
-        <p className="mt-1 text-[16px] text-[#606060]">
-          เพิ่มรายการสินค้าและรายละเอียดสำหรับนำเข้าคลัง
-        </p>
-      </div>
-
-      <form onSubmit={submit}>
-        {/* รายละเอียดสินค้า */}
-        <div className="border-b border-[#EBEBEB] pb-8">
+    <form onSubmit={submit}>
+      <PanelSection
+        title="บันทึกการรับสินค้าใหม่"
+        description="เพิ่มรายการสินค้าและรายละเอียดสำหรับนำเข้าคลัง"
+      >
+        <div className="space-y-4">
           <ReceiveItemRow
             line={lines[0]}
             models={models}
             removable={false}
-            onChange={(id, field, value) =>
-              field === "modelId"
-                ? selectModel(id, value)
-                : changeLine(id, field, value)
-            }
-            onRemove={(id) =>
-              setLines((current) =>
-                current.filter(
-                  (item) => item.id !== id,
-                ),
-              )
-            }
+            onChange={(id, field, value) => {
+              if (field === "modelId") {
+                selectModel(id, value);
+              } else {
+                changeLine(id, field, value);
+              }
+            }}
+            onRemove={removeLine}
           />
 
-          {/* รายการเพิ่มเติม */}
           {lines.length > 1 && (
-            <div className="mt-8 space-y-8">
+            <div className="space-y-4">
               {lines.slice(1).map((line) => (
                 <div
                   key={line.id}
-                  className="border-t border-[#EBEBEB] pt-8"
+                  className="border-t border-[#EBEBEB] pt-4"
                 >
                   <ReceiveItemRow
                     line={line}
                     models={models}
                     removable
-                    onChange={(id, field, value) =>
-                      field === "modelId"
-                        ? selectModel(id, value)
-                        : changeLine(
-                            id,
-                            field,
-                            value,
-                          )
-                    }
-                    onRemove={(id) =>
-                      setLines((current) =>
-                        current.filter(
-                          (item) =>
-                            item.id !== id,
-                        ),
-                      )
-                    }
+                    onChange={(id, field, value) => {
+                      if (field === "modelId") {
+                        selectModel(id, value);
+                      } else {
+                        changeLine(
+                          id,
+                          field,
+                          value,
+                        );
+                      }
+                    }}
+                    onRemove={removeLine}
                   />
                 </div>
               ))}
             </div>
           )}
         </div>
+      </PanelSection>
 
-        {/* ปุ่ม */}
-        <div className="mt-6 flex flex-wrap gap-4">
-          <button
-            type="button"
-            disabled={saving}
-            onClick={() => {
-              setLines((current) => [
-                ...current,
-                createLine(crypto.randomUUID()),
-              ]);
-
-              setMessage("");
-            }}
-            className="flex h-12 items-center justify-center gap-2 rounded-full border border-[#D9E0E8] bg-white px-5 text-[16px] text-[#606060] transition hover:bg-[#F8F9FB] disabled:opacity-50"
-          >
+      <div className="flex flex-col-reverse gap-3 px-4 py-4 sm:flex-row sm:justify-end sm:px-6">
+        <button
+          type="button"
+          onClick={addLine}
+          disabled={saving}
+          className="h-11 rounded-lg border border-[#D9E0E8] bg-white px-4 text-sm font-medium text-[#404040] transition hover:bg-[#F8F9FB] disabled:opacity-50"
+        >
+          <span className="flex items-center gap-2">
             <Plus
-              size={20}
+              size={16}
               aria-hidden="true"
             />
-
             เพิ่มรายการ
-          </button>
+          </span>
+        </button>
 
-          <button
-            type="submit"
-            disabled={
-              saving || models.length === 0
-            }
-            className="h-12 rounded-full bg-[#7FBFFF] px-7 text-[16px] text-white transition hover:bg-[#68AEF4] disabled:opacity-50"
-          >
-            {saving
-              ? "กำลังบันทึก..."
-              : "ยืนยันการรับสินค้า"}
-          </button>
-        </div>
+        <button
+          type="submit"
+          disabled={saving}
+          className="h-11 rounded-lg bg-[#7FBFFF] px-5 text-sm font-medium text-white transition hover:bg-[#68AEF4] disabled:opacity-50"
+        >
+          {saving
+            ? "กำลังบันทึก…"
+            : "ยืนยันการรับสินค้า"}
+        </button>
+      </div>
 
-        {/* ข้อความสถานะ */}
-        {message && (
+      {message && (
+        <div className="px-4 pb-4 sm:px-6">
           <p
-            role="status"
-            className={`mt-4 text-sm ${
+            className={
               isError
-                ? "text-[#E53935]"
-                : "text-[#249447]"
-            }`}
+                ? "text-sm text-[#E53935]"
+                : "text-sm text-[#606060]"
+            }
           >
             {message}
           </p>
-        )}
-      </form>
-    </section>
+        </div>
+      )}
+    </form>
   );
 }
