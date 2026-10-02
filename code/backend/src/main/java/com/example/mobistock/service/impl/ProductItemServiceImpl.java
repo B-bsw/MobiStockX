@@ -34,11 +34,11 @@ public class ProductItemServiceImpl implements ProductItemService {
         ProductModel model = productModelRepository.findById(request.getModelId())
                 .orElseThrow(() -> new ResourceNotFoundException("Product model not found with id: " + request.getModelId()));
 
-        if (request.getImei() != null && productItemRepository.findByImei(request.getImei()).isPresent()) {
+        if (request.getImei() != null && productItemRepository.existsByImei(request.getImei())) {
             throw new BadRequestException("Device with IMEI '" + request.getImei() + "' already exists");
         }
 
-        if (request.getSerialNumber() != null && productItemRepository.findBySerialNumber(request.getSerialNumber()).isPresent()) {
+        if (request.getSerialNumber() != null && productItemRepository.existsBySerialNumber(request.getSerialNumber())) {
             throw new BadRequestException("Device with Serial Number '" + request.getSerialNumber() + "' already exists");
         }
 
@@ -56,7 +56,7 @@ public class ProductItemServiceImpl implements ProductItemService {
     @Override
     @Transactional(readOnly = true)
     public ProductItemResponse getProductItemById(Long itemId) {
-        ProductItem item = productItemRepository.findById(itemId)
+        ProductItem item = productItemRepository.findWithModelByItemId(itemId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product item not found with id: " + itemId));
         return stockMapper.toProductItemResponse(item);
     }

@@ -40,7 +40,13 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -69,6 +75,13 @@ public class SaleServiceImpl implements SaleService {
             throw new BadRequestException("Sale order must contain at least one item");
         }
 
+        /*
+         * โหลด model/item ทั้งหมดล่วงหน้าเป็น 2 query (WHERE id IN (...))
+         * ของเดิมยิง findById ต่อ 1 บรรทัดสินค้า → 2N query ต่อ 1 บิล
+         */
+        Map<Long, ProductModel> modelsById = loadModels(request.getItems());
+        Map<Long, ProductItem> itemsById = loadItems(request.getItems());
+
         BigDecimal subtotal = BigDecimal.ZERO;
         SaleOrder saleOrder = SaleOrder.builder()
                 .customer(customer)
@@ -79,16 +92,22 @@ public class SaleServiceImpl implements SaleService {
                 .discountAmount(request.getDiscountAmount() != null ? request.getDiscountAmount() : BigDecimal.ZERO)
                 .build();
 
+        LocalDateTime now = LocalDateTime.now();
+
         for (SaleItemRequest itemRequest : request.getItems()) {
-            ProductModel model = productModelRepository.findById(itemRequest.getModelId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Product model not found with id: " + itemRequest.getModelId()));
+            ProductModel model = modelsById.get(itemRequest.getModelId());
+            if (model == null) {
+                throw new ResourceNotFoundException("Product model not found with id: " + itemRequest.getModelId());
+            }
 
             ProductItem item = null;
             LocalDateTime warrantyExpireDate = null;
 
             if (itemRequest.getItemId() != null) {
-                item = productItemRepository.findById(itemRequest.getItemId())
-                        .orElseThrow(() -> new ResourceNotFoundException("Product item not found with id: " + itemRequest.getItemId()));
+                item = itemsById.get(itemRequest.getItemId());
+                if (item == null) {
+                    throw new ResourceNotFoundException("Product item not found with id: " + itemRequest.getItemId());
+                }
 
                 if (!item.getProductModel().getModelId().equals(model.getModelId())) {
                     throw new BadRequestException("Product item does not match product model id: " + model.getModelId());
@@ -99,20 +118,22 @@ public class SaleServiceImpl implements SaleService {
                             + " is not available for sale (status: " + item.getStatus() + ")");
                 }
 
+                /*
+                 * item / model เป็น managed entity อยู่แล้วใน transaction นี้
+                 * dirty checking จะ flush update ให้ตอน commit — เรียก save() เองไม่ได้ช่วยอะไร
+                 * แค่เพิ่ม flush รอบพิเศษกลางลูป
+                 */
                 item.setStatus(ItemStatus.SOLD);
                 int warrantyMonths = model.getModelWarrantyDuration() != null ? model.getModelWarrantyDuration() : 12;
-                warrantyExpireDate = LocalDateTime.now().plusMonths(warrantyMonths);
+                warrantyExpireDate = now.plusMonths(warrantyMonths);
                 item.setWarrantyExpireDate(warrantyExpireDate);
-                productItemRepository.save(item);
 
                 model.setStockQuantity(Math.max(0, model.getStockQuantity() - itemRequest.getQuantity()));
-                productModelRepository.save(model);
             } else {
                 if (model.getStockQuantity() < itemRequest.getQuantity()) {
                     throw new BadRequestException("Insufficient stock quantity for model: " + model.getModelName());
                 }
                 model.setStockQuantity(model.getStockQuantity() - itemRequest.getQuantity());
-                productModelRepository.save(model);
             }
 
             BigDecimal unitCost = item != null ? item.getCostPrice() : (model.getStandardCost() != null ? model.getStandardCost() : BigDecimal.ZERO);
@@ -181,7 +202,7 @@ public class SaleServiceImpl implements SaleService {
     @Override
     @Transactional(readOnly = true)
     public SaleOrderResponse getSaleOrderById(Long saleId) {
-        SaleOrder saleOrder = saleOrderRepository.findById(saleId)
+        SaleOrder saleOrder = saleOrderRepository.findDetailById(saleId)
                 .orElseThrow(() -> new ResourceNotFoundException("Sale order not found with id: " + saleId));
         return saleMapper.toSaleOrderResponse(saleOrder);
     }
@@ -189,7 +210,7 @@ public class SaleServiceImpl implements SaleService {
     @Override
     @Transactional(readOnly = true)
     public SaleOrderResponse getSaleOrderByCode(String saleCode) {
-        SaleOrder saleOrder = saleOrderRepository.findBySaleCode(saleCode)
+        SaleOrder saleOrder = saleOrderRepository.findDetailBySaleCode(saleCode)
                 .orElseThrow(() -> new ResourceNotFoundException("Sale order not found with code: " + saleCode));
         return saleMapper.toSaleOrderResponse(saleOrder);
     }
@@ -206,6 +227,30 @@ public class SaleServiceImpl implements SaleService {
     public Page<SaleOrderResponse> getSaleOrdersByStatus(SaleStatus status, Pageable pageable) {
         return saleOrderRepository.findByStatus(status, pageable)
                 .map(saleMapper::toSaleOrderResponse);
+    }
+
+    private Map<Long, ProductModel> loadModels(List<SaleItemRequest> items) {
+        Set<Long> modelIds = items.stream()
+                .map(SaleItemRequest::getModelId)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+
+        return productModelRepository.findAllById(modelIds).stream()
+                .collect(Collectors.toMap(ProductModel::getModelId, Function.identity()));
+    }
+
+    private Map<Long, ProductItem> loadItems(List<SaleItemRequest> items) {
+        Set<Long> itemIds = items.stream()
+                .map(SaleItemRequest::getItemId)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+
+        if (itemIds.isEmpty()) {
+            return Map.of();
+        }
+
+        return productItemRepository.findAllById(itemIds).stream()
+                .collect(Collectors.toMap(ProductItem::getItemId, Function.identity()));
     }
 
     private String generateSaleCode() {

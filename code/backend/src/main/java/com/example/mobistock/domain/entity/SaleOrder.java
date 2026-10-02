@@ -14,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Index;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -33,7 +34,12 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "SALE_ORDER")
+@Table(name = "SALE_ORDER", indexes = {
+        // findByStatus(pageable) — คู่กับ sort saleId DESC ที่ controller ใช้เป็น default
+        @Index(name = "idx_sale_order_status_id", columnList = "sale_status, sale_id"),
+        @Index(name = "idx_sale_order_date", columnList = "sale_date"),
+        @Index(name = "idx_sale_order_customer", columnList = "customer_id")
+})
 public class SaleOrder extends BaseEntity {
 
     @Id
