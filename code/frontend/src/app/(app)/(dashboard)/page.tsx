@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, PackageCheck } from "lucide-react";
+import { ArrowRight, PackageCheck, TriangleAlert, Smartphone } from "lucide-react";
 import { api } from "@/lib/api";
 import { formatMoney } from "@/lib/format";
 import { Alert } from "@/components/ui/alert";
@@ -73,7 +73,12 @@ export default function Home() {
     .sort((a, b) => Number(a.stockQuantity) - Number(b.stockQuantity));
 
   const stats = [
-    { label: "รุ่นสินค้าทั้งหมด", value: formatMoney(models.length), unit: "รุ่น" },
+    {
+      label: "รุ่นสินค้าทั้งหมด",
+      value: formatMoney(models.length),
+      unit: "รุ่น",
+      icon: Smartphone,
+    },
     { label: "สต๊อกรวม", value: formatMoney(totalStock), unit: "ชิ้น" },
     { label: "มูลค่าสต๊อก (ต้นทุน)", value: `฿${formatMoney(stockValue)}` },
     { label: "ยอดขายรวม", value: `฿${formatMoney(revenue)}` },
@@ -103,18 +108,39 @@ export default function Home() {
               flush instead of floating in cards inside a card. */}
           <dl className="grid grid-cols-2 gap-px border-b bg-border sm:grid-cols-3 xl:grid-cols-6">
             {stats.map((stat) => (
-              <div key={stat.label} className="bg-card px-4 py-4 sm:px-5">
-                <dt className="text-xs text-muted-foreground">{stat.label}</dt>
-                <dd className="mt-1 flex items-baseline gap-1">
-                  <span className="text-xl font-semibold tabular-nums text-foreground">
-                    {stat.value}
-                  </span>
-                  {stat.unit ? (
-                    <span className="text-xs text-muted-foreground">
-                      {stat.unit}
-                    </span>
+              <div
+                key={stat.label}
+                className="bg-card px-4 py-4 sm:px-5"
+              >
+                <div className="flex items-center gap-3">
+                  {stat.icon ? (
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-purple-100">
+                      <stat.icon
+                        size={22}
+                        className="text-purple-600"
+                        aria-hidden="true"
+                      />
+                    </div>
                   ) : null}
-                </dd>
+
+                  <div className="min-w-0">
+                    <dt className="text-xs text-muted-foreground">
+                      {stat.label}
+                    </dt>
+
+                    <dd className="mt-1 flex items-baseline gap-1">
+                      <span className="text-xl font-semibold tabular-nums text-foreground">
+                        {stat.value}
+                      </span>
+
+                      {stat.unit ? (
+                        <span className="text-xs text-muted-foreground">
+                          {stat.unit}
+                        </span>
+                      ) : null}
+                    </dd>
+                  </div>
+                </div>
               </div>
             ))}
           </dl>
@@ -159,7 +185,10 @@ export default function Home() {
                       </p>
                     </div>
                     <Badge tone={quantity === 0 ? "danger" : "warning"}>
-                      {quantity === 0 ? "หมดสต๊อก" : `เหลือ ${quantity}`}
+                      <span className="flex items-center gap-1">
+                        {quantity === 0 ? "หมดสต๊อก" : `เหลือ ${quantity}`}
+                        <TriangleAlert size={14} aria-hidden="true" />
+                      </span>
                     </Badge>
                   </li>
                 );
