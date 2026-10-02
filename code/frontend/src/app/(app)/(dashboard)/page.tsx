@@ -2,7 +2,17 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, PackageCheck, TriangleAlert, Smartphone } from "lucide-react";
+import {
+  ArrowRight,
+  Package,
+  PackageCheck,
+  Smartphone,
+  Wallet,
+  Banknote,
+  Receipt,
+  ShoppingCart,
+  TriangleAlert,
+} from "lucide-react";
 import { api } from "@/lib/api";
 import { formatMoney } from "@/lib/format";
 import { Alert } from "@/components/ui/alert";
@@ -78,12 +88,41 @@ export default function Home() {
       value: formatMoney(models.length),
       unit: "รุ่น",
       icon: Smartphone,
+      iconClass: "bg-purple-100 text-purple-600",
     },
-    { label: "สต๊อกรวม", value: formatMoney(totalStock), unit: "ชิ้น" },
-    { label: "มูลค่าสต๊อก (ต้นทุน)", value: `฿${formatMoney(stockValue)}` },
-    { label: "ยอดขายรวม", value: `฿${formatMoney(revenue)}` },
-    { label: "บิลที่สำเร็จ", value: formatMoney(completed.length), unit: "บิล" },
-    { label: "เครื่องพร้อมขาย", value: formatMoney(available), unit: "เครื่อง" },
+    {
+      label: "สต๊อกรวม",
+      value: formatMoney(totalStock),
+      unit: "ชิ้น",
+      icon: Package,
+      iconClass: "bg-blue-100 text-blue-600",
+    },
+    {
+      label: "มูลค่าสต๊อก (ต้นทุน)",
+      value: `฿${formatMoney(stockValue)}`,
+      icon: Wallet,
+      iconClass: "bg-emerald-100 text-emerald-600",
+    },
+    {
+      label: "ยอดขายรวม",
+      value: `฿${formatMoney(revenue)}`,
+      icon: Banknote,
+      iconClass: "bg-yellow-100 text-yellow-600",
+    },
+    {
+      label: "บิลที่สำเร็จ",
+      value: formatMoney(completed.length),
+      unit: "บิล",
+      icon: Receipt,
+      iconClass: "bg-pink-100 text-pink-600",
+    },
+    {
+      label: "เครื่องพร้อมขาย",
+      value: formatMoney(available),
+      unit: "เครื่อง",
+      icon: ShoppingCart,
+      iconClass: "bg-orange-100 text-orange-600",
+    },
   ];
 
   return (
@@ -113,15 +152,15 @@ export default function Home() {
                 className="bg-card px-4 py-4 sm:px-5"
               >
                 <div className="flex items-center gap-3">
-                  {stat.icon ? (
-                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-purple-100">
-                      <stat.icon
-                        size={22}
-                        className="text-purple-600"
-                        aria-hidden="true"
-                      />
-                    </div>
-                  ) : null}
+                  <div
+                    className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${stat.iconClass}`}
+                  >
+                    <stat.icon
+                      size={22}
+                      strokeWidth={2}
+                      aria-hidden="true"
+                    />
+                  </div>
 
                   <div className="min-w-0">
                     <dt className="text-xs text-muted-foreground">
