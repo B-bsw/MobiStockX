@@ -1,4 +1,5 @@
 import { ChevronDown, Trash2 } from "lucide-react";
+
 import { suppliers } from "@/datas/receive/data";
 import type { ReceiveLine } from "@/types/receive/types";
 import type { ProductModel } from "@/types/products/types";
@@ -16,8 +17,10 @@ interface ReceiveItemRowProps {
 }
 
 const fieldClass =
-  "h-[49px] w-full min-w-0 rounded-[19px] border border-[#EBEBEB] bg-white px-4 text-[15px] text-black outline-none placeholder:text-[#808080] focus:border-[#7FBFFF] focus:ring-2 focus:ring-blue-100";
-const labelClass = "mb-1 block px-2 text-[14px] text-[#808080]";
+  "h-12 w-full min-w-0 rounded-lg border border-[#D9E0E8] bg-white px-4 text-[15px] text-[#292929] outline-none placeholder:text-[#8A94A3] focus:border-[#7FBFFF] focus:ring-2 focus:ring-blue-100";
+
+const labelClass =
+  "mb-2 block text-sm font-medium text-[#404040]";
 
 export function ReceiveItemRow({
   line,
@@ -27,44 +30,60 @@ export function ReceiveItemRow({
   onRemove,
 }: ReceiveItemRowProps) {
   return (
-    <div className="rounded-[20px] border border-[#EBEBEB] bg-[#F8F9FB] p-3">
-      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-[2fr_0.7fr_1fr_1fr_1.2fr]">
-        <div className="min-w-0">
-          <label htmlFor={`model-${line.id}`} className={labelClass}>
-            ชื่อสินค้า *
-          </label>
-          <div className="relative">
-            <select
-              id={`model-${line.id}`}
-              required
-              value={line.modelId}
-              onChange={(event) =>
-                onChange(line.id, "modelId", event.target.value)
-              }
-              className={`${fieldClass} appearance-none pr-9`}
-            >
-              <option value="">-เลือกสินค้า-</option>
-              {models.map((model) => (
-                <option key={model.modelId} value={model.modelId}>
-                  {model.modelName}
-                  {model.storageCapacity && model.storageCapacity !== "-"
-                    ? ` ${model.storageCapacity}`
-                    : ""}
-                </option>
-              ))}
-            </select>
-            <ChevronDown
-              size={18}
-              aria-hidden="true"
-              className="pointer-events-none absolute right-4 top-4 text-[#AAAAAA]"
-            />
-          </div>
-        </div>
+    <div className="space-y-5">
+      {/* ชื่อสินค้า */}
+      <div>
+        <label
+          htmlFor={`model-${line.id}`}
+          className={labelClass}
+        >
+          ชื่อสินค้า <span className="text-red-500">*</span>
+        </label>
 
+        <div className="relative">
+          <select
+            id={`model-${line.id}`}
+            required
+            value={line.modelId}
+            onChange={(event) =>
+              onChange(line.id, "modelId", event.target.value)
+            }
+            className={`${fieldClass} appearance-none pr-10`}
+          >
+            <option value="">-เลือกสินค้า-</option>
+
+            {models.map((model) => (
+              <option
+                key={model.modelId}
+                value={model.modelId}
+              >
+                {model.modelName}
+                {model.storageCapacity &&
+                model.storageCapacity !== "-"
+                  ? ` ${model.storageCapacity}`
+                  : ""}
+              </option>
+            ))}
+          </select>
+
+          <ChevronDown
+            size={18}
+            aria-hidden="true"
+            className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#808080]"
+          />
+        </div>
+      </div>
+
+      {/* จำนวน / ต้นทุน */}
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
         <div>
-          <label htmlFor={`quantity-${line.id}`} className={labelClass}>
-            จำนวน *
+          <label
+            htmlFor={`quantity-${line.id}`}
+            className={labelClass}
+          >
+            จำนวน <span className="text-red-500">*</span>
           </label>
+
           <input
             id={`quantity-${line.id}`}
             type="number"
@@ -81,9 +100,13 @@ export function ReceiveItemRow({
         </div>
 
         <div>
-          <label htmlFor={`cost-${line.id}`} className={labelClass}>
-            ต้นทุน/เครื่อง *
+          <label
+            htmlFor={`cost-${line.id}`}
+            className={labelClass}
+          >
+            ต้นทุน/เครื่อง <span className="text-red-500">*</span>
           </label>
+
           <input
             id={`cost-${line.id}`}
             type="number"
@@ -97,11 +120,18 @@ export function ReceiveItemRow({
             className={fieldClass}
           />
         </div>
+      </div>
 
+      {/* ราคาขาย / Serial */}
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
         <div>
-          <label htmlFor={`price-${line.id}`} className={labelClass}>
-            ราคาขาย *
+          <label
+            htmlFor={`price-${line.id}`}
+            className={labelClass}
+          >
+            ราคาขาย <span className="text-red-500">*</span>
           </label>
+
           <input
             id={`price-${line.id}`}
             type="number"
@@ -117,9 +147,13 @@ export function ReceiveItemRow({
         </div>
 
         <div>
-          <label htmlFor={`serial-${line.id}`} className={labelClass}>
+          <label
+            htmlFor={`serial-${line.id}`}
+            className={labelClass}
+          >
             Serial เริ่มต้น
           </label>
+
           <input
             id={`serial-${line.id}`}
             value={line.serialNumber}
@@ -132,11 +166,16 @@ export function ReceiveItemRow({
         </div>
       </div>
 
-      <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-3">
-        <div className="min-w-0">
-          <label htmlFor={`supplier-${line.id}`} className={labelClass}>
+      {/* ซัพพลายเออร์ / เลขที่ใบส่งของ */}
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+        <div>
+          <label
+            htmlFor={`supplier-${line.id}`}
+            className={labelClass}
+          >
             ซัพพลายเออร์
           </label>
+
           <div className="relative">
             <select
               id={`supplier-${line.id}`}
@@ -144,24 +183,31 @@ export function ReceiveItemRow({
               onChange={(event) =>
                 onChange(line.id, "supplier", event.target.value)
               }
-              className={`${fieldClass} appearance-none pr-9`}
+              className={`${fieldClass} appearance-none pr-10`}
             >
               {suppliers.map((supplier) => (
-                <option key={supplier}>{supplier}</option>
+                <option key={supplier}>
+                  {supplier}
+                </option>
               ))}
             </select>
+
             <ChevronDown
               size={18}
               aria-hidden="true"
-              className="pointer-events-none absolute right-4 top-4 text-[#AAAAAA]"
+              className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#808080]"
             />
           </div>
         </div>
 
         <div>
-          <label htmlFor={`invoice-${line.id}`} className={labelClass}>
+          <label
+            htmlFor={`invoice-${line.id}`}
+            className={labelClass}
+          >
             เลขที่ใบส่งของ
           </label>
+
           <input
             id={`invoice-${line.id}`}
             value={line.invoice}
@@ -172,28 +218,37 @@ export function ReceiveItemRow({
             className={fieldClass}
           />
         </div>
-
-        <div>
-          <label htmlFor={`note-${line.id}`} className={labelClass}>
-            หมายเหตุ
-          </label>
-          <input
-            id={`note-${line.id}`}
-            value={line.note}
-            placeholder="ไม่บังคับ"
-            onChange={(event) => onChange(line.id, "note", event.target.value)}
-            className={fieldClass}
-          />
-        </div>
       </div>
 
+      {/* หมายเหตุ */}
+      <div>
+        <label
+          htmlFor={`note-${line.id}`}
+          className={labelClass}
+        >
+          หมายเหตุ
+        </label>
+
+        <input
+          id={`note-${line.id}`}
+          value={line.note}
+          placeholder="ไม่บังคับ"
+          onChange={(event) =>
+            onChange(line.id, "note", event.target.value)
+          }
+          className={fieldClass}
+        />
+      </div>
+
+      {/* ลบรายการ */}
       {removable && (
         <button
           type="button"
           onClick={() => onRemove(line.id)}
-          className="mt-2 flex items-center gap-1 px-2 text-sm text-red-500"
+          className="flex items-center gap-1.5 text-sm text-red-500 transition hover:text-red-600"
         >
-          <Trash2 size={15} /> ลบรายการ
+          <Trash2 size={16} />
+          ลบรายการ
         </button>
       )}
     </div>

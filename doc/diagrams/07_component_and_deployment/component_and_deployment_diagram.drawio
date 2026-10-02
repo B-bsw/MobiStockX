@@ -1,0 +1,28 @@
+<mxfile host="Electron" version="21.0.0" type="device">
+  <diagram id="dep_diagram" name="Component &amp; Deployment Diagram">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1300" pageHeight="850">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="n_client" value="«device»&#xa;Client Workstation / Tablet" style="shape=cube;whiteSpace=wrap;html=1;size=15;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;verticalAlign=top;spacingTop=20;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="60" y="80" width="220" height="200" as="geometry" /></mxCell>
+        <mxCell id="a_browser" value="«artifact»&#xa;Web Browser (SPA Client)" style="shape=module;align=center;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="n_client"><mxGeometry x="25" y="70" width="170" height="90" as="geometry" /></mxCell>
+        <mxCell id="n_fe" value="«environment»&#xa;Frontend Host (Next.js 16)&#xa;Port: 3000" style="shape=cube;whiteSpace=wrap;html=1;size=15;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;verticalAlign=top;spacingTop=20;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="360" y="80" width="240" height="230" as="geometry" /></mxCell>
+        <mxCell id="c_next" value="«component» Next.js&#xa;• React 19 Components&#xa;• Axios Client&#xa;• Tailwind CSS" style="shape=module;align=left;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;spacingLeft=10;" vertex="1" parent="n_fe"><mxGeometry x="25" y="75" width="190" height="120" as="geometry" /></mxCell>
+        <mxCell id="n_gw" value="«infrastructure»&#xa;Cloudflare Tunnel / Proxy" style="shape=cube;whiteSpace=wrap;html=1;size=15;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;verticalAlign=top;spacingTop=20;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="670" y="110" width="200" height="150" as="geometry" /></mxCell>
+        <mxCell id="c_tls" value="SSL/TLS Termination" style="shape=module;align=center;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="n_gw"><mxGeometry x="20" y="65" width="160" height="60" as="geometry" /></mxCell>
+        <mxCell id="n_be" value="«environment»&#xa;Docker (OpenJDK 21)&#xa;Spring Boot 4 | Port: 8080" style="shape=cube;whiteSpace=wrap;html=1;size=15;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;verticalAlign=top;spacingTop=20;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="940" y="80" width="300" height="380" as="geometry" /></mxCell>
+        <mxCell id="c_c" value="«component» REST Controllers" style="shape=module;align=center;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="n_be"><mxGeometry x="30" y="70" width="240" height="50" as="geometry" /></mxCell>
+        <mxCell id="c_s" value="«component» Security &amp; JWT" style="shape=module;align=center;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="n_be"><mxGeometry x="30" y="130" width="240" height="50" as="geometry" /></mxCell>
+        <mxCell id="c_sv" value="«component» Service + Patterns" style="shape=module;align=center;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="n_be"><mxGeometry x="30" y="190" width="240" height="60" as="geometry" /></mxCell>
+        <mxCell id="c_j" value="«component» Spring Data JPA" style="shape=module;align=center;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="n_be"><mxGeometry x="30" y="260" width="240" height="50" as="geometry" /></mxCell>
+        <mxCell id="c_d" value="«component» OpenAPI / Swagger" style="shape=module;align=center;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="n_be"><mxGeometry x="30" y="320" width="240" height="40" as="geometry" /></mxCell>
+        <mxCell id="n_db" value="«database»&#xa;Cloud PostgreSQL (Supabase)&#xa;Port: 5432" style="shape=cube;whiteSpace=wrap;html=1;size=15;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;verticalAlign=top;spacingTop=20;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="970" y="520" width="240" height="180" as="geometry" /></mxCell>
+        <mxCell id="a_db" value="mobistock DB&#xa;11 Tables" style="shape=cylinder3;whiteSpace=wrap;html=1;size=15;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="n_db"><mxGeometry x="45" y="70" width="150" height="85" as="geometry" /></mxCell>
+        <mxCell id="ec1" value="HTTP 3000" style="endArrow=none;html=1;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1" source="n_client" target="n_fe"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ec2" value="REST JSON HTTPS" style="endArrow=none;html=1;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1" source="n_fe" target="n_gw"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ec3" value="Proxy Port 8080" style="endArrow=none;html=1;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1" source="n_gw" target="n_be"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ec4" value="JDBC Port 5432" style="endArrow=none;html=1;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1" source="n_be" target="n_db"><mxGeometry relative="1" as="geometry" /></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

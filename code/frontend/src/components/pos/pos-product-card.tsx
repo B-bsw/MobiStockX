@@ -1,3 +1,5 @@
+import { formatMoney } from "@/lib/format";
+import { cn } from "@/lib/utils";
 import type { PosProduct } from "@/types/pos/types";
 
 interface PosProductCardProps {
@@ -6,20 +8,47 @@ interface PosProductCardProps {
   onAdd: (product: PosProduct) => void;
 }
 
-export function PosProductCard({ product, remaining, onAdd }: PosProductCardProps) {
+export function PosProductCard({
+  product,
+  remaining,
+  onAdd,
+}: PosProductCardProps) {
+  const soldOut = remaining === 0;
+
   return (
     <button
       type="button"
-      disabled={remaining === 0}
+      disabled={soldOut}
       onClick={() => onAdd(product)}
-      aria-label={`เพิ่ม ${product.name} ลงตะกร้า`}
-      className="rounded-[26px] border border-[#EBEBEB] bg-white px-6 py-[18px] text-left transition hover:border-[#7FBFFF] hover:shadow-sm focus-visible:outline-2 focus-visible:outline-[#7FBFFF] disabled:cursor-not-allowed disabled:opacity-50"
+      aria-label={`เพิ่ม ${product.name} ลงตะกร้า เหลือ ${remaining} เครื่อง`}
+      className={cn(
+        "flex min-h-[7rem] flex-col justify-between gap-2 rounded-xl border border-border bg-card p-4 text-start transition-[border-color,box-shadow,transform] duration-150",
+        "hover:border-primary hover:shadow-[0_1px_2px_oklch(0.26_0.018_250/0.06),0_8px_20px_-14px_oklch(0.53_0.145_250/0.4)]",
+        "active:translate-y-px",
+        "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+        "disabled:cursor-not-allowed disabled:border-border disabled:bg-secondary disabled:shadow-none",
+      )}
     >
-      <p className="text-[17px] font-medium text-black">{product.name}</p>
-      <p className="text-[14px] text-[#808080]">{product.brand} · {product.model}</p>
-      <div className="mt-2 flex items-center justify-between gap-3">
-        <span className="text-[17px] text-black">{product.price.toLocaleString("th-TH")}</span>
-        <span className="text-[15px] text-[#808080]">เหลือ {remaining}</span>
+      <div className="min-w-0">
+        <p className="truncate text-sm font-semibold text-foreground">
+          {product.name}
+        </p>
+        <p className="truncate text-xs text-muted-foreground">
+          {product.brand} · {product.model}
+        </p>
+      </div>
+      <div className="flex items-baseline justify-between gap-3">
+        <span className="text-base font-semibold tabular-nums text-foreground">
+          ฿{formatMoney(product.price)}
+        </span>
+        <span
+          className={cn(
+            "text-xs tabular-nums",
+            soldOut ? "font-medium text-danger" : "text-muted-foreground",
+          )}
+        >
+          {soldOut ? "หมด" : `เหลือ ${remaining}`}
+        </span>
       </div>
     </button>
   );

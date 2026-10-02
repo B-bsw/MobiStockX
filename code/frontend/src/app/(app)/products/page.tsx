@@ -6,6 +6,8 @@ import { api } from "@/lib/api";
 import { ProductsFilters } from "@/components/searchs/productsFilters";
 import { ProductsHeader } from "@/components/headers/productsHeader";
 import { ProductsTable } from "@/components/tables/productsTable";
+import { Alert } from "@/components/ui/alert";
+import { Panel } from "@/components/ui/panel";
 import type { Category, ProductModel } from "@/types/products/types";
 
 export default function Page() {
@@ -18,6 +20,7 @@ export default function Page() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [deletingId, setDeletingId] = useState<number | null>(null);
+  const [confirmId, setConfirmId] = useState<number | null>(null);
 
   useEffect(() => {
     const getData = async () => {
@@ -43,11 +46,6 @@ export default function Page() {
   }, []);
 
   const handleDelete = async (product: ProductModel) => {
-    const confirmed = window.confirm(
-      `ต้องการลบ ${product.modelName} ใช่หรือไม่?`,
-    );
-    if (!confirmed) return;
-
     try {
       setDeletingId(product.modelId);
       setError("");
@@ -57,8 +55,10 @@ export default function Page() {
       setProducts((prev) =>
         prev.filter((item) => item.modelId !== product.modelId),
       );
+      setConfirmId(null);
     } catch {
       setError("ลบสินค้าไม่สำเร็จ สินค้านี้อาจถูกใช้งานอยู่ในระบบ");
+      setConfirmId(null);
     } finally {
       setDeletingId(null);
     }
@@ -80,7 +80,7 @@ export default function Page() {
   const categoryTabs = ["ทั้งหมด", ...categories.map((c) => c.categoryNameTh)];
 
   return (
-    <div className="min-h-[calc(100vh-48px)] rounded-[20px] bg-white shadow-md">
+    <Panel className="overflow-hidden">
       <ProductsHeader
         totalProducts={products.length}
         onAdd={() => router.push("/products/add")}
@@ -93,23 +93,27 @@ export default function Page() {
         onCategoryChange={setActiveCategory}
       />
 
-      {error && products.length > 0 && (
-        <div className="mx-6 mb-4 rounded-[20px] bg-[#FFE4E4] px-7 py-3 text-[16px] text-[#E53935]">
-          {error}
+      {error !== "" && products.length > 0 ? (
+        <div className="px-4 pt-4 sm:px-6">
+          <Alert tone="danger">{error}</Alert>
         </div>
-      )}
+      ) : null}
 
       <ProductsTable
         products={filteredProducts}
         search={search}
         loading={loading}
         error={products.length === 0 ? error : ""}
-        deletingId={deletingId}
-        onEdit={(product) =>
-          router.push(`/products/edit?id=${product.modelId}`)
-        }
-        onDelete={handleDelete}
+        actions={{
+          deletingId,
+          confirmId,
+          onEdit: (product) =>
+            router.push(`/products/edit?id=${product.modelId}`),
+          onRequestDelete: (product) => setConfirmId(product.modelId),
+          onConfirmDelete: handleDelete,
+          onCancelDelete: () => setConfirmId(null),
+        }}
       />
-    </div>
+    </Panel>
   );
 }

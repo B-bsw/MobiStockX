@@ -1,0 +1,162 @@
+<mxfile host="Electron" version="21.0.0" type="device">
+  <diagram id="use_case" name="Use Case Diagram">
+    <mxGraphModel dx="1200" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- System Boundary (Clean Academic Style, No Title) -->
+        <mxCell id="sys" value="" style="shape=rect;html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=2;align=center;verticalAlign=top;fontStyle=1;fontSize=14;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="160" y="30" width="850" height="750" as="geometry" />
+        </mxCell>
+
+        <!-- ACTORS (Left) -->
+        <mxCell id="a_cashier" value="Cashier&#xa;(พนักงานขาย)" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="190" width="50" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="a_manager" value="Manager&#xa;(ผู้จัดการร้าน)" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="450" width="50" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- ACTORS (Right) -->
+        <mxCell id="a_tech" value="Technician&#xa;(ช่างเทคนิค)" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="240" width="50" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="a_admin" value="Admin&#xa;(ผู้ดูแลระบบ)" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="520" width="50" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- USE CASES -->
+        <!-- Row 1: Login / Auth (Center) -->
+        <mxCell id="uc_login" value="เข้าสู่ระบบ (Login / Auth)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="495" y="60" width="180" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- Row 2: POS Sale (Left) & Extend Discount (Center) -->
+        <mxCell id="uc_pos" value="ขายสินค้าหน้าร้าน (POS Sale)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="220" y="130" width="170" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_discount" value="คำนวณส่วนลด &amp; โปรโมชั่น" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="495" y="130" width="180" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- Row 3: Tax Invoice (Left) & Check Warranty (Right) -->
+        <mxCell id="uc_tax" value="ออกใบกำกับภาษี (Tax Invoice)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="220" y="200" width="170" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_warranty" value="ตรวจสอบประกัน (Check Warranty)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="770" y="200" width="170" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- Row 4: Customers (Left) & Repairs (Right) -->
+        <mxCell id="uc_cust" value="จัดการข้อมูลลูกค้า (Customers)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="220" y="270" width="170" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_repair" value="รับเครื่องซ่อม / บันทึกอาการ" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="770" y="270" width="170" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- Row 5: Central Stock & IMEI Check -->
+        <mxCell id="uc_stock" value="จัดการสต็อก &amp; ตรวจสอบ IMEI" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="485" y="340" width="200" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- Row 6: Catalog (Left) & Claims (Right) -->
+        <mxCell id="uc_catalog" value="จัดการแคตตาล็อก (Product Models)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="210" y="420" width="190" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_claim" value="จัดการเคลมสินค้าประกัน (Claims)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="770" y="420" width="170" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- Row 7: Receive Items (Left) & Users (Right) -->
+        <mxCell id="uc_receive" value="รับสินค้าเข้าสต็อก (Receive Items)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="210" y="490" width="190" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_user" value="จัดการบัญชีผู้ใช้งาน (User &amp; Roles)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="770" y="490" width="170" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- Row 8: Central Master Data -->
+        <mxCell id="uc_brand_cat" value="จัดการแบรนด์และหมวดหมู่ (Master Data)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="485" y="570" width="200" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- Row 9: Central Sales Report -->
+        <mxCell id="uc_report" value="ดูรายงานยอดขาย &amp; กำไร (Sales Report)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="485" y="640" width="200" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- Row 10: System Config (Admin Only) -->
+        <mxCell id="uc_settings" value="ตั้งค่าระบบและร้านค้า (System Config)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="770" y="710" width="170" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- ================= EDGES (ASSOCIATIONS) ================= -->
+        <!-- Login Associations via Clean Outer Routing -->
+        <mxCell id="e_cashier_login" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;endArrow=none;" edge="1" parent="1" source="a_cashier" target="uc_login">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="30" y="235" />
+              <mxPoint x="30" y="82" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_manager_login" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;endArrow=none;" edge="1" parent="1" source="a_manager" target="uc_login">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="30" y="495" />
+              <mxPoint x="30" y="82" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_tech_login" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;endArrow=none;" edge="1" parent="1" source="a_tech" target="uc_login">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1130" y="285" />
+              <mxPoint x="1130" y="82" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_admin_login" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#000000;endArrow=none;" edge="1" parent="1" source="a_admin" target="uc_login">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1130" y="565" />
+              <mxPoint x="1130" y="82" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Cashier Direct Associations -->
+        <mxCell id="e_cashier_pos" style="endArrow=none;html=1;strokeColor=#000000;" edge="1" parent="1" source="a_cashier" target="uc_pos"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_cashier_tax" style="endArrow=none;html=1;strokeColor=#000000;" edge="1" parent="1" source="a_cashier" target="uc_tax"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_cashier_cust" style="endArrow=none;html=1;strokeColor=#000000;" edge="1" parent="1" source="a_cashier" target="uc_cust"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_cashier_stock" style="endArrow=none;html=1;strokeColor=#000000;" edge="1" parent="1" source="a_cashier" target="uc_stock"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+        <!-- Extend: Discount -> POS Sale -->
+        <mxCell id="e_extend" value="&amp;lt;&amp;lt;extend&amp;gt;&amp;gt;" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;dashed=1;strokeColor=#000000;fontColor=#000000;fontStyle=2;fontSize=11;" edge="1" parent="1" source="uc_discount" target="uc_pos"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+        <!-- Manager Direct Associations -->
+        <mxCell id="e_manager_stock" style="endArrow=none;html=1;strokeColor=#000000;" edge="1" parent="1" source="a_manager" target="uc_stock"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_manager_catalog" style="endArrow=none;html=1;strokeColor=#000000;" edge="1" parent="1" source="a_manager" target="uc_catalog"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_manager_receive" style="endArrow=none;html=1;strokeColor=#000000;" edge="1" parent="1" source="a_manager" target="uc_receive"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_manager_brand" style="endArrow=none;html=1;strokeColor=#000000;" edge="1" parent="1" source="a_manager" target="uc_brand_cat"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_manager_report" style="endArrow=none;html=1;strokeColor=#000000;" edge="1" parent="1" source="a_manager" target="uc_report"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+        <!-- Technician Direct Associations -->
+        <mxCell id="e_tech_warranty" style="endArrow=none;html=1;strokeColor=#000000;" edge="1" parent="1" source="a_tech" target="uc_warranty"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_tech_repair" style="endArrow=none;html=1;strokeColor=#000000;" edge="1" parent="1" source="a_tech" target="uc_repair"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_tech_stock" style="endArrow=none;html=1;strokeColor=#000000;" edge="1" parent="1" source="a_tech" target="uc_stock"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_tech_claim" style="endArrow=none;html=1;strokeColor=#000000;" edge="1" parent="1" source="a_tech" target="uc_claim"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+        <!-- Admin Direct Associations -->
+        <mxCell id="e_admin_claim" style="endArrow=none;html=1;strokeColor=#000000;" edge="1" parent="1" source="a_admin" target="uc_claim"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_admin_user" style="endArrow=none;html=1;strokeColor=#000000;" edge="1" parent="1" source="a_admin" target="uc_user"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_admin_brand" style="endArrow=none;html=1;strokeColor=#000000;" edge="1" parent="1" source="a_admin" target="uc_brand_cat"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_admin_report" style="endArrow=none;html=1;strokeColor=#000000;" edge="1" parent="1" source="a_admin" target="uc_report"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_admin_settings" style="endArrow=none;html=1;strokeColor=#000000;" edge="1" parent="1" source="a_admin" target="uc_settings"><mxGeometry relative="1" as="geometry" /></mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,9 +1,26 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { api } from "@/lib/api";
 import Link from "next/link";
+import {
+  ArrowRight,
+  Package,
+  PackageCheck,
+  Smartphone,
+  Wallet,
+  Banknote,
+  Receipt,
+  ShoppingCart,
+  TriangleAlert,
+} from "lucide-react";
+import { api } from "@/lib/api";
 import { formatMoney } from "@/lib/format";
+import { Alert } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Panel, PanelHeader } from "@/components/ui/panel";
+import { Skeleton } from "@/components/ui/skeleton";
 import type { ProductModel } from "@/types/products/types";
 import type { SaleOrder } from "@/types/sales/types";
 import type { ProductItem } from "@/types/stock/types";
@@ -65,95 +82,189 @@ export default function Home() {
     .filter((model) => Number(model.stockQuantity ?? 0) <= LOW_STOCK_THRESHOLD)
     .sort((a, b) => Number(a.stockQuantity) - Number(b.stockQuantity));
 
-  const cards = [
-    { label: "รุ่นสินค้าทั้งหมด", value: `${models.length} รุ่น` },
-    { label: "สต๊อกรวม", value: `${totalStock} ชิ้น` },
-    { label: "มูลค่าสต๊อก (ต้นทุน)", value: `฿${formatMoney(stockValue)}` },
-    { label: "ยอดขายรวม", value: `฿${formatMoney(revenue)}` },
-    { label: "จำนวนบิลที่สำเร็จ", value: `${completed.length} บิล` },
-    { label: "เครื่องพร้อมขาย", value: `${available} เครื่อง` },
+  const stats = [
+    {
+      label: "รุ่นสินค้าทั้งหมด",
+      value: formatMoney(models.length),
+      unit: "รุ่น",
+      icon: Smartphone,
+      iconClass: "bg-purple-100 text-purple-600",
+    },
+    {
+      label: "สต๊อกรวม",
+      value: formatMoney(totalStock),
+      unit: "ชิ้น",
+      icon: Package,
+      iconClass: "bg-blue-100 text-blue-600",
+    },
+    {
+      label: "มูลค่าสต๊อก (ต้นทุน)",
+      value: `฿${formatMoney(stockValue)}`,
+      icon: Wallet,
+      iconClass: "bg-emerald-100 text-emerald-600",
+    },
+    {
+      label: "ยอดขายรวม",
+      value: `฿${formatMoney(revenue)}`,
+      icon: Banknote,
+      iconClass: "bg-yellow-100 text-yellow-600",
+    },
+    {
+      label: "บิลที่สำเร็จ",
+      value: formatMoney(completed.length),
+      unit: "บิล",
+      icon: Receipt,
+      iconClass: "bg-pink-100 text-pink-600",
+    },
+    {
+      label: "เครื่องพร้อมขาย",
+      value: formatMoney(available),
+      unit: "เครื่อง",
+      icon: ShoppingCart,
+      iconClass: "bg-orange-100 text-orange-600",
+    },
   ];
 
   return (
-    <div className="min-h-[calc(100vh-48px)] rounded-[20px] bg-white p-7 shadow-md">
-      <div className="mb-6">
-        <h1 className="text-[24px] font-medium text-gray-900">แดชบอร์ด</h1>
-        <p className="text-[14px] text-gray-600">ภาพรวมคลังสินค้าและการขาย</p>
-      </div>
+    <Panel className="overflow-hidden">
+      <PanelHeader
+        title="แดชบอร์ด"
+        description="ภาพรวมคลังสินค้าและการขาย"
+      />
 
-      {error && (
-        <div className="mb-5 rounded-[20px] bg-[#FFE4E4] px-7 py-4 text-[16px] text-[#E53935]">
-          {error}
+      {error ? (
+        <div className="px-4 pt-4 sm:px-6">
+          <Alert tone="danger">{error}</Alert>
         </div>
-      )}
+      ) : null}
 
       {loading ? (
-        <div className="flex h-[200px] items-center justify-center text-[16px] text-gray-500">
-          กำลังโหลดข้อมูล...
-        </div>
+        <DashboardSkeleton />
       ) : (
         <>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-            {cards.map((card) => (
+          {/* gap-px over a border-coloured track gives exact 1px rules at every
+              breakpoint without per-cell border maths, and keeps the numbers
+              flush instead of floating in cards inside a card. */}
+          <dl className="grid grid-cols-2 gap-px border-b bg-border sm:grid-cols-3 xl:grid-cols-[1fr_0.9fr_1.15fr_1fr_0.9fr_1fr]">
+            {stats.map((stat) => (
               <div
-                key={card.label}
-                className="rounded-[20px] border border-[#E5E7EB] px-6 py-5"
+                key={stat.label}
+                className="bg-card px-4 py-4 sm:px-5"
               >
-                <p className="text-[14px] text-gray-500">{card.label}</p>
-                <p className="mt-1 text-[24px] text-gray-900">{card.value}</p>
+                <div className="flex items-center gap-3">
+                  <div
+                    className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${stat.iconClass}`}
+                  >
+                    <stat.icon
+                      size={22}
+                      strokeWidth={2}
+                      aria-hidden="true"
+                    />
+                  </div>
+
+                  <div className="min-w-0">
+                    <dt className="text-xs text-muted-foreground">
+                      {stat.label}
+                    </dt>
+
+                    <dd className="mt-1 flex items-baseline gap-1">
+                      <span className="text-xl font-semibold tabular-nums text-foreground">
+                        {stat.value}
+                      </span>
+
+                      {stat.unit ? (
+                        <span className="text-xs text-muted-foreground">
+                          {stat.unit}
+                        </span>
+                      ) : null}
+                    </dd>
+                  </div>
+                </div>
               </div>
             ))}
-          </div>
+          </dl>
 
-          <div className="mt-7 overflow-hidden rounded-[20px] border border-[#E5E7EB]">
-            <div className="flex items-center justify-between border-b border-[#E5E7EB] bg-[#F8FAFC] px-7 py-4">
-              <h2 className="text-[18px] font-medium text-gray-800">
-                สินค้าสต๊อกต่ำ (เหลือไม่เกิน {LOW_STOCK_THRESHOLD})
+          <div className="flex flex-col gap-3 border-b px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+            <div className="min-w-0">
+              <h2 className="text-base font-semibold text-foreground">
+                สินค้าสต๊อกต่ำ
               </h2>
-              <Link
-                href="/receive"
-                className="rounded-full bg-[#DCEEFF] px-5 py-1 text-[14px] text-[#2580D9]"
-              >
-                รับสินค้าเข้า
-              </Link>
+              <p className="mt-0.5 text-sm text-muted-foreground">
+                รุ่นที่เหลือไม่เกิน {LOW_STOCK_THRESHOLD} ชิ้น
+                {lowStock.length > 10
+                  ? ` · แสดง 10 จาก ${lowStock.length} รุ่น`
+                  : null}
+              </p>
             </div>
-
-            {lowStock.length > 0 ? (
-              lowStock.slice(0, 10).map((model) => (
-                <div
-                  key={model.modelId}
-                  className="grid grid-cols-[2fr_1fr_1fr] items-center border-b border-[#E5E7EB] px-7 py-3 last:border-b-0"
-                >
-                  <div>
-                    <p className="text-[15px] text-gray-900">
-                      {model.modelName}
-                    </p>
-                    <p className="text-[13px] text-gray-500">
-                      {model.brandName}
-                    </p>
-                  </div>
-                  <span className="text-[15px] text-gray-500">
-                    {model.categoryNameTh}
-                  </span>
-                  <span
-                    className={`w-fit rounded-full px-5 py-1 text-[14px] ${
-                      Number(model.stockQuantity) === 0
-                        ? "bg-[#FFE4E4] text-[#E53935]"
-                        : "bg-[#FFF4D6] text-[#B4820A]"
-                    }`}
-                  >
-                    เหลือ {model.stockQuantity}
-                  </span>
-                </div>
-              ))
-            ) : (
-              <div className="flex h-[120px] items-center justify-center text-[16px] text-gray-500">
-                สต๊อกทุกรุ่นอยู่ในระดับปกติ
-              </div>
-            )}
+            <Button asChild size="touch" variant="outline" className="w-full sm:w-auto">
+              <Link href="/receive">
+                รับสินค้าเข้า
+                <ArrowRight aria-hidden="true" />
+              </Link>
+            </Button>
           </div>
+
+          {lowStock.length > 0 ? (
+            <ul className="divide-y">
+              {lowStock.slice(0, 10).map((model) => {
+                const quantity = Number(model.stockQuantity);
+
+                return (
+                  <li
+                    key={model.modelId}
+                    className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-3 sm:px-6"
+                  >
+                    <div className="min-w-0 flex-1 basis-48">
+                      <p className="truncate text-sm font-medium text-foreground">
+                        {model.modelName}
+                      </p>
+                      <p className="truncate text-xs text-muted-foreground">
+                        {model.brandName}
+                        {model.categoryNameTh ? ` · ${model.categoryNameTh}` : null}
+                      </p>
+                    </div>
+                    <Badge tone={quantity === 0 ? "danger" : "warning"}>
+                      <span className="flex items-center gap-1">
+                        {quantity === 0 ? "หมดสต๊อก" : `เหลือ ${quantity}`}
+                        <TriangleAlert size={14} aria-hidden="true" />
+                      </span>
+                    </Badge>
+                  </li>
+                );
+              })}
+            </ul>
+          ) : (
+            <EmptyState
+              icon={PackageCheck}
+              title="สต๊อกทุกรุ่นอยู่ในระดับปกติ"
+              description={`ยังไม่มีรุ่นไหนเหลือต่ำกว่า ${LOW_STOCK_THRESHOLD} ชิ้น ถ้ามีจะขึ้นเตือนที่นี่`}
+            />
+          )}
         </>
       )}
+    </Panel>
+  );
+}
+
+function DashboardSkeleton() {
+  return (
+    <div aria-hidden="true">
+      <span className="sr-only" role="status">
+        กำลังโหลดข้อมูลแดชบอร์ด
+      </span>
+      <div className="grid grid-cols-2 gap-px border-b bg-border sm:grid-cols-3 xl:grid-cols-6">
+        {Array.from({ length: 6 }, (_, index) => (
+          <div key={index} className="bg-card px-4 py-4 sm:px-5">
+            <Skeleton className="h-3 w-24" />
+            <Skeleton className="mt-2 h-6 w-20" />
+          </div>
+        ))}
+      </div>
+      <div className="space-y-3 px-4 py-5 sm:px-6">
+        {Array.from({ length: 5 }, (_, index) => (
+          <Skeleton key={index} className="h-11 w-full" />
+        ))}
+      </div>
     </div>
   );
 }

@@ -1,3 +1,5 @@
+import type { BadgeTone } from "@/components/ui/badge";
+
 export type SaleStatus = "PENDING" | "COMPLETED" | "CANCELLED";
 
 export type PaymentMethod = "CASH" | "TRANSFER" | "CREDIT_CARD" | "INSTALLMENT";
@@ -50,4 +52,10 @@ export const SALE_STATUS_LABEL: Record<SaleStatus, string> = {
   PENDING: "รอดำเนินการ",
   COMPLETED: "สำเร็จ",
   CANCELLED: "ยกเลิก",
+};
+
+export const SALE_STATUS_TONE: Record<SaleStatus, BadgeTone> = {
+  PENDING: "warning",
+  COMPLETED: "success",
+  CANCELLED: "danger",
 };

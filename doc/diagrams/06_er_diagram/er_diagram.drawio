@@ -1,0 +1,78 @@
+<mxfile host="Electron" version="21.0.0" type="device">
+  <diagram id="er_diagram" name="Entity Relationship Diagram (ERD)">
+    <mxGraphModel dx="1600" dy="1200" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1100">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Brand -->
+        <mxCell id="t_brand" value="brand&#xa;--&#xa;PK: brand_id (BIGSERIAL)&#xa;brand_name (VARCHAR)&#xa;brand_country (VARCHAR)&#xa;image_url (VARCHAR)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="50" y="80" width="200" height="110" as="geometry" />
+        </mxCell>
+
+        <!-- Category -->
+        <mxCell id="t_category" value="category&#xa;--&#xa;PK: category_id (BIGSERIAL)&#xa;category_name_th (VARCHAR)&#xa;category_name_en (VARCHAR)&#xa;is_serialized (BOOLEAN)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="50" y="230" width="200" height="110" as="geometry" />
+        </mxCell>
+
+        <!-- ProductModel -->
+        <mxCell id="t_model" value="product_model&#xa;--&#xa;PK: model_id (BIGSERIAL)&#xa;FK: brand_id (BIGINT)&#xa;FK: category_id (BIGINT)&#xa;model_code (VARCHAR)&#xa;model_name (VARCHAR)&#xa;color (VARCHAR)&#xa;capacity (VARCHAR)&#xa;standard_price (NUMERIC)&#xa;model_warranty_duration (INT)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="340" y="80" width="230" height="190" as="geometry" />
+        </mxCell>
+
+        <!-- ProductItem -->
+        <mxCell id="t_item" value="product_item&#xa;--&#xa;PK: item_id (BIGSERIAL)&#xa;FK: model_id (BIGINT)&#xa;imei (VARCHAR)&#xa;serial_number (VARCHAR)&#xa;cost_price (NUMERIC)&#xa;selling_price (NUMERIC)&#xa;item_condition (VARCHAR)&#xa;status (VARCHAR)&#xa;received_date (TIMESTAMP)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="660" y="80" width="220" height="190" as="geometry" />
+        </mxCell>
+
+        <!-- ProductWarranty -->
+        <mxCell id="t_war" value="product_warranty&#xa;--&#xa;PK: warranty_id (BIGSERIAL)&#xa;warranty_code (VARCHAR)&#xa;item_imei (VARCHAR)&#xa;start_date (DATE)&#xa;expire_date (DATE)&#xa;terms_conditions (TEXT)&#xa;warranty_status (VARCHAR)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="960" y="80" width="220" height="160" as="geometry" />
+        </mxCell>
+
+        <!-- AppUser -->
+        <mxCell id="t_user" value="app_user&#xa;--&#xa;PK: user_id (BIGSERIAL)&#xa;username (VARCHAR)&#xa;email (VARCHAR)&#xa;password (VARCHAR)&#xa;full_name (VARCHAR)&#xa;phone (VARCHAR)&#xa;role (VARCHAR)&#xa;is_active (BOOLEAN)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="50" y="440" width="200" height="170" as="geometry" />
+        </mxCell>
+
+        <!-- Customer -->
+        <mxCell id="t_cust" value="customer&#xa;--&#xa;PK: customer_id (BIGSERIAL)&#xa;first_name (VARCHAR)&#xa;last_name (VARCHAR)&#xa;phone (VARCHAR)&#xa;email (VARCHAR)&#xa;tax_id (VARCHAR)&#xa;address (TEXT)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="50" y="660" width="200" height="160" as="geometry" />
+        </mxCell>
+
+        <!-- SaleOrder -->
+        <mxCell id="t_sale" value="sale_order&#xa;--&#xa;PK: sale_id (BIGSERIAL)&#xa;sale_code (VARCHAR)&#xa;FK: customer_id (BIGINT)&#xa;FK: cashier_id (BIGINT)&#xa;sale_date (TIMESTAMP)&#xa;subtotal_amount (NUMERIC)&#xa;discount_amount (NUMERIC)&#xa;total_amount (NUMERIC)&#xa;status (VARCHAR)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="340" y="470" width="230" height="200" as="geometry" />
+        </mxCell>
+
+        <!-- SaleOrderItem -->
+        <mxCell id="t_order_item" value="sale_order_item&#xa;--&#xa;PK: order_item_id (BIGSERIAL)&#xa;FK: sale_id (BIGINT)&#xa;FK: model_id (BIGINT)&#xa;FK: item_id (BIGINT)&#xa;FK: warranty_id (BIGINT)&#xa;quantity (INT)&#xa;unit_cost (NUMERIC)&#xa;unit_price (NUMERIC)&#xa;discount_amount (NUMERIC)&#xa;warranty_expire_date (DATE)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="660" y="470" width="220" height="210" as="geometry" />
+        </mxCell>
+
+        <!-- Payment -->
+        <mxCell id="t_payment" value="payment&#xa;--&#xa;PK: payment_id (BIGSERIAL)&#xa;FK: sale_id (BIGINT)&#xa;payment_method (VARCHAR)&#xa;amount (NUMERIC)&#xa;payment_status (VARCHAR)&#xa;reference_no (VARCHAR)&#xa;FK: received_by (BIGINT)&#xa;payment_date (TIMESTAMP)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="340" y="730" width="230" height="180" as="geometry" />
+        </mxCell>
+
+        <!-- TaxInvoice -->
+        <mxCell id="t_invoice" value="tax_invoice (1:1 with sale_order)&#xa;--&#xa;PK: invoice_id (BIGSERIAL)&#xa;FK (Unique): sale_id (BIGINT)&#xa;invoice_number (VARCHAR)&#xa;company_or_buyer_name (VARCHAR)&#xa;tax_id (VARCHAR)&#xa;branch_number (VARCHAR)&#xa;address (TEXT)&#xa;subtotal_amount (NUMERIC)&#xa;vat_rate (NUMERIC)&#xa;vat_amount (NUMERIC)&#xa;grand_total (NUMERIC)&#xa;issued_at (TIMESTAMP)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="660" y="730" width="240" height="230" as="geometry" />
+        </mxCell>
+
+        <!-- Edges / FK Lines -->
+        <mxCell id="e_bm" value="1 : N" style="endArrow=none;html=1;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1" source="t_brand" target="t_model"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_cm" value="1 : N" style="endArrow=none;html=1;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1" source="t_category" target="t_model"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_mi" value="1 : N" style="endArrow=none;html=1;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1" source="t_model" target="t_item"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_iw" value="1 : 0..1" style="endArrow=none;html=1;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1" source="t_item" target="t_war"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_us" value="1 : N" style="endArrow=none;html=1;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1" source="t_user" target="t_sale"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_cs" value="1 : N" style="endArrow=none;html=1;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1" source="t_cust" target="t_sale"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_so_item" value="1 : N" style="endArrow=none;html=1;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1" source="t_sale" target="t_order_item"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_mo_item" value="1 : N" style="endArrow=none;html=1;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1" source="t_model" target="t_order_item"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_it_item" value="0..1 : 1" style="endArrow=none;html=1;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1" source="t_item" target="t_order_item"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_sp" value="1 : N" style="endArrow=none;html=1;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1" source="t_sale" target="t_payment"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_si" value="1 : 1 (One-to-One)" style="endArrow=none;html=1;strokeColor=#000000;fontColor=#000000;fontStyle=1;" edge="1" parent="1" source="t_sale" target="t_invoice"><mxGeometry relative="1" as="geometry" /></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
