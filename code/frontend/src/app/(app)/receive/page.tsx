@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 
 import { api } from "@/lib/api";
 
+import { Panel } from "@/components/ui/panel";
+
 import { ReceiveHeader } from "@/components/headers/receiveHeader";
 
 import { ReceiveForm } from "@/components/receive/receive-form";
@@ -27,15 +29,27 @@ export default function Page() {
         setLoading(true);
         setError("");
 
-        const [modelRes, itemRes] = await Promise.all([
-          api.get("/products/models", { params: { size: 100 } }),
-          api.get("/products/items", { params: { size: 50 } }),
-        ]);
+        const [modelRes, itemRes] =
+          await Promise.all([
+            api.get("/products/models", {
+              params: { size: 100 },
+            }),
+            api.get("/products/items", {
+              params: { size: 50 },
+            }),
+          ]);
 
-        setModels(modelRes.data.data.content ?? []);
-        setItems(itemRes.data.data.content ?? []);
+        setModels(
+          modelRes.data.data.content ?? [],
+        );
+
+        setItems(
+          itemRes.data.data.content ?? [],
+        );
       } catch {
-        setError("ไม่สามารถโหลดข้อมูลสินค้าได้");
+        setError(
+          "ไม่สามารถโหลดข้อมูลสินค้าได้",
+        );
       } finally {
         setLoading(false);
       }
@@ -45,21 +59,31 @@ export default function Page() {
   }, [reloadToken]);
 
   return (
-    <div className="min-h-[calc(100dvh-48px)] overflow-hidden rounded-[20px] bg-white">
+    <Panel className="overflow-hidden">
       <ReceiveHeader />
 
       {error && (
-        <div className="mx-6 mt-5 rounded-xl bg-[#FFE4E4] px-6 py-4 text-[16px] text-[#E53935]">
-          {error}
+        <div className="px-4 pt-4 sm:px-6">
+          <div className="rounded-lg bg-[#FFE4E4] px-4 py-3 text-sm text-[#E53935]">
+            {error}
+          </div>
         </div>
       )}
 
       <ReceiveForm
         models={models}
-        onReceived={() => setReloadToken((token) => token + 1)}
+        onReceived={() =>
+          setReloadToken(
+            (token) => token + 1,
+          )
+        }
       />
 
-      <ReceiveHistory items={items} loading={loading} error="" />
-    </div>
+      <ReceiveHistory
+        items={items}
+        loading={loading}
+        error=""
+      />
+    </Panel>
   );
 }
