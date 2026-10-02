@@ -145,7 +145,7 @@ export default function Home() {
           {/* gap-px over a border-coloured track gives exact 1px rules at every
               breakpoint without per-cell border maths, and keeps the numbers
               flush instead of floating in cards inside a card. */}
-          <dl className="grid grid-cols-2 gap-px border-b bg-border sm:grid-cols-3 xl:grid-cols-6">
+          <dl className="grid grid-cols-2 gap-px border-b bg-border sm:grid-cols-3 xl:grid-cols-[1fr_0.9fr_1.15fr_1fr_0.9fr_1fr]">
             {stats.map((stat) => (
               <div
                 key={stat.label}
