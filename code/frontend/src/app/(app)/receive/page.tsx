@@ -41,7 +41,7 @@ export default function Page() {
   return (
     <div className="min-h-[calc(100dvh-48px)] overflow-hidden rounded-[20px] bg-[#F8F9FB]">
       <ReceiveHeader />
-      <div className="space-y-5 p-5">
+      <div className="space-y-5 p-5 bg-white">
         {error && (
           <div className="rounded-[20px] bg-[#FFE4E4] px-7 py-4 text-[16px] text-[#E53935]">
             {error}

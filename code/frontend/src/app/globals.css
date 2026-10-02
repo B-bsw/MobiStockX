@@ -85,9 +85,9 @@
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.26 0.018 250);
 
-  --primary: oklch(0.53 0.145 250);
-  --primary-foreground: oklch(1 0 0);
-  --primary-hover: oklch(0.47 0.13 250);
+  --primary: #7fbfff;
+  --primary-foreground: #fff;
+  --primary-hover: #68aef4;
 
   --secondary: oklch(0.965 0.01 250);
   --secondary-foreground: oklch(0.34 0.02 250);
@@ -123,17 +123,16 @@
 
   --radius: 0.75rem;
 
-  /* Sidebar is the second neutral layer: same hue, much darker, so the
-     content surface reads as the place where work happens. */
-  --sidebar: oklch(0.48 0.125 250);
-  --sidebar-foreground: oklch(1 0 0);
-  --sidebar-muted: oklch(0.88 0.025 250);
-  --sidebar-primary: oklch(1 0 0);
-  --sidebar-primary-foreground: oklch(0.47 0.13 250);
-  --sidebar-accent: oklch(1 0 0 / 10%);
-  --sidebar-accent-foreground: oklch(1 0 0);
-  --sidebar-border: oklch(1 0 0 / 20%);
-  --sidebar-ring: oklch(1 0 0);
+  /* Light sidebar uses the brand blue with white labels. */
+  --sidebar: #7fbfff;
+  --sidebar-foreground: #fff;
+  --sidebar-muted: #fff;
+  --sidebar-primary: rgb(255 255 255 / 35%);
+  --sidebar-primary-foreground: #fff;
+  --sidebar-accent: rgb(255 255 255 / 35%);
+  --sidebar-accent-foreground: #fff;
+  --sidebar-border: rgb(255 255 255 / 50%);
+  --sidebar-ring: #fff;
 }
 /*---break---*/
 .dark {
@@ -144,8 +143,8 @@
   --popover: oklch(0.235 0.016 250);
   --popover-foreground: oklch(0.96 0.006 250);
 
-  --primary: oklch(0.7 0.13 250);
-  --primary-foreground: oklch(0.19 0.015 250);
+  --primary: #7fbfff;
+  --primary-foreground: #fff;
   --primary-hover: oklch(0.76 0.12 250);
 
   --secondary: oklch(0.29 0.018 250);
@@ -183,12 +182,12 @@
   --sidebar: oklch(0.235 0.018 250);
   --sidebar-foreground: oklch(0.96 0.006 250);
   --sidebar-muted: oklch(0.74 0.018 250);
-  --sidebar-primary: oklch(0.7 0.13 250);
+  --sidebar-primary: #7fbfff;
   --sidebar-primary-foreground: oklch(0.19 0.015 250);
   --sidebar-accent: oklch(1 0 0 / 8%);
   --sidebar-accent-foreground: oklch(0.96 0.006 250);
   --sidebar-border: oklch(1 0 0 / 14%);
-  --sidebar-ring: oklch(0.7 0.13 250);
+  --sidebar-ring: #7fbfff;
 }
 /*---break---*/
 @layer base {
