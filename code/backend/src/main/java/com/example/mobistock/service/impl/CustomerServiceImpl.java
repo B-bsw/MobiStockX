@@ -25,7 +25,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     @Transactional
     public CustomerResponse createCustomer(CreateCustomerRequest request) {
-        if (customerRepository.findByPhone(request.getPhone()).isPresent()) {
+        if (customerRepository.existsByPhone(request.getPhone())) {
             throw new BadRequestException("Customer with phone number '" + request.getPhone() + "' already exists");
         }
         Customer customer = customerMapper.toCustomerEntity(request);
@@ -76,8 +76,8 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     @Transactional(readOnly = true)
     public Page<CustomerResponse> searchCustomers(String keyword, Pageable pageable) {
-        return customerRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrPhoneContaining(
-                keyword, keyword, keyword, pageable)
+        String raw = keyword == null ? "" : keyword.trim();
+        return customerRepository.search("%" + raw.toLowerCase() + "%", "%" + raw + "%", pageable)
                 .map(customerMapper::toCustomerResponse);
     }
 

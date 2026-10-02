@@ -24,8 +24,9 @@
 `Supabase` · `PostgreSQL`
 
 **DevOps**
-`Docker` · `GitHub Actions` · `Cloudflare Tunnel`
-[![Gemini-Generated-Image-1eljk41eljk41elj.jpg](https://i.postimg.cc/L4yjTF4R/Gemini-Generated-Image-1eljk41eljk41elj.jpg)](https://postimg.cc/c6nKxj85)
+`Docker` · `GitHub Actions` · `Nginx`
+
+<img src="img/techStack/mobistockXtechStack.png" alt="techStack">
 
 ## System Architecture
 

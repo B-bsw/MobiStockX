@@ -11,6 +11,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -29,7 +30,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "PAYMENT")
+@Table(name = "PAYMENT", indexes = {
+        @Index(name = "idx_payment_sale", columnList = "sale_id"),
+        @Index(name = "idx_payment_received_by", columnList = "received_by")
+})
 public class Payment extends BaseEntity {
 
     @Id

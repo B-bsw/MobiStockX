@@ -11,6 +11,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -29,7 +30,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "PRODUCT_ITEM")
+@Table(name = "PRODUCT_ITEM", indexes = {
+        // findByProductModelModelIdAndStatus / countByProductModelModelIdAndStatus
+        @Index(name = "idx_product_item_model_status", columnList = "model_id, item_status"),
+        // findByStatus(pageable)
+        @Index(name = "idx_product_item_status", columnList = "item_status")
+})
 public class ProductItem extends BaseEntity {
 
     @Id

@@ -25,7 +25,7 @@ export function PosHeader({ activeTab, onTabChange }: PosHeaderProps) {
           options={TABS}
           value={activeTab}
           onValueChange={onTabChange}
-          className="rounded-full border border-border bg-card px-1"
+          className="rounded-full bg-card px-1"
         />
       }
     />
