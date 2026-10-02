@@ -1,100 +1,119 @@
-//โยย่า
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { api } from "@/lib/api";
+import { ProductsFilters } from "@/components/searchs/productsFilters";
+import { ProductsHeader } from "@/components/headers/productsHeader";
+import { ProductsTable } from "@/components/tables/productsTable";
+import { Alert } from "@/components/ui/alert";
+import { Panel } from "@/components/ui/panel";
+import type { Category, ProductModel } from "@/types/products/types";
 
 export default function Page() {
+  const router = useRouter();
 
   const [activeCategory, setActiveCategory] = useState("ทั้งหมด");
+  const [search, setSearch] = useState("");
+  const [products, setProducts] = useState<ProductModel[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [deletingId, setDeletingId] = useState<number | null>(null);
+  const [confirmId, setConfirmId] = useState<number | null>(null);
 
-    return (
-    <div className="min-h-screen bg-[#dae8ff] p-6">
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        setLoading(true);
+        setError("");
 
-      <div className="min-h-[calc(100vh-64px)] rounded-[20px] bg-white shadow-md">
-        
-        <div className="flex items-center justify-between border-b border-[#EBEBEB] px-10 py-5">
+        const [productRes, categoryRes] = await Promise.all([
+          api.get("/products/models", { params: { size: 100 } }),
+          api.get("/categories"),
+        ]);
 
-          <div>
-            <h1 className="text-[24px] font-medium text-gray-900">
-              สินค้า
-            </h1>
-            <p className="text-[14px] text-gray-600">
-              มีสินค้าทั้งหมด 8 รายการ
-            </p>
-          </div>
-          
-          <button className="rounded-full bg-[#7FBFFF] px-7 py-2 text-[20px] text-white">
-            + เพิ่มสินค้า
-          </button>
+        setProducts(productRes.data.data.content ?? []);
+        setCategories(categoryRes.data.data ?? []);
+      } catch {
+        setError("ไม่สามารถโหลดข้อมูลสินค้าได้");
+      } finally {
+        setLoading(false);
+      }
+    };
 
+    getData();
+  }, []);
+
+  const handleDelete = async (product: ProductModel) => {
+    try {
+      setDeletingId(product.modelId);
+      setError("");
+
+      await api.delete(`/products/models/${product.modelId}`);
+
+      setProducts((prev) =>
+        prev.filter((item) => item.modelId !== product.modelId),
+      );
+      setConfirmId(null);
+    } catch {
+      setError("ลบสินค้าไม่สำเร็จ สินค้านี้อาจถูกใช้งานอยู่ในระบบ");
+      setConfirmId(null);
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
+  const filteredProducts = products.filter((product) => {
+    const keyword = search.toLowerCase();
+
+    const matchSearch =
+      product.modelName.toLowerCase().includes(keyword) ||
+      (product.brandName ?? "").toLowerCase().includes(keyword);
+
+    const matchCategory =
+      activeCategory === "ทั้งหมด" || product.categoryNameTh === activeCategory;
+
+    return matchSearch && matchCategory;
+  });
+
+  const categoryTabs = ["ทั้งหมด", ...categories.map((c) => c.categoryNameTh)];
+
+  return (
+    <Panel className="overflow-hidden">
+      <ProductsHeader
+        totalProducts={products.length}
+        onAdd={() => router.push("/products/add")}
+      />
+      <ProductsFilters
+        search={search}
+        activeCategory={activeCategory}
+        categories={categoryTabs}
+        onSearchChange={setSearch}
+        onCategoryChange={setActiveCategory}
+      />
+
+      {error !== "" && products.length > 0 ? (
+        <div className="px-4 pt-4 sm:px-6">
+          <Alert tone="danger">{error}</Alert>
         </div>
+      ) : null}
 
-        <div className="flex items-center gap-5 px-10 py-4">
-
-          <div className="flex h-[45px] flex-1 items-center rounded-full border border-[#EBEBEB] px-6">
-            <span className="text-[20px] text-gray-500">
-              🔍
-            </span>
-
-            <input
-              type="text"
-              placeholder="ค้นหาสินค้า"
-              className="ml-4 flex-1 bg-transparent text-[16px] outline-none placeholder:text-gray-300"
-            />
-          </div>
-
-          <div className="flex h-[45px] items-center rounded-full border border-[#E5E7EB] px-2">
-
-            <button
-              onClick={() => setActiveCategory("ทั้งหมด")}
-              className={`rounded-full px-8 py-1 text-[18px] transition-all duration-300 ${
-              activeCategory === "ทั้งหมด"
-              ? "bg-[#78B8F2] text-white"
-              : "text-gray-500 hover:bg-gray-100"
-              }`}
-            >
-                ทั้งหมด
-            </button>
-
-            <button
-              onClick={() => setActiveCategory("Flagship")}
-              className={`rounded-full px-8 py-1 text-[18px] transition-all duration-300 ${
-              activeCategory === "Flagship"
-              ? "bg-[#78B8F2] text-white"
-              : "text-gray-500 hover:bg-gray-100"
-              }`}
-            >
-              Flagship
-            </button>
-
-            <button
-              onClick={() => setActiveCategory("Mid-Range")}
-              className={`rounded-full px-8 py-1 text-[18px] transition-all duration-300 ${
-              activeCategory === "Mid-Range"
-              ? "bg-[#78B8F2] text-white"
-              : "text-gray-500 hover:bg-gray-100"
-              }`}
-            >
-              Mid-Range
-            </button>
-
-          <button
-              onClick={() => setActiveCategory("Budget")}
-              className={`rounded-full px-8 py-1 text-[18px] transition-all duration-300 ${
-              activeCategory === "Budget"
-              ? "bg-[#78B8F2] text-white"
-              : "text-gray-500 hover:bg-gray-100"
-              }`}
-              >
-                Budget
-            </button>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
+      <ProductsTable
+        products={filteredProducts}
+        search={search}
+        loading={loading}
+        error={products.length === 0 ? error : ""}
+        actions={{
+          deletingId,
+          confirmId,
+          onEdit: (product) =>
+            router.push(`/products/edit?id=${product.modelId}`),
+          onRequestDelete: (product) => setConfirmId(product.modelId),
+          onConfirmDelete: handleDelete,
+          onCancelDelete: () => setConfirmId(null),
+        }}
+      />
+    </Panel>
   );
 }

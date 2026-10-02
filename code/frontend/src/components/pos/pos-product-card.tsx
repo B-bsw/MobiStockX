@@ -1,0 +1,55 @@
+import { formatMoney } from "@/lib/format";
+import { cn } from "@/lib/utils";
+import type { PosProduct } from "@/types/pos/types";
+
+interface PosProductCardProps {
+  product: PosProduct;
+  remaining: number;
+  onAdd: (product: PosProduct) => void;
+}
+
+export function PosProductCard({
+  product,
+  remaining,
+  onAdd,
+}: PosProductCardProps) {
+  const soldOut = remaining === 0;
+
+  return (
+    <button
+      type="button"
+      disabled={soldOut}
+      onClick={() => onAdd(product)}
+      aria-label={`เพิ่ม ${product.name} ลงตะกร้า เหลือ ${remaining} เครื่อง`}
+      className={cn(
+        "flex min-h-[7rem] flex-col justify-between gap-2 rounded-xl border border-border bg-card p-4 text-start transition-[border-color,box-shadow,transform] duration-150",
+        "hover:border-primary hover:shadow-[0_1px_2px_oklch(0.26_0.018_250/0.06),0_8px_20px_-14px_oklch(0.53_0.145_250/0.4)]",
+        "active:translate-y-px",
+        "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+        "disabled:cursor-not-allowed disabled:border-border disabled:bg-secondary disabled:shadow-none",
+      )}
+    >
+      <div className="min-w-0">
+        <p className="truncate text-sm font-semibold text-foreground">
+          {product.name}
+        </p>
+        <p className="truncate text-xs text-muted-foreground">
+          {product.brand} · {product.model}
+        </p>
+      </div>
+      <div className="flex items-baseline justify-between gap-3">
+        <span className="text-base font-semibold tabular-nums text-foreground">
+          ฿{formatMoney(product.price)}
+        </span>
+        <span
+          className={cn(
+            "text-xs tabular-nums",
+            soldOut ? "font-medium text-danger" : "text-muted-foreground",
+          )}
+        >
+          {soldOut ? "หมด" : `เหลือ ${remaining}`}
+        </span>
+      </div>
+    </button>
+  );
+}

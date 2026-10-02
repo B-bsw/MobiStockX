@@ -1,110 +1,53 @@
-import Link from "next/link"
-import {
-  LayoutDashboard,
-  Smartphone,
-  PlusSquare,
-  Package,
-  ShoppingCart,
-  PackagePlus,
-  LogOut,
-} from "lucide-react"
+import type { CSSProperties, ReactNode } from "react";
+import { AppSidebar } from "@/components/app-sidebar";
+import { AuthGuard } from "@/components/auth-guard";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { AuthProvider } from "@/lib/auth-context";
 
-export default function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function DashboardLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="flex min-h-screen bg-white">
-      <aside className="hidden w-[320px] shrink-0 flex-col bg-[#78B8F2] px-5 py-8 md:flex">
-        <div className="mb-12 text-center">
-          <h1 className="text-[24px] font-semibold text-white">
-            Mobistock
-          </h1>
+    <AuthProvider>
+      <TooltipProvider>
+        <SidebarProvider
+          style={{ "--sidebar-width": "17rem" } as CSSProperties}
+        >
+          <AppSidebar />
 
-          <p className="text-[15px] text-white/80">
-            ระบบจัดการคลังสินค้า
-          </p>
-        </div>
+          <div className="relative isolate flex min-w-0 flex-1 flex-col bg-white dark:bg-background">
+            <svg
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-x-0 top-0 h-[65dvh] w-full text-[#dce7ff] dark:text-[#26354f]"
+              viewBox="0 0 1440 800"
+              preserveAspectRatio="none"
+            >
+              <path
+                fill="currentColor"
+                d="M0 0H1440V255C1230 300 1070 260 870 250C650 220 485 255 315 455C175 625 95 735 0 780Z"
+              />
+            </svg>
 
-        <nav className="flex-1 space-y-2">
-          <Link
-            href="/"
-            className="flex h-15 items-center gap-5 rounded-[25px] bg-white/25 px-7 text-white"
-          >
-            <LayoutDashboard size={26} />
-            <span className="text-[20px]">แดชบอร์ด</span>
-          </Link>
+            {/* Stays put so the menu toggle is reachable from anywhere in a
+                long table, which is most of this app. */}
+            <header className="sticky top-0 z-(--z-sticky) flex h-14 shrink-0 items-center gap-2 border-b bg-background px-2 sm:px-4">
+              <SidebarTrigger
+                size="icon-touch"
+                variant="ghost"
+                aria-label="เปิดหรือปิดเมนู"
+                title="เปิดหรือปิดเมนู (Ctrl+B)"
+                className="text-muted-foreground hover:text-foreground"
+              />
+              <span className="truncate text-sm font-semibold text-foreground md:hidden">
+                Mobistock
+              </span>
+            </header>
 
-          <Link
-            href="/products"
-            className="flex h-15 items-center gap-5 rounded-[25px] px-7 text-white transition hover:bg-white/15"
-          >
-            <Smartphone size={26} />
-            <span className="text-[20px]">สินค้า</span>
-          </Link>
-
-          <Link
-            href="/products/add"
-            className="flex h-15 items-center gap-5 rounded-[25px] px-7 text-white transition hover:bg-white/15"
-          >
-            <PlusSquare size={26} />
-            <span className="text-[20px]">เพิ่มสินค้า</span>
-          </Link>
-
-          <Link
-            href="/stock"
-            className="flex h-15 items-center gap-5 rounded-[25px] px-7 text-white transition hover:bg-white/15"
-          >
-            <Package size={26} />
-            <span className="text-[20px]">จัดการสต๊อก</span>
-          </Link>
-
-          <Link
-            href="/pos"
-            className="flex h-15 items-center gap-5 rounded-[25px] px-7 text-white transition hover:bg-white/15"
-          >
-            <ShoppingCart size={26} />
-            <span className="text-[20px]">ขายสินค้า/POS</span>
-          </Link>
-
-          <Link
-            href="/receive"
-            className="flex h-15 items-center gap-5 rounded-[25px] px-7 text-white transition hover:bg-white/15"
-          >
-            <PackagePlus size={26} />
-            <span className="text-[20px]">รับสินค้าเข้า</span>
-          </Link>
-        </nav>
-
-        <div className="border-t border-white/30 pt-7">
-          <div className="mb-6 flex items-center gap-5 px-2">
-            <div className="h-15 w-15 shrink-0 rounded-full bg-white/25" />
-
-            <div>
-              <p className="text-[19px] text-white">
-                Piyada ketmala
-              </p>
-
-              <p className="text-[14px] text-white/80">
-                ผู้ดูแลระบบ
-              </p>
-            </div>
+            <main className="relative min-w-0 flex-1 p-3 sm:p-4 lg:p-6">
+              <AuthGuard>{children}</AuthGuard>
+            </main>
           </div>
-
-          <Link
-            href="/auth/login"
-            className="flex h-14.5 w-full items-center gap-5 rounded-[25px] bg-white/25 px-7 text-white transition hover:bg-white/35"
-          >
-            <LogOut size={26} />
-            <span className="text-[20px]">ออกจากระบบ</span>
-          </Link>
-        </div>
-      </aside>
-
-      <main className="min-w-0 flex-1">
-        {children}
-      </main>
-    </div>
-  )
+        </SidebarProvider>
+      </TooltipProvider>
+    </AuthProvider>
+  );
 }
