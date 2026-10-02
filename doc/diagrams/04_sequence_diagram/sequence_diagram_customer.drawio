@@ -1,0 +1,37 @@
+<mxfile host="Electron" version="21.0.0" type="device">
+  <diagram id="seq_customer" name="Scenario 2 - Register Customer">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="ll_client" value="Client (Frontend)" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="60" y="40" width="130" height="460" as="geometry" />
+        </mxCell>
+        <mxCell id="ll_ctrl" value="CustomerController" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="270" y="40" width="140" height="460" as="geometry" />
+        </mxCell>
+        <mxCell id="ll_service" value="CustomerServiceImpl" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="480" y="40" width="150" height="460" as="geometry" />
+        </mxCell>
+        <mxCell id="ll_repo" value="CustomerRepository" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="700" y="40" width="140" height="460" as="geometry" />
+        </mxCell>
+        <mxCell id="ll_mapper" value="CustomerMapper" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="910" y="40" width="130" height="460" as="geometry" />
+        </mxCell>
+        <mxCell id="m1" value="1: POST /api/v1/customers (@Valid req)" style="html=1;verticalAlign=bottom;endArrow=block;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="125" y="110" as="sourcePoint"/><mxPoint x="340" y="110" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m2" value="2: createCustomer(request)" style="html=1;verticalAlign=bottom;endArrow=block;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="340" y="140" as="sourcePoint"/><mxPoint x="555" y="140" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m3" value="3: findByPhone(request.getPhone())" style="html=1;verticalAlign=bottom;endArrow=block;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="555" y="170" as="sourcePoint"/><mxPoint x="770" y="170" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m4" value="4: return Optional.empty()" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="770" y="210" as="sourcePoint"/><mxPoint x="555" y="210" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m5" value="5: toCustomerEntity(request)" style="html=1;verticalAlign=bottom;endArrow=block;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="555" y="250" as="sourcePoint"/><mxPoint x="975" y="250" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m6" value="6: return Customer entity" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="975" y="280" as="sourcePoint"/><mxPoint x="555" y="280" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m7" value="7: save(customer)" style="html=1;verticalAlign=bottom;endArrow=block;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="555" y="320" as="sourcePoint"/><mxPoint x="770" y="320" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m8" value="8: return savedCustomer (ID generated)" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="770" y="350" as="sourcePoint"/><mxPoint x="555" y="350" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m9" value="9: toCustomerResponse(savedCustomer)" style="html=1;verticalAlign=bottom;endArrow=block;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="555" y="380" as="sourcePoint"/><mxPoint x="975" y="380" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m10" value="10: return CustomerResponse" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="975" y="405" as="sourcePoint"/><mxPoint x="555" y="405" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m11" value="11: return CustomerResponse" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="555" y="430" as="sourcePoint"/><mxPoint x="340" y="430" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m12" value="12: HTTP 201 CREATED" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="340" y="460" as="sourcePoint"/><mxPoint x="125" y="460" as="targetPoint"/></mxGeometry></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
