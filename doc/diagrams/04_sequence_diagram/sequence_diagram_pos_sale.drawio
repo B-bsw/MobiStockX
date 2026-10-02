@@ -1,0 +1,45 @@
+<mxfile host="Electron" version="21.0.0" type="device">
+  <diagram id="seq_sale" name="Scenario 3 - POS Sale &amp; Checkout">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1350" pageHeight="850">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="ll_client" value="Client (POS UI)" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="120" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="ll_ctrl" value="SaleOrderController" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="210" y="40" width="140" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="ll_service" value="SaleServiceImpl" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="400" y="40" width="140" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="ll_strat" value="«Strategy»&#xa;DiscountResolver" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="590" y="40" width="140" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="ll_w_fac" value="«Factory»&#xa;WarrantyFactory" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="780" y="40" width="140" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="ll_inv_fac" value="«Factory»&#xa;TaxInvoiceFactory" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="970" y="40" width="140" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="ll_repos" value="Repositories / DB" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="1160" y="40" width="130" height="520" as="geometry" />
+        </mxCell>
+        <mxCell id="m1" value="1: POST /api/v1/sales (items, payment, invoice)" style="html=1;verticalAlign=bottom;endArrow=block;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="100" y="100" as="sourcePoint"/><mxPoint x="280" y="100" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m2" value="2: createSaleOrder(request)" style="html=1;verticalAlign=bottom;endArrow=block;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="280" y="130" as="sourcePoint"/><mxPoint x="470" y="130" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m3" value="3: findById(cust), findByImei(item)" style="html=1;verticalAlign=bottom;endArrow=block;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="470" y="160" as="sourcePoint"/><mxPoint x="1225" y="160" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m4" value="4: return Customer, ProductItem (AVAILABLE)" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="1225" y="190" as="sourcePoint"/><mxPoint x="470" y="190" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m5" value="5: createWarranty(code, imei, model)" style="html=1;verticalAlign=bottom;endArrow=block;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="470" y="230" as="sourcePoint"/><mxPoint x="850" y="230" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m6" value="6: return ProductWarranty (ACTIVE)" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="850" y="260" as="sourcePoint"/><mxPoint x="470" y="260" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m7" value="7: calculateDiscount(subtotal, val)" style="html=1;verticalAlign=bottom;endArrow=block;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="470" y="300" as="sourcePoint"/><mxPoint x="660" y="300" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m8" value="8: return netDiscount" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="660" y="330" as="sourcePoint"/><mxPoint x="470" y="330" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m9" value="9: createTaxInvoice(invoiceNo, req, total)" style="html=1;verticalAlign=bottom;endArrow=block;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="470" y="370" as="sourcePoint"/><mxPoint x="1040" y="370" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m10" value="10: return TaxInvoice (7% VAT calculated)" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="1040" y="400" as="sourcePoint"/><mxPoint x="470" y="400" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m11" value="11: save(saleOrder), setStatus(SOLD)" style="html=1;verticalAlign=bottom;endArrow=block;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="470" y="440" as="sourcePoint"/><mxPoint x="1225" y="440" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m12" value="12: return savedSaleOrder" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="1225" y="470" as="sourcePoint"/><mxPoint x="470" y="470" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m13" value="13: return SaleOrderResponse" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="470" y="495" as="sourcePoint"/><mxPoint x="280" y="495" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m14" value="14: HTTP 201 CREATED" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="280" y="520" as="sourcePoint"/><mxPoint x="100" y="520" as="targetPoint"/></mxGeometry></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
