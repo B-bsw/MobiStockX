@@ -28,6 +28,8 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { ROLE_LABEL, useAuth } from "@/lib/auth-context";
+import Image from "next/image";
+import logo from "@/../public/logo.png";
 
 interface NavItem {
   href: string;
@@ -76,16 +78,21 @@ export function AppSidebar() {
   ).sort((a, b) => b.href.length - a.href.length)[0]?.href;
 
   return (
-    <Sidebar collapsible="offcanvas" className="border-none">
+    <Sidebar collapsible="offcanvas">
       <SidebarHeader className="relative gap-0 px-4 pb-4 pt-5">
-        <Link
-          href="/"
-          onClick={() => setOpenMobile(false)}
-          className="w-fit rounded-md text-lg font-semibold tracking-tight text-sidebar-foreground"
-        >
-          Mobistock
-        </Link>
-        <p className="text-sm text-sidebar-muted">ระบบจัดการคลังสินค้า</p>
+        <div className="flex items-center">
+          <Image src={logo} alt="logo" width={60} height={60} />
+          <div>
+            <Link
+              href="/"
+              onClick={() => setOpenMobile(false)}
+              className="w-fit rounded-md text-lg font-semibold tracking-tight text-sidebar-foreground"
+            >
+              Mobistock
+            </Link>
+            <p className="text-sm text-sidebar-muted">ระบบจัดการคลังสินค้า</p>
+          </div>
+        </div>
         <button
           type="button"
           aria-label="ปิดเมนู"
@@ -109,8 +116,7 @@ export function AppSidebar() {
                     <SidebarMenuButton
                       asChild
                       isActive={activeHref === href}
-                      // The active pill inverts to the light surface; hover is a
-                      // 10% white wash. Both keep label text above 5:1.
+                      // Active and hover colors come from the sidebar theme.
                       className="h-11 gap-3 rounded-lg px-3 text-sm data-active:bg-sidebar-primary data-active:font-semibold data-active:text-sidebar-primary-foreground [&_svg]:size-4.5"
                     >
                       <Link

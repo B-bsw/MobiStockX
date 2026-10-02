@@ -8,8 +8,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        // Hover darkens rather than fades: `bg-primary/80` over a white
-        // surface lightens the fill and drops white label text below 4.5:1.
+        // Use a solid hover fill so the primary button keeps its white label.
         default: "bg-primary text-primary-foreground hover:bg-primary-hover",
         outline:
           "border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50",

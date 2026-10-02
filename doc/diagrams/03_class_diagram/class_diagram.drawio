@@ -1,0 +1,62 @@
+<mxfile host="Electron" version="21.0.0" type="device">
+  <diagram id="class_diagram" name="Class Diagram (with Design Patterns)">
+    <mxGraphModel dx="1400" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="950">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="box_legend" value="«Design Patterns Applied»&#xa;• Singleton: Spring Service / Component Beans&#xa;• Factory Method: TaxInvoiceFactory, ProductWarrantyFactory&#xa;• Strategy Pattern: DiscountStrategy &amp; Implementations&#xa;• Builder Pattern: Lombok @Builder on Entities &amp; DTOs" style="shape=rect;html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=1.5;align=left;spacingLeft=10;fontStyle=0;fontSize=11;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="40" y="30" width="340" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_ctrl" value="«RestController»&#xa;SaleOrderController&#xa;--&#xa;- saleService: SaleService&#xa;--&#xa;+ createSaleOrder(request): ResponseEntity&#xa;+ getSaleOrderById(id): ResponseEntity" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="460" y="30" width="280" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_service_if" value="«interface»&#xa;SaleService&#xa;--&#xa;+ createSaleOrder(request): SaleOrderResponse&#xa;+ getSaleOrderById(id): SaleOrderResponse" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="460" y="190" width="280" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_service_impl" value="«Service / Singleton»&#xa;SaleServiceImpl&#xa;--&#xa;- saleOrderRepository: SaleOrderRepository&#xa;- customerRepository: CustomerRepository&#xa;- taxInvoiceFactory: TaxInvoiceFactory&#xa;- productWarrantyFactory: ProductWarrantyFactory&#xa;- discountStrategyResolver: DiscountStrategyResolver&#xa;--&#xa;+ createSaleOrder(request): SaleOrderResponse" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="440" y="340" width="320" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_strat_if" value="«Strategy Interface»&#xa;DiscountStrategy&#xa;--&#xa;+ calculateDiscount(subtotal, val): BigDecimal" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="840" y="190" width="260" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_strat_fixed" value="«Concrete Strategy»&#xa;FixedAmountDiscountStrategy&#xa;--&#xa;+ calculateDiscount(subtotal, val): BigDecimal" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="800" y="320" width="230" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_strat_percent" value="«Concrete Strategy»&#xa;PercentageDiscountStrategy&#xa;--&#xa;+ calculateDiscount(subtotal, val): BigDecimal" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="320" width="230" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_strat_res" value="«Context / Resolver»&#xa;DiscountStrategyResolver&#xa;--&#xa;- strategies: Map&lt;String, DiscountStrategy&gt;&#xa;--&#xa;+ getStrategy(name): DiscountStrategy" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="840" y="440" width="260" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_fac_inv" value="«Factory Method»&#xa;TaxInvoiceFactory&#xa;--&#xa;+ createTaxInvoice(no, req, grandTotal): TaxInvoice" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="60" y="330" width="310" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_fac_war" value="«Factory Method»&#xa;ProductWarrantyFactory&#xa;--&#xa;+ createWarranty(code, imei, model): ProductWarranty" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="60" y="440" width="310" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_repo" value="«interface / Repository»&#xa;SaleOrderRepository&#xa;--&#xa;+ findBySaleCode(code): Optional&lt;SaleOrder&gt;&#xa;+ findByCustomer(customer, pageable): Page&lt;SaleOrder&gt;" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="440" y="550" width="320" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_ent_sale" value="«Entity / Builder»&#xa;SaleOrder&#xa;--&#xa;- saleId: Long&#xa;- saleCode: String&#xa;- totalAmount: BigDecimal&#xa;- status: SaleStatus&#xa;--&#xa;+ builder(): SaleOrderBuilder" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="490" y="690" width="220" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="cd_ent_invoice" value="«Entity / Builder»&#xa;TaxInvoice&#xa;--&#xa;- invoiceNumber: String&#xa;- vatAmount: BigDecimal&#xa;- grandTotal: BigDecimal&#xa;--&#xa;+ builder(): TaxInvoiceBuilder" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="110" y="690" width="220" height="130" as="geometry" />
+        </mxCell>
+        <!-- Edges -->
+        <mxCell id="e_c_s" style="endArrow=open;html=1;strokeColor=#000000;" edge="1" parent="1" source="cd_ctrl" target="cd_service_if"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_si_s" style="endArrow=block;dashed=1;endFill=0;html=1;strokeColor=#000000;" edge="1" parent="1" source="cd_service_impl" target="cd_service_if"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_si_fi" style="endArrow=open;dashed=1;html=1;strokeColor=#000000;" edge="1" parent="1" source="cd_service_impl" target="cd_fac_inv"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_si_fw" style="endArrow=open;dashed=1;html=1;strokeColor=#000000;" edge="1" parent="1" source="cd_service_impl" target="cd_fac_war"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_fi_ent" style="endArrow=open;dashed=1;html=1;strokeColor=#000000;" edge="1" parent="1" source="cd_fac_inv" target="cd_ent_invoice"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_si_sr" style="endArrow=open;html=1;strokeColor=#000000;" edge="1" parent="1" source="cd_service_impl" target="cd_strat_res"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_sr_st" style="endArrow=open;html=1;strokeColor=#000000;" edge="1" parent="1" source="cd_strat_res" target="cd_strat_if"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_s1_si" style="endArrow=block;dashed=1;endFill=0;html=1;strokeColor=#000000;" edge="1" parent="1" source="cd_strat_fixed" target="cd_strat_if"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_s2_si" style="endArrow=block;dashed=1;endFill=0;html=1;strokeColor=#000000;" edge="1" parent="1" source="cd_strat_percent" target="cd_strat_if"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_si_rep" style="endArrow=open;html=1;strokeColor=#000000;" edge="1" parent="1" source="cd_service_impl" target="cd_repo"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_rep_ent" style="endArrow=open;dashed=1;html=1;strokeColor=#000000;" edge="1" parent="1" source="cd_repo" target="cd_ent_sale"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_sale_inv" value="1 : 1" style="endArrow=none;html=1;strokeColor=#000000;fontColor=#000000;fontStyle=1;" edge="1" parent="1" source="cd_ent_sale" target="cd_ent_invoice"><mxGeometry relative="1" as="geometry" /></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
