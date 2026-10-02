@@ -1,11 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
+
 import { api } from "@/lib/api";
+
 import { ReceiveHeader } from "@/components/headers/receiveHeader";
+
 import { ReceiveForm } from "@/components/receive/receive-form";
+
 import { ReceiveHistory } from "@/components/receive/receive-history";
+
 import type { ProductModel } from "@/types/products/types";
+
 import type { ProductItem } from "@/types/stock/types";
 
 export default function Page() {
@@ -39,20 +45,21 @@ export default function Page() {
   }, [reloadToken]);
 
   return (
-    <div className="min-h-[calc(100dvh-48px)] overflow-hidden rounded-[20px] bg-[#F8F9FB]">
+    <div className="min-h-[calc(100dvh-48px)] overflow-hidden rounded-[20px] bg-white">
       <ReceiveHeader />
-      <div className="space-y-5 p-5 bg-white">
-        {error && (
-          <div className="rounded-[20px] bg-[#FFE4E4] px-7 py-4 text-[16px] text-[#E53935]">
-            {error}
-          </div>
-        )}
-        <ReceiveForm
-          models={models}
-          onReceived={() => setReloadToken((token) => token + 1)}
-        />
-        <ReceiveHistory items={items} loading={loading} error="" />
-      </div>
+
+      {error && (
+        <div className="mx-6 mt-5 rounded-xl bg-[#FFE4E4] px-6 py-4 text-[16px] text-[#E53935]">
+          {error}
+        </div>
+      )}
+
+      <ReceiveForm
+        models={models}
+        onReceived={() => setReloadToken((token) => token + 1)}
+      />
+
+      <ReceiveHistory items={items} loading={loading} error="" />
     </div>
   );
 }
