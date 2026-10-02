@@ -1,11 +1,9 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-
 import { Plus } from "lucide-react";
 
 import { api } from "@/lib/api";
-
 import { suppliers } from "@/datas/receive/data";
 
 import type { ReceiveLine } from "@/types/receive/types";
@@ -138,14 +136,12 @@ export function ReceiveForm({
         try {
           await api.post("/products/items", {
             modelId: Number(line.modelId),
-
             serialNumber:
               serial === ""
                 ? null
                 : quantity === 1
                   ? serial
                   : `${serial}-${index + 1}`,
-
             imei: null,
             condition: "NEW",
             grade: line.grade || null,
@@ -259,17 +255,15 @@ export function ReceiveForm({
             onClick={() => {
               setLines((current) => [
                 ...current,
-                createLine(
-                  crypto.randomUUID(),
-                ),
+                createLine(crypto.randomUUID()),
               ]);
 
               setMessage("");
             }}
-            className="flex h-12 items-center justify-center gap-2 rounded-full border border-[#D9E0E8] bg-white px-5 text-[18px] text-[#606060] transition hover:bg-[#F8F9FB] disabled:opacity-50"
+            className="flex h-12 items-center justify-center gap-2 rounded-full border border-[#D9E0E8] bg-white px-5 text-[16px] text-[#606060] transition hover:bg-[#F8F9FB] disabled:opacity-50"
           >
             <Plus
-              size={22}
+              size={20}
               aria-hidden="true"
             />
 
@@ -281,7 +275,7 @@ export function ReceiveForm({
             disabled={
               saving || models.length === 0
             }
-            className="h-12 rounded-full bg-[#7FBFFF] px-7 text-[18px] text-white transition hover:bg-[#68AEF4] disabled:opacity-50"
+            className="h-12 rounded-full bg-[#7FBFFF] px-7 text-[16px] text-white transition hover:bg-[#68AEF4] disabled:opacity-50"
           >
             {saving
               ? "กำลังบันทึก..."
