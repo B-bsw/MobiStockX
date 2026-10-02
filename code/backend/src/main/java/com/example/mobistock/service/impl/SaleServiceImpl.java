@@ -23,6 +23,9 @@ import com.example.mobistock.mapper.SaleMapper;
 import com.example.mobistock.repository.AppUserRepository;
 import com.example.mobistock.repository.CustomerRepository;
 import com.example.mobistock.repository.ProductItemRepository;
+import com.example.mobistock.service.factory.ProductWarrantyFactory;
+import com.example.mobistock.service.factory.TaxInvoiceFactory;
+import com.example.mobistock.service.strategy.DiscountStrategyResolver;
 import com.example.mobistock.repository.ProductModelRepository;
 import com.example.mobistock.repository.SaleOrderRepository;
 import com.example.mobistock.service.SaleService;
@@ -49,6 +52,9 @@ public class SaleServiceImpl implements SaleService {
     private final ProductModelRepository productModelRepository;
     private final ProductItemRepository productItemRepository;
     private final SaleMapper saleMapper;
+    private final TaxInvoiceFactory taxInvoiceFactory;
+    private final ProductWarrantyFactory productWarrantyFactory;
+    private final DiscountStrategyResolver discountStrategyResolver;
 
     @Override
     @Transactional
@@ -128,22 +134,17 @@ public class SaleServiceImpl implements SaleService {
                     .build();
 
             if (item != null) {
-                int warrantyMonths = model.getModelWarrantyDuration() != null ? model.getModelWarrantyDuration() : 12;
-                ProductWarranty warranty = ProductWarranty.builder()
-                        .warrantyCode(generateWarrantyCode())
-                        .itemImei(item.getImei())
-                        .startDate(LocalDate.now())
-                        .expireDate(LocalDate.now().plusMonths(warrantyMonths))
-                        .termsConditions("MobiStock warranty covers hardware faults for " + warrantyMonths + " months.")
-                        .warrantyStatus("ACTIVE")
-                        .build();
+                ProductWarranty warranty = productWarrantyFactory.createWarranty(
+                        generateWarrantyCode(), item.getImei(), model);
                 orderItem.setWarranty(warranty);
             }
 
             saleOrder.addItem(orderItem);
         }
 
-        BigDecimal orderDiscount = request.getDiscountAmount() != null ? request.getDiscountAmount() : BigDecimal.ZERO;
+        BigDecimal rawDiscount = request.getDiscountAmount() != null ? request.getDiscountAmount() : BigDecimal.ZERO;
+        BigDecimal orderDiscount = discountStrategyResolver.getStrategy("fixedDiscountStrategy")
+                .calculateDiscount(subtotal, rawDiscount);
         BigDecimal grandTotal = subtotal.subtract(orderDiscount);
         if (grandTotal.compareTo(BigDecimal.ZERO) < 0) {
             grandTotal = BigDecimal.ZERO;
@@ -168,24 +169,8 @@ public class SaleServiceImpl implements SaleService {
         saleOrder.addPayment(payment);
 
         if (Boolean.TRUE.equals(request.getRequiresTaxInvoice()) && request.getTaxInvoice() != null) {
-            TaxInvoiceRequest invoiceReq = request.getTaxInvoice();
-            BigDecimal vatRate = new BigDecimal("7.00");
-            BigDecimal preVatAmount = grandTotal.multiply(BigDecimal.valueOf(100))
-                    .divide(BigDecimal.valueOf(107), 2, RoundingMode.HALF_UP);
-            BigDecimal vatAmount = grandTotal.subtract(preVatAmount);
-
-            TaxInvoice taxInvoice = TaxInvoice.builder()
-                    .invoiceNumber(generateInvoiceNumber())
-                    .companyOrBuyerName(invoiceReq.getCompanyOrBuyerName())
-                    .taxId(invoiceReq.getTaxId())
-                    .branchNumber(invoiceReq.getBranchNumber() != null ? invoiceReq.getBranchNumber() : "00000")
-                    .address(invoiceReq.getAddress())
-                    .subtotalAmount(preVatAmount)
-                    .vatRate(vatRate)
-                    .vatAmount(vatAmount)
-                    .grandTotal(grandTotal)
-                    .issuedAt(LocalDateTime.now())
-                    .build();
+            TaxInvoice taxInvoice = taxInvoiceFactory.createTaxInvoice(
+                    generateInvoiceNumber(), request.getTaxInvoice(), grandTotal);
             saleOrder.setTaxInvoice(taxInvoice);
         }
 

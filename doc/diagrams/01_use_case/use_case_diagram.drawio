@@ -1,0 +1,76 @@
+<mxfile host="Electron" version="21.0.0" type="device">
+  <diagram id="use_case" name="Use Case Diagram">
+    <mxGraphModel dx="1200" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="sys" value="MobiStock X System" style="shape=rect;html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#000000;strokeWidth=2;align=center;verticalAlign=top;spacingTop=10;fontStyle=1;fontSize=14;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="220" y="40" width="680" height="740" as="geometry" />
+        </mxCell>
+        <mxCell id="a_cashier" value="Cashier&#xa;(พนักงานขาย)" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="60" y="160" width="50" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="a_manager" value="Manager&#xa;(ผู้จัดการร้าน)" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="60" y="420" width="50" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="a_tech" value="Technician&#xa;(ช่างเทคนิค)" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="960" y="240" width="50" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="a_admin" value="Admin&#xa;(ผู้ดูแลระบบ)" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="960" y="520" width="50" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_1" value="เข้าสู่ระบบ (Login &amp; Auth)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="460" y="70" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_2" value="ขายสินค้าหน้าร้าน (POS Sale)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="270" y="150" width="180" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_3" value="ออกใบกำกับภาษี (Tax Invoice)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="540" y="160" width="180" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_4" value="จัดการข้อมูลลูกค้า (Customers)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="270" y="240" width="190" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_5" value="ค้นหา/ตรวจสถานะ IMEI &amp; Serial" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="270" y="320" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_6" value="ตรวจสอบประกัน (Check Warranty)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="660" y="280" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_7" value="จัดการแคตตาล็อกสินค้า (Product Models)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="270" y="420" width="220" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_8" value="รับสินค้าเข้าสต็อก (Receive Stock / Serial)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="270" y="500" width="220" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_9" value="ดูรายงานยอดขาย (Sales Dashboard)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="380" y="580" width="210" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_10" value="จัดการบัญชีผู้ใช้งาน (User &amp; Roles)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="650" y="540" width="210" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="uc_11" value="ตั้งค่าระบบและร้านค้า (System Config)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="650" y="630" width="210" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- Lines -->
+        <mxCell id="e_1" style="endArrow=none;html=1;strokeColor=#000000;" edge="1" parent="1" source="a_cashier" target="uc_1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_2" style="endArrow=none;html=1;strokeColor=#000000;" edge="1" parent="1" source="a_cashier" target="uc_2"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_3" style="endArrow=none;html=1;strokeColor=#000000;" edge="1" parent="1" source="a_cashier" target="uc_4"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_4" style="endArrow=none;html=1;strokeColor=#000000;" edge="1" parent="1" source="a_cashier" target="uc_5"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_5" value="&amp;lt;&amp;lt;extend&amp;gt;&amp;gt;" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;dashed=1;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1" source="uc_3" target="uc_2"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_6" style="endArrow=none;html=1;strokeColor=#000000;" edge="1" parent="1" source="a_manager" target="uc_1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_7" style="endArrow=none;html=1;strokeColor=#000000;" edge="1" parent="1" source="a_manager" target="uc_7"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_8" style="endArrow=none;html=1;strokeColor=#000000;" edge="1" parent="1" source="a_manager" target="uc_8"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_9" style="endArrow=none;html=1;strokeColor=#000000;" edge="1" parent="1" source="a_manager" target="uc_9"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_10" style="endArrow=none;html=1;strokeColor=#000000;" edge="1" parent="1" source="a_tech" target="uc_1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_11" style="endArrow=none;html=1;strokeColor=#000000;" edge="1" parent="1" source="a_tech" target="uc_6"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_12" style="endArrow=none;html=1;strokeColor=#000000;" edge="1" parent="1" source="a_tech" target="uc_5"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_13" style="endArrow=none;html=1;strokeColor=#000000;" edge="1" parent="1" source="a_admin" target="uc_1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_14" style="endArrow=none;html=1;strokeColor=#000000;" edge="1" parent="1" source="a_admin" target="uc_10"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_15" style="endArrow=none;html=1;strokeColor=#000000;" edge="1" parent="1" source="a_admin" target="uc_11"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e_16" style="endArrow=none;html=1;strokeColor=#000000;" edge="1" parent="1" source="a_admin" target="uc_9"><mxGeometry relative="1" as="geometry" /></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

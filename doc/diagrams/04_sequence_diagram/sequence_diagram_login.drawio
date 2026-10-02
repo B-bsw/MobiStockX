@@ -1,0 +1,38 @@
+<mxfile host="Electron" version="21.0.0" type="device">
+  <diagram id="seq_login" name="Scenario 1 - User Authentication &amp; Login">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="ll_client" value="Client (Frontend)" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="60" y="40" width="130" height="480" as="geometry" />
+        </mxCell>
+        <mxCell id="ll_ctrl" value="AuthController" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="250" y="40" width="130" height="480" as="geometry" />
+        </mxCell>
+        <mxCell id="ll_service" value="AuthService" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="440" y="40" width="130" height="480" as="geometry" />
+        </mxCell>
+        <mxCell id="ll_repo" value="AppUserRepository" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="630" y="40" width="140" height="480" as="geometry" />
+        </mxCell>
+        <mxCell id="ll_encoder" value="PasswordEncoder" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="820" y="40" width="130" height="480" as="geometry" />
+        </mxCell>
+        <mxCell id="ll_jwt" value="JwtService" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="990" y="40" width="120" height="480" as="geometry" />
+        </mxCell>
+        <mxCell id="m1" value="1: POST /api/v1/auth/login" style="html=1;verticalAlign=bottom;endArrow=block;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="125" y="110" as="sourcePoint"/><mxPoint x="315" y="110" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m2" value="2: login(request)" style="html=1;verticalAlign=bottom;endArrow=block;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="315" y="140" as="sourcePoint"/><mxPoint x="505" y="140" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m3" value="3: findByUsername(username)" style="html=1;verticalAlign=bottom;endArrow=block;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="505" y="170" as="sourcePoint"/><mxPoint x="700" y="170" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m4" value="4: return Optional&lt;AppUser&gt;" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="700" y="210" as="sourcePoint"/><mxPoint x="505" y="210" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m5" value="5: matches(rawPassword, hash)" style="html=1;verticalAlign=bottom;endArrow=block;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="505" y="250" as="sourcePoint"/><mxPoint x="885" y="250" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m6" value="6: return true" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="885" y="280" as="sourcePoint"/><mxPoint x="505" y="280" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m7" value="7: generateToken(username, role)" style="html=1;verticalAlign=bottom;endArrow=block;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="505" y="320" as="sourcePoint"/><mxPoint x="1050" y="320" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m8" value="8: return tokenString" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="1050" y="350" as="sourcePoint"/><mxPoint x="505" y="350" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m9" value="9: return AuthResponse(token, userDetails)" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="505" y="390" as="sourcePoint"/><mxPoint x="315" y="390" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="m10" value="10: HTTP 200 OK + JSON Body" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="315" y="430" as="sourcePoint"/><mxPoint x="125" y="430" as="targetPoint"/></mxGeometry></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

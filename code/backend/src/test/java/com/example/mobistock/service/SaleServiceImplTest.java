@@ -67,6 +67,16 @@ class SaleServiceImplTest {
     @Spy
     private SaleMapper saleMapper;
 
+    @Spy
+    private com.example.mobistock.service.factory.TaxInvoiceFactory taxInvoiceFactory = new com.example.mobistock.service.factory.TaxInvoiceFactory();
+
+    @Spy
+    private com.example.mobistock.service.factory.ProductWarrantyFactory productWarrantyFactory = new com.example.mobistock.service.factory.ProductWarrantyFactory();
+
+    @Spy
+    private com.example.mobistock.service.strategy.DiscountStrategyResolver discountStrategyResolver = new com.example.mobistock.service.strategy.DiscountStrategyResolver(
+            java.util.Map.of("fixedDiscountStrategy", new com.example.mobistock.service.strategy.FixedAmountDiscountStrategy()));
+
     @InjectMocks
     private SaleServiceImpl saleService;
 

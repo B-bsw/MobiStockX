@@ -1,0 +1,35 @@
+<mxfile host="Electron" version="21.0.0" type="device">
+  <diagram id="act_sale" name="Activity Diagram - POS Sale Process">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="start" value="" style="ellipse;html=1;shape=startState;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1"><mxGeometry x="380" y="30" width="30" height="30" as="geometry" /></mxCell>
+        <mxCell id="a1" value="พนักงานสแกนหรือเลือกสินค้า&#xa;(Scan IMEI / Serial)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1"><mxGeometry x="305" y="90" width="180" height="50" as="geometry" /></mxCell>
+        <mxCell id="d1" value="สินค้าอยู่ในสต็อก?&#xa;(AVAILABLE)" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1"><mxGeometry x="325" y="170" width="140" height="70" as="geometry" /></mxCell>
+        <mxCell id="a_err" value="แจ้งเตือน: สินค้าไม่พร้อมขาย&#xa;(Out of stock / Sold)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1"><mxGeometry x="540" y="180" width="160" height="50" as="geometry" /></mxCell>
+        <mxCell id="a2" value="เพิ่มสินค้าลงรายการขาย&#xa;คำนวณส่วนลด (Discount Strategy)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1"><mxGeometry x="295" y="270" width="200" height="50" as="geometry" /></mxCell>
+        <mxCell id="d2" value="ลูกค้าขอใบกำกับภาษี?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1"><mxGeometry x="325" y="350" width="140" height="70" as="geometry" /></mxCell>
+        <mxCell id="a_tax" value="กรอกข้อมูลผู้เสียภาษี&#xa;คำนวณ VAT 7% (TaxInvoiceFactory)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1"><mxGeometry x="530" y="360" width="200" height="50" as="geometry" /></mxCell>
+        <mxCell id="a3" value="ระบุวิธีชำระเงินและรับยอดชำระ&#xa;(CASH / QR / CREDIT)" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1"><mxGeometry x="305" y="460" width="180" height="50" as="geometry" /></mxCell>
+        <mxCell id="d3" value="ยอดชำระครบถ้วน?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1"><mxGeometry x="325" y="540" width="140" height="70" as="geometry" /></mxCell>
+        <mxCell id="a4" value="บันทึก Order, ออกใบเสร็จ&#xa;สร้างใบรับประกัน (WarrantyFactory)&#xa;เปลี่ยนสถานะเครื่องเป็น SOLD" style="rounded=1;whiteSpace=wrap;html=1;arcSize=20;fillColor=#ffffff;strokeColor=#000000;fontColor=#000000;" vertex="1" parent="1"><mxGeometry x="275" y="650" width="240" height="60" as="geometry" /></mxCell>
+        <mxCell id="end" value="" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1"><mxGeometry x="380" y="750" width="30" height="30" as="geometry" /></mxCell>
+
+        <!-- Edges -->
+        <mxCell id="e1" style="endArrow=block;html=1;strokeColor=#000000;" edge="1" parent="1" source="start" target="a1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e2" style="endArrow=block;html=1;strokeColor=#000000;" edge="1" parent="1" source="a1" target="d1"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ed1_no" value="[ไม่ใช่]" style="endArrow=block;html=1;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1" source="d1" target="a_err"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ed1_yes" value="[ใช่]" style="endArrow=block;html=1;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1" source="d1" target="a2"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e3" style="endArrow=block;html=1;strokeColor=#000000;" edge="1" parent="1" source="a2" target="d2"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ed2_yes" value="[ต้องการ]" style="endArrow=block;html=1;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1" source="d2" target="a_tax"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="et_merge" style="endArrow=block;html=1;strokeColor=#000000;" edge="1" parent="1" source="a_tax" target="a3"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="630" y="485"/></Array></mxGeometry></mxCell>
+        <mxCell id="ed2_no" value="[ไม่ต้องการ]" style="endArrow=block;html=1;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1" source="d2" target="a3"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e4" style="endArrow=block;html=1;strokeColor=#000000;" edge="1" parent="1" source="a3" target="d3"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="ed3_no" value="[ยอดเงินไม่พอ]" style="endArrow=block;html=1;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1" source="d3" target="a3"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="230" y="575"/><mxPoint x="230" y="485"/></Array></mxGeometry></mxCell>
+        <mxCell id="ed3_yes" value="[ครบถ้วน]" style="endArrow=block;html=1;strokeColor=#000000;fontColor=#000000;" edge="1" parent="1" source="d3" target="a4"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e5" style="endArrow=block;html=1;strokeColor=#000000;" edge="1" parent="1" source="a4" target="end"><mxGeometry relative="1" as="geometry" /></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
