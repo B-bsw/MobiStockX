@@ -4,6 +4,7 @@ import com.example.mobistock.domain.entity.Brand;
 import com.example.mobistock.domain.entity.Category;
 import com.example.mobistock.domain.entity.ProductItem;
 import com.example.mobistock.domain.entity.ProductModel;
+import com.example.mobistock.domain.enums.ItemCondition;
 import com.example.mobistock.dto.request.CreateBrandRequest;
 import com.example.mobistock.dto.request.CreateCategoryRequest;
 import com.example.mobistock.dto.request.CreateProductItemRequest;
@@ -60,8 +61,8 @@ public class StockMapper {
                 .modelName(request.getModelName())
                 .color(request.getColor())
                 .storageCapacity(request.getStorageCapacity())
-                .modelWarrantyDuration(request.getModelWarrantyDuration())
-                .isSerialized(request.getIsSerialized())
+                .modelWarrantyDuration(request.getModelWarrantyDuration() != null ? request.getModelWarrantyDuration() : 12)
+                .isSerialized(request.getIsSerialized() != null ? request.getIsSerialized() : true)
                 .standardCost(request.getStandardCost())
                 .standardPrice(request.getStandardPrice())
                 .imageUrl(request.getImageUrl())
@@ -97,7 +98,7 @@ public class StockMapper {
                 .productModel(model)
                 .serialNumber(request.getSerialNumber())
                 .imei(request.getImei())
-                .condition(request.getCondition())
+                .condition(request.getCondition() != null ? request.getCondition() : ItemCondition.NEW)
                 .grade(request.getGrade())
                 .batteryHealth(request.getBatteryHealth())
                 .costPrice(request.getCostPrice())

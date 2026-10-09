@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 
 const BACKEND_URL = (
-  process.env.BACKEND_API_URL ?? "http://157.85.103.33:8080"
+  process.env.BACKEND_API_URL ?? "http://localhost:8080"
 ).replace(/\/$/, "");
 
 const SKIP_REQUEST_HEADERS = new Set([

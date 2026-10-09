@@ -2,15 +2,17 @@
 
 ระบบบริหารจัดการร้านค้าปลีกสินค้าอิเล็กทรอนิกส์/โทรศัพท์มือถือ
 
+URL: [mobistockx.b-bsw.com](mobistockx.b-bsw.com)
+
 ## สมาชิกกลุ่ม
 
-| ลำดับ | ชื่อ-นามสกุล        | รหัสนักศึกษา | Section | Branch                  | หน้าที่รับผิดชอบ |
-| ----- | ------------------- | ------------ | ------- | ----------------------- | ---------------- |
-| 1     | กิตติชัย รักษาวงค์ | 673380028-2  | 02      | kittichai_6733800282_02 | PM + DevOps + FullStack    |
-| 2     | พรรษพร มุสันเทียะ   | 673380051-7  | 02      | patsaporn_6733800517_02 | Frotend + UX/UI          |
-| 3     | พิยดา เกษมาลา       | 673380052-5  | 02      | piyada_6733800525_02    | Frontend + UX/UI         |
-| 4     | สรวิทญ์ ทัศดร่      | 673380065-6  | 02      | sorawit_6733800656_02   | Backend + QA     |
-| 5     | เอกรินทร์ บุดดาหลู่ | 673380074-5  | 02      | aekkarin_6733800745_02  | Backend + SA     |
+| ลำดับ | ชื่อ-นามสกุล        | รหัสนักศึกษา | Section | Branch                  | หน้าที่รับผิดชอบ        |
+| ----- | ------------------- | ------------ | ------- | ----------------------- | ----------------------- |
+| 1     | กิตติชัย รักษาวงค์  | 673380028-2  | 02      | kittichai_6733800282_02 | PM + DevOps + FullStack |
+| 2     | พรรษพร มุสันเทียะ   | 673380051-7  | 02      | patsaporn_6733800517_02 | Frotend + UX/UI         |
+| 3     | พิยดา เกษมาลา       | 673380052-5  | 02      | piyada_6733800525_02    | Frontend + UX/UI        |
+| 4     | สรวิทญ์ ทัศดร่      | 673380065-6  | 02      | sorawit_6733800656_02   | Backend + QA            |
+| 5     | เอกรินทร์ บุดดาหลู่ | 673380074-5  | 02      | aekkarin_6733800745_02  | Backend + SA            |
 
 ## Tech Stack
 
@@ -103,12 +105,12 @@ cd code/backend
 
 ### ข้อมูลทดสอบระบบเริ่มต้น (Default Test Accounts จาก DataSeeder)
 
-| ผู้ใช้งาน (Username) | รหัสผ่าน (Password) | บทบาท (Role) | หน้าที่ |
-| :--- | :--- | :--- | :--- |
-| `admin` | `password` | `ADMIN` | ผู้ดูแลระบบ จัดการผู้ใช้และแบรนด์/หมวดหมู่ |
-| `cashier1` | `password` | `SALES` | พนักงานขาย จุดชำระเงิน POS และออกใบกำกับภาษี |
-| `technician1` | `password` | `TECHNICIAN` | ช่างเทคนิค ตรวจสอบประกันและเคลมสินค้า |
-| `inventory1` | `password` | `INVENTORY` | พนักงานคลัง รับสินค้าเข้าสต็อกและเช็ก IMEI |
+| ผู้ใช้งาน (Username) | รหัสผ่าน (Password) | บทบาท (Role) | หน้าที่                                      |
+| :------------------- | :------------------ | :----------- | :------------------------------------------- |
+| `admin`              | `password`          | `ADMIN`      | ผู้ดูแลระบบ จัดการผู้ใช้และแบรนด์/หมวดหมู่   |
+| `cashier1`           | `password`          | `SALES`      | พนักงานขาย จุดชำระเงิน POS และออกใบกำกับภาษี |
+| `technician1`        | `password`          | `TECHNICIAN` | ช่างเทคนิค ตรวจสอบประกันและเคลมสินค้า        |
+| `inventory1`         | `password`          | `INVENTORY`  | พนักงานคลัง รับสินค้าเข้าสต็อกและเช็ก IMEI   |
 
 ## API Documentation
 
@@ -117,14 +119,14 @@ cd code/backend
 
 ### สรุป Resource-based REST API Endpoints
 
-| Resource | HTTP Method | Path | คำอธิบาย |
-| :--- | :---: | :--- | :--- |
-| **Brands** | `GET` / `POST` / `PUT` / `DELETE` | `/api/v1/brands` | จัดการข้อมูลแบรนด์ (CRUD ครบถ้วน) |
-| **Categories** | `GET` / `POST` / `PUT` / `DELETE` | `/api/v1/categories` | จัดการหมวดหมู่สินค้า (CRUD ครบถ้วน) |
-| **Product Models** | `GET` / `POST` / `PUT` / `DELETE` | `/api/v1/products/models` | จัดการรุ่นสินค้า (CRUD + Pagination & Sorting) |
-| **Product Items** | `GET` / `POST` / `PATCH` / `DELETE` | `/api/v1/products/items` | จัดการสต็อกรายเครื่อง (ค้นหาตาม IMEI, เปลี่ยนสถานะ) |
-| **Customers** | `GET` / `POST` / `PUT` / `DELETE` | `/api/v1/customers` | จัดการข้อมูลลูกค้า (CRUD + ค้นหาตามเบอร์โทร) |
-| **POS Sales** | `POST` / `GET` | `/api/v1/sales` | รายการขายหน้าร้าน (ตัดสต็อก, คำนวณ VAT 7%, ออกใบกำกับภาษี และสร้างประกันอัตโนมัติ) |
+| Resource           |             HTTP Method             | Path                      | คำอธิบาย                                                                           |
+| :----------------- | :---------------------------------: | :------------------------ | :--------------------------------------------------------------------------------- |
+| **Brands**         |  `GET` / `POST` / `PUT` / `DELETE`  | `/api/v1/brands`          | จัดการข้อมูลแบรนด์ (CRUD ครบถ้วน)                                                  |
+| **Categories**     |  `GET` / `POST` / `PUT` / `DELETE`  | `/api/v1/categories`      | จัดการหมวดหมู่สินค้า (CRUD ครบถ้วน)                                                |
+| **Product Models** |  `GET` / `POST` / `PUT` / `DELETE`  | `/api/v1/products/models` | จัดการรุ่นสินค้า (CRUD + Pagination & Sorting)                                     |
+| **Product Items**  | `GET` / `POST` / `PATCH` / `DELETE` | `/api/v1/products/items`  | จัดการสต็อกรายเครื่อง (ค้นหาตาม IMEI, เปลี่ยนสถานะ)                                |
+| **Customers**      |  `GET` / `POST` / `PUT` / `DELETE`  | `/api/v1/customers`       | จัดการข้อมูลลูกค้า (CRUD + ค้นหาตามเบอร์โทร)                                       |
+| **POS Sales**      |           `POST` / `GET`            | `/api/v1/sales`           | รายการขายหน้าร้าน (ตัดสต็อก, คำนวณ VAT 7%, ออกใบกำกับภาษี และสร้างประกันอัตโนมัติ) |
 
 ## How to Run Tests
 
@@ -139,12 +141,12 @@ cd code/backend
 
 ## Deployment URL
 
-| บริการ | URL การเข้าใช้งาน | สถานะ |
-| :--- | :--- | :---: |
-| **Frontend Web App** | `https://mobistockx.dev` (หรือ Cloudflare Tunnel) | Ready |
-| **Backend REST API** | `https://api.mobistockx.dev` | Ready |
-| **Swagger UI** | `http://localhost:8080/swagger-ui.html` | Ready |
-| **Cloud Database** | PostgreSQL on Supabase Cloud | Connected |
+| บริการ               | URL การเข้าใช้งาน                                       |   สถานะ   |
+| :------------------- | :------------------------------------------------------ | :-------: |
+| **Frontend Web App** | `https://mobistockx.b-bsw.com` (หรือ Cloudflare Tunnel) |   Ready   |
+| **Backend REST API** | `http://cp353002.b-bsw.com`                             |   Ready   |
+| **Swagger UI**       | `http://cp353002.b-bsw.com/swagger-ui.html`             |   Ready   |
+| **Cloud Database**   | PostgreSQL on Supabase Cloud                            | Connected |
 
 ## Project Structure
 
@@ -156,6 +158,8 @@ MobiStockX/
 │   ├── backend/                         # Spring Boot 3 Backend
 │   └── frontend/                        # Next.js / React Frontend
 ├── test/                                # ที่เก็บสคริปต์และการทดสอบเพิ่มเติม
+│   └── backend
+│       └── test-report.md               # Report test of Backend
 ├── doc/                                 # เอกสารการออกแบบและสไลด์นำเสนอ
 │   ├── diagrams/                        # แผนภาพ UML และสถาปัตยกรรมระบบ
 │   │   ├── 01_use_case/                 # Use Case Diagram & Draw.io

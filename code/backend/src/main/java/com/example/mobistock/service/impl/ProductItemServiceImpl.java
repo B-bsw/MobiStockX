@@ -6,7 +6,7 @@ import com.example.mobistock.domain.enums.ItemStatus;
 import com.example.mobistock.dto.request.CreateProductItemRequest;
 import com.example.mobistock.dto.request.UpdateProductItemStatusRequest;
 import com.example.mobistock.dto.response.ProductItemResponse;
-import com.example.mobistock.exception.BadRequestException;
+import com.example.mobistock.exception.ConflictException;
 import com.example.mobistock.exception.ResourceNotFoundException;
 import com.example.mobistock.mapper.StockMapper;
 import com.example.mobistock.repository.ProductItemRepository;
@@ -35,11 +35,11 @@ public class ProductItemServiceImpl implements ProductItemService {
                 .orElseThrow(() -> new ResourceNotFoundException("Product model not found with id: " + request.getModelId()));
 
         if (request.getImei() != null && productItemRepository.existsByImei(request.getImei())) {
-            throw new BadRequestException("Device with IMEI '" + request.getImei() + "' already exists");
+            throw new ConflictException("Device with IMEI '" + request.getImei() + "' already exists");
         }
 
         if (request.getSerialNumber() != null && productItemRepository.existsBySerialNumber(request.getSerialNumber())) {
-            throw new BadRequestException("Device with Serial Number '" + request.getSerialNumber() + "' already exists");
+            throw new ConflictException("Device with Serial Number '" + request.getSerialNumber() + "' already exists");
         }
 
         ProductItem item = stockMapper.toProductItemEntity(request, model);
