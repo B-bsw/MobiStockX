@@ -158,6 +158,8 @@ MobiStockX/
 │   ├── backend/                         # Spring Boot 3 Backend
 │   └── frontend/                        # Next.js / React Frontend
 ├── test/                                # ที่เก็บสคริปต์และการทดสอบเพิ่มเติม
+│   └── backend
+│       └── test-report.md               # Report test of Backend
 ├── doc/                                 # เอกสารการออกแบบและสไลด์นำเสนอ
 │   ├── diagrams/                        # แผนภาพ UML และสถาปัตยกรรมระบบ
 │   │   ├── 01_use_case/                 # Use Case Diagram & Draw.io
