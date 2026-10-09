@@ -4,7 +4,7 @@ import com.example.mobistock.domain.entity.Customer;
 import com.example.mobistock.dto.request.CreateCustomerRequest;
 import com.example.mobistock.dto.request.UpdateCustomerRequest;
 import com.example.mobistock.dto.response.CustomerResponse;
-import com.example.mobistock.exception.BadRequestException;
+import com.example.mobistock.exception.ConflictException;
 import com.example.mobistock.exception.ResourceNotFoundException;
 import com.example.mobistock.mapper.CustomerMapper;
 import com.example.mobistock.repository.CustomerRepository;
@@ -26,7 +26,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Transactional
     public CustomerResponse createCustomer(CreateCustomerRequest request) {
         if (customerRepository.existsByPhone(request.getPhone())) {
-            throw new BadRequestException("Customer with phone number '" + request.getPhone() + "' already exists");
+            throw new ConflictException("Customer with phone number '" + request.getPhone() + "' already exists");
         }
         Customer customer = customerMapper.toCustomerEntity(request);
         Customer savedCustomer = customerRepository.save(customer);

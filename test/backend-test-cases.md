@@ -4,7 +4,7 @@
 
 ## ขอบเขตและวิธีทดสอบ
 
-- ชุดเดิม 53 เคส และชุดเพิ่ม 115 เคส รวม 168 test invocations; parameterized test แต่ละ input นับเป็นหนึ่งเคส
+- ชุดเดิม 53 เคส และชุดเพิ่ม 119 เคส รวม 172 test invocations; parameterized test แต่ละ input นับเป็นหนึ่งเคส
 - Controller slice ใช้ MockMvc กับ service จำลองเพื่อตรวจ routing, validation, status และ error handler; ชุด integration เปิด security filter จริงและใช้ H2
 - Auth: สร้างบัญชี CASHIER ทดสอบด้วยรหัสที่เข้ารหัส BCrypt; login แล้วใช้ JWT เรียก API ตรวจผล response และการไม่มี session
 - Stock/customer: สร้างแบรนด์ หมวดหมู่และรุ่นสินค้าในแต่ละเคส เรียก service จริง แล้ว flush/clear persistence context ก่อนอ่านข้อมูลกลับ
@@ -27,9 +27,13 @@
 | Unexpected internal exception | 500 | Mockito ให้ service โยน IllegalStateException แล้วตรวจ real handler |
 | PATCH บน route ที่รองรับเฉพาะ GET/PUT/DELETE | 405 | เพิ่มเติมเพื่อตรวจ method ที่ไม่รองรับ |
 
+## การยืนยันหลังแก้ backend
+
+เคสเดิมยังคง ID เดิม เพิ่ม BE-169 ถึง BE-172 เพื่อยืนยันค่า explicit ไม่ถูก default ทับ, DuplicateKeyException และ non-unique SQLSTATE 23502/23503; SQLSTATE 23505 ของ unique violation ใช้ยืนยันเคส 409 เดิม
+
 ## กรณีทดสอบทั้งหมด
 
-ชื่อเคสระบุ scenario/input; expected เป็นพฤติกรรมที่ assertion ตรวจ ไม่ปรับ expected ให้ตามบั๊กที่พบ รายละเอียดขั้นตอนและ input เพิ่มเติมอยู่ใน source ของแต่ละคลาส
+Expected เป็นเกณฑ์ assertion; ขั้นตอนและ input เพิ่มเติมอยู่ใน source ของแต่ละคลาส
 
 ### MobistockBackendApplicationTests
 
@@ -106,7 +110,10 @@
 | BE-032 | HTTP POST ขัดแย้ง unique constraint ต้องตอบ 409 ไม่ใช่ 500 | HTTP POST ขัดแย้ง unique constraint ต้องตอบ 409 ไม่ใช่ 500 |
 | BE-033 | HTTP POST ข้อมูลไม่ผ่าน validation ต้องตอบ 400 และไม่เรียก service | HTTP POST ข้อมูลไม่ผ่าน validation ต้องตอบ 400 และไม่เรียก service |
 | BE-034 | HTTP POST สร้างข้อมูลสำเร็จต้องตอบ 201 | HTTP POST สร้างข้อมูลสำเร็จต้องตอบ 201 |
+| BE-169 | HTTP POST เมื่อ Spring ระบุ DuplicateKeyException ต้องตอบ 409 | HTTP POST เมื่อ Spring ระบุ DuplicateKeyException ต้องตอบ 409 |
 | BE-035 | HTTP PUT แก้ไขข้อมูลสำเร็จพร้อม response body ต้องตอบ 200 | HTTP PUT แก้ไขข้อมูลสำเร็จพร้อม response body ต้องตอบ 200 |
+| BE-170 | non-unique constraint SQLSTATE: "23502" | HTTP 400 และข้อความไม่เปิดเผย SQL สำหรับ constraint ที่ไม่ใช่ unique |
+| BE-171 | non-unique constraint SQLSTATE: "23503" | HTTP 400 และข้อความไม่เปิดเผย SQL สำหรับ constraint ที่ไม่ใช่ unique |
 
 ### ProductItemControllerTest
 
@@ -187,6 +194,7 @@
 | BE-085 | service อ่านผู้ใช้ที่ไม่มีต้องแจ้ง not found | service อ่านผู้ใช้ที่ไม่มีต้องแจ้ง not found |
 | BE-086 | token ของผู้ใช้ที่ถูกลบต้องได้ 401 | token ของผู้ใช้ที่ถูกลบต้องได้ 401 |
 | BE-087 | token หมดอายุหรือเซ็นด้วยกุญแจอื่นต้องได้ 401 | token หมดอายุหรือเซ็นด้วยกุญแจอื่นต้องได้ 401 |
+| BE-172 | ค่า default ต้องไม่ทับ isSerialized=false ระยะประกันที่ระบุ หรือ condition=SECOND_HAND | ค่า default ต้องไม่ทับ isSerialized=false ระยะประกันที่ระบุ หรือ condition=SECOND_HAND |
 | BE-088 | บัญชีปิดใช้งาน login ไม่ได้และ token เดิมเข้า API ไม่ได้ | บัญชีปิดใช้งาน login ไม่ได้และ token เดิมเข้า API ไม่ได้ |
 | BE-089 | หน้า root เปิดได้โดยไม่ต้อง login และ status อ่านได้เมื่อมี JWT | หน้า root เปิดได้โดยไม่ต้อง login และ status อ่านได้เมื่อมี JWT |
 

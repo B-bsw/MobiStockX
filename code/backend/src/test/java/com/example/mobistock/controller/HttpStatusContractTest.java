@@ -8,15 +8,21 @@ import com.example.mobistock.service.BrandService;
 import com.example.mobistock.support.TestSecurityBeans;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.sql.SQLException;
+
+import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -96,9 +102,29 @@ class HttpStatusContractTest {
     @Test
     @DisplayName("HTTP POST ขัดแย้ง unique constraint ต้องตอบ 409 ไม่ใช่ 500")
     void databaseConflictReturns409() throws Exception {
-        when(brands.createBrand(any())).thenThrow(new DataIntegrityViolationException("duplicate brand name"));
+        when(brands.createBrand(any())).thenThrow(new DataIntegrityViolationException(
+                "database constraint violation", new SQLException("duplicate brand name", "23505")));
         mvc.perform(post("/api/v1/brands").contentType(MediaType.APPLICATION_JSON).content("{\"brandName\":\"HTTPBrand\"}"))
-                .andExpect(status().isConflict());
+                .andExpect(status().isConflict()).andExpect(jsonPath("$.status").value(409));
+    }
+
+    @Test
+    @DisplayName("HTTP POST เมื่อ Spring ระบุ DuplicateKeyException ต้องตอบ 409")
+    void duplicateKeyReturns409() throws Exception {
+        when(brands.createBrand(any())).thenThrow(new DuplicateKeyException("duplicate brand name"));
+        mvc.perform(post("/api/v1/brands").contentType(MediaType.APPLICATION_JSON).content("{\"brandName\":\"HTTPBrand\"}"))
+                .andExpect(status().isConflict()).andExpect(jsonPath("$.status").value(409));
+    }
+
+    @ParameterizedTest(name = "non-unique constraint SQLSTATE: {0}")
+    @ValueSource(strings = {"23502", "23503"})
+    @DisplayName("constraint ที่ไม่ใช่ unique ต้องตอบ 400 และไม่เปิดเผย SQL")
+    void nonUniqueConstraintReturns400(String sqlState) throws Exception {
+        when(brands.createBrand(any())).thenThrow(new DataIntegrityViolationException(
+                "private database details", new SQLException("private SQL statement", sqlState)));
+        mvc.perform(post("/api/v1/brands").contentType(MediaType.APPLICATION_JSON).content("{\"brandName\":\"HTTPBrand\"}"))
+                .andExpect(status().isBadRequest()).andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.message").value("Data violates a database constraint"));
     }
 
     @Test
@@ -113,7 +139,10 @@ class HttpStatusContractTest {
     @DisplayName("HTTP Method ที่ route ไม่รองรับต้องตอบ 405 ไม่ใช่ 500 และไม่เรียก service")
     void unsupportedMethodReturns405() throws Exception {
         mvc.perform(patch("/api/v1/brands/1").contentType(MediaType.APPLICATION_JSON).content("{\"brandName\":\"HTTPBrand\"}"))
-                .andExpect(status().isMethodNotAllowed());
+                .andExpect(status().isMethodNotAllowed())
+                .andExpect(header().string("Allow", containsString("GET")))
+                .andExpect(header().string("Allow", containsString("PUT")))
+                .andExpect(header().string("Allow", containsString("DELETE")));
         verifyNoInteractions(brands);
     }
 }

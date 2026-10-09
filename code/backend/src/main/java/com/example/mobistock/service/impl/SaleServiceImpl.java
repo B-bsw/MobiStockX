@@ -15,7 +15,6 @@ import com.example.mobistock.domain.enums.SaleStatus;
 import com.example.mobistock.dto.request.CreateSaleOrderRequest;
 import com.example.mobistock.dto.request.PaymentRequest;
 import com.example.mobistock.dto.request.SaleItemRequest;
-import com.example.mobistock.dto.request.TaxInvoiceRequest;
 import com.example.mobistock.dto.response.SaleOrderResponse;
 import com.example.mobistock.exception.BadRequestException;
 import com.example.mobistock.exception.ResourceNotFoundException;
@@ -36,8 +35,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -104,6 +101,9 @@ public class SaleServiceImpl implements SaleService {
             LocalDateTime warrantyExpireDate = null;
 
             if (itemRequest.getItemId() != null) {
+                if (!Integer.valueOf(1).equals(itemRequest.getQuantity())) {
+                    throw new BadRequestException("A specific product item must have quantity exactly one");
+                }
                 item = itemsById.get(itemRequest.getItemId());
                 if (item == null) {
                     throw new ResourceNotFoundException("Product item not found with id: " + itemRequest.getItemId());

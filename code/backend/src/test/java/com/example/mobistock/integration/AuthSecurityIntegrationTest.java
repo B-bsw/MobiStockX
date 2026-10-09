@@ -185,7 +185,8 @@ class AuthSecurityIntegrationTest {
         mvc.perform(post("/api/v1/products/models").header("Authorization", "Bearer " + token())
                         .contentType(MediaType.APPLICATION_JSON).content("{\"modelName\":\"DefaultPhone\",\"standardPrice\":1070,"
                                 + "\"brandId\":" + brand + ",\"categoryId\":" + category + "}"))
-                .andExpect(status().isCreated()).andExpect(jsonPath("$.data.isSerialized").value(true));
+                .andExpect(status().isCreated()).andExpect(jsonPath("$.data.isSerialized").value(true))
+                .andExpect(jsonPath("$.data.modelWarrantyDuration").value(12));
     }
 
     @Test
@@ -196,6 +197,23 @@ class AuthSecurityIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON).content("{\"modelId\":" + model
                                 + ",\"serialNumber\":\"DEFAULT-1\",\"costPrice\":700,\"sellingPrice\":1070}"))
                 .andExpect(status().isCreated()).andExpect(jsonPath("$.data.condition").value("NEW"));
+    }
+
+    @Test
+    @DisplayName("ค่า default ต้องไม่ทับ isSerialized=false ระยะประกันที่ระบุ หรือ condition=SECOND_HAND")
+    void explicitValuesPreserved() throws Exception {
+        long brand = createThroughApi("/api/v1/brands", "{\"brandName\":\"ExplicitBrand\"}", "brandId");
+        long category = createThroughApi("/api/v1/categories", "{\"categoryNameTh\":\"ExplicitCategory\"}", "categoryId");
+        var result = mvc.perform(post("/api/v1/products/models").header("Authorization", "Bearer " + token())
+                        .contentType(MediaType.APPLICATION_JSON).content("{\"modelName\":\"ExplicitModel\",\"standardPrice\":1070,"
+                                + "\"isSerialized\":false,\"modelWarrantyDuration\":24,\"brandId\":" + brand + ",\"categoryId\":" + category + "}"))
+                .andExpect(status().isCreated()).andExpect(jsonPath("$.data.isSerialized").value(false))
+                .andExpect(jsonPath("$.data.modelWarrantyDuration").value(24)).andReturn();
+        long model = json.readTree(result.getResponse().getContentAsString()).at("/data/modelId").asLong();
+        mvc.perform(post("/api/v1/products/items").header("Authorization", "Bearer " + token())
+                        .contentType(MediaType.APPLICATION_JSON).content("{\"modelId\":" + model
+                                + ",\"serialNumber\":\"EXPLICIT-1\",\"condition\":\"SECOND_HAND\",\"costPrice\":700,\"sellingPrice\":1070}"))
+                .andExpect(status().isCreated()).andExpect(jsonPath("$.data.condition").value("SECOND_HAND"));
     }
 
     @ParameterizedTest(name = "duplicate resource conflict: {0}")

@@ -4,7 +4,7 @@ import com.example.mobistock.domain.entity.Category;
 import com.example.mobistock.dto.request.CreateCategoryRequest;
 import com.example.mobistock.dto.request.UpdateCategoryRequest;
 import com.example.mobistock.dto.response.CategoryResponse;
-import com.example.mobistock.exception.BadRequestException;
+import com.example.mobistock.exception.ConflictException;
 import com.example.mobistock.exception.ResourceNotFoundException;
 import com.example.mobistock.mapper.StockMapper;
 import com.example.mobistock.repository.CategoryRepository;
@@ -26,7 +26,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public CategoryResponse createCategory(CreateCategoryRequest request) {
         if (categoryRepository.findByCategoryNameThIgnoreCase(request.getCategoryNameTh()).isPresent()) {
-            throw new BadRequestException("Category with name '" + request.getCategoryNameTh() + "' already exists");
+            throw new ConflictException("Category with name '" + request.getCategoryNameTh() + "' already exists");
         }
         Category category = stockMapper.toCategoryEntity(request);
         Category savedCategory = categoryRepository.save(category);

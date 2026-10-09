@@ -79,7 +79,7 @@ class StockCustomerIntegrationTest {
     @Test
     @DisplayName("สร้างแบรนด์ชื่อซ้ำต่างตัวพิมพ์ต้องปฏิเสธ")
     void duplicateBrand() {
-        assertThrows(BadRequestException.class, () -> brands.createBrand(CreateBrandRequest.builder().brandName("coveragebrand").build()));
+        assertThrows(ConflictException.class, () -> brands.createBrand(CreateBrandRequest.builder().brandName("coveragebrand").build()));
         assertEquals(1, brands.getAllBrands().size());
     }
 
@@ -102,7 +102,7 @@ class StockCustomerIntegrationTest {
     @Test
     @DisplayName("หมวดหมู่ชื่อซ้ำต่างตัวพิมพ์ต้องปฏิเสธ")
     void duplicateCategory() {
-        assertThrows(BadRequestException.class, () -> categories.createCategory(
+        assertThrows(ConflictException.class, () -> categories.createCategory(
                 CreateCategoryRequest.builder().categoryNameTh("coveragecategory").build()));
     }
 
@@ -131,7 +131,7 @@ class StockCustomerIntegrationTest {
     void duplicatePhone() {
         var request = CreateCustomerRequest.builder().firstName("A").lastName("B").phone("0812345678").build();
         customers.createCustomer(request);
-        assertThrows(BadRequestException.class, () -> customers.createCustomer(request));
+        assertThrows(ConflictException.class, () -> customers.createCustomer(request));
         assertEquals(1, customers.getAllCustomers(PageRequest.of(0, 20)).getTotalElements());
     }
 
@@ -218,8 +218,8 @@ class StockCustomerIntegrationTest {
     @DisplayName("IMEI หรือ Serial ซ้ำต้องปฏิเสธโดยไม่เพิ่มสต็อก")
     void duplicateItemIdentifiers() {
         items.createProductItem(itemRequest("351234567890123", "SN-001"));
-        assertThrows(BadRequestException.class, () -> items.createProductItem(itemRequest("351234567890123", "SN-002")));
-        assertThrows(BadRequestException.class, () -> items.createProductItem(itemRequest("351234567890124", "SN-001")));
+        assertThrows(ConflictException.class, () -> items.createProductItem(itemRequest("351234567890123", "SN-002")));
+        assertThrows(ConflictException.class, () -> items.createProductItem(itemRequest("351234567890124", "SN-001")));
         reload();
         assertEquals(1, stock());
         assertEquals(1, itemRepository.count());
