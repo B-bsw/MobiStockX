@@ -4,7 +4,7 @@ import com.example.mobistock.domain.entity.Brand;
 import com.example.mobistock.dto.request.CreateBrandRequest;
 import com.example.mobistock.dto.request.UpdateBrandRequest;
 import com.example.mobistock.dto.response.BrandResponse;
-import com.example.mobistock.exception.BadRequestException;
+import com.example.mobistock.exception.ConflictException;
 import com.example.mobistock.exception.ResourceNotFoundException;
 import com.example.mobistock.mapper.StockMapper;
 import com.example.mobistock.repository.BrandRepository;
@@ -26,7 +26,7 @@ public class BrandServiceImpl implements BrandService {
     @Transactional
     public BrandResponse createBrand(CreateBrandRequest request) {
         if (brandRepository.findByBrandNameIgnoreCase(request.getBrandName()).isPresent()) {
-            throw new BadRequestException("Brand with name '" + request.getBrandName() + "' already exists");
+            throw new ConflictException("Brand with name '" + request.getBrandName() + "' already exists");
         }
         Brand brand = stockMapper.toBrandEntity(request);
         Brand savedBrand = brandRepository.save(brand);
