@@ -54,6 +54,7 @@ function EditProductForm() {
           warranty: String(product.modelWarrantyDuration ?? 12),
           price: String(product.standardPrice ?? ""),
           cost: String(product.standardCost ?? ""),
+          imageUrl: product.imageUrl ?? "",
         });
         setIsSerialized(product.isSerialized ?? true);
 
@@ -89,7 +90,7 @@ function EditProductForm() {
         isSerialized,
         standardCost: Number(values.cost),
         standardPrice: Number(values.price),
-        imageUrl: null,
+        imageUrl: values.imageUrl.trim() || null,
         brandId: Number(values.brandId),
         categoryId: Number(values.categoryId),
       });

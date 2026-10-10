@@ -1,4 +1,5 @@
 import { ScanLine } from "lucide-react";
+import { ProductImage } from "@/components/products/product-image";
 import { formatMoney } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import type { PosProduct } from "@/types/pos/types";
@@ -35,19 +36,27 @@ export function PosProductCard({
         "disabled:cursor-not-allowed disabled:border-border disabled:bg-secondary disabled:shadow-none",
       )}
     >
-      <div className="min-w-0">
-        <p className="truncate text-sm font-semibold text-foreground">
-          {product.name}
-        </p>
-        <p className="truncate text-xs text-muted-foreground">
-          {product.brand} · {product.model}
-        </p>
-        {perUnit && !soldOut && (
-          <p className="mt-1 flex items-center gap-1 text-xs text-primary">
-            <ScanLine size={12} aria-hidden="true" />
-            เลือกตาม S/N หรือ IMEI
+      <div className="flex min-w-0 gap-3">
+        <ProductImage
+          url={product.imageUrl}
+          name={product.name}
+          className={cn("size-14", soldOut && "opacity-60")}
+          iconSize={22}
+        />
+        <div className="min-w-0">
+          <p className="truncate text-sm font-semibold text-foreground">
+            {product.name}
           </p>
-        )}
+          <p className="truncate text-xs text-muted-foreground">
+            {product.brand} · {product.model}
+          </p>
+          {perUnit && !soldOut && (
+            <p className="mt-1 flex items-center gap-1 text-xs text-primary">
+              <ScanLine size={12} aria-hidden="true" />
+              เลือกตาม S/N หรือ IMEI
+            </p>
+          )}
+        </div>
       </div>
       <div className="flex items-baseline justify-between gap-3">
         <span className="text-base font-semibold tabular-nums text-foreground">

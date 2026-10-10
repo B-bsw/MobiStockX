@@ -43,6 +43,7 @@ function toPosProduct(model: ProductModel): PosProduct {
     model: spec || model.categoryNameTh,
     price: Number(model.standardPrice ?? 0),
     stock: Number(model.stockQuantity ?? 0),
+    imageUrl: model.imageUrl ?? null,
     isSerialized: Boolean(model.isSerialized),
   };
 }

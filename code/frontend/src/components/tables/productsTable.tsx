@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { DataTable, type Column } from "@/components/ui/data-table";
 import { EmptyState } from "@/components/ui/empty-state";
 import { formatMoney } from "@/lib/format";
+import { ProductImage } from "@/components/products/product-image";
 import type { ProductModel } from "@/types/products/types";
 import {
   ProductActions,
@@ -35,13 +36,20 @@ export function ProductsTable({
       id: "product",
       header: "สินค้า",
       cell: (product) => (
-        <div className="min-w-0">
-          <p className="truncate font-medium text-foreground">
-            {product.modelName}
-          </p>
-          <p className="truncate text-xs text-muted-foreground">
-            {product.brandName}
-          </p>
+        <div className="flex min-w-0 items-center gap-3">
+          <ProductImage
+            url={product.imageUrl}
+            name={product.modelName}
+            className="size-11"
+          />
+          <div className="min-w-0">
+            <p className="truncate font-medium text-foreground">
+              {product.modelName}
+            </p>
+            <p className="truncate text-xs text-muted-foreground">
+              {product.brandName}
+            </p>
+          </div>
         </div>
       ),
     },
