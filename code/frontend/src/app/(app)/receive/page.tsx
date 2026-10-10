@@ -35,7 +35,7 @@ export default function Page() {
               params: { size: 100 },
             }),
             api.get("/products/items", {
-              params: { size: 50 },
+              params: { size: 200 },
             }),
           ]);
 
