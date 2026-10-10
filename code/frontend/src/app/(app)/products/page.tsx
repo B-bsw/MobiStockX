@@ -3,11 +3,16 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
-import { ProductsFilters } from "@/components/searchs/productsFilters";
+import {
+  ProductsFilters,
+  type StockFilter,
+} from "@/components/searchs/productsFilters";
 import { ProductsHeader } from "@/components/headers/productsHeader";
 import { ProductsTable } from "@/components/tables/productsTable";
 import { Alert } from "@/components/ui/alert";
+import { Pagination } from "@/components/ui/pagination";
 import { Panel } from "@/components/ui/panel";
+import { usePagination } from "@/lib/use-pagination";
 import type { Category, ProductModel } from "@/types/products/types";
 
 export default function Page() {
@@ -15,6 +20,8 @@ export default function Page() {
 
   const [activeCategory, setActiveCategory] = useState("ทั้งหมด");
   const [search, setSearch] = useState("");
+  const [brand, setBrand] = useState("ทั้งหมด");
+  const [stock, setStock] = useState<StockFilter>("ALL");
   const [products, setProducts] = useState<ProductModel[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
@@ -66,6 +73,7 @@ export default function Page() {
 
   const filteredProducts = products.filter((product) => {
     const keyword = search.toLowerCase();
+    const quantity = Number(product.stockQuantity ?? 0);
 
     const matchSearch =
       product.modelName.toLowerCase().includes(keyword) ||
@@ -74,10 +82,22 @@ export default function Page() {
     const matchCategory =
       activeCategory === "ทั้งหมด" || product.categoryNameTh === activeCategory;
 
-    return matchSearch && matchCategory;
+    const matchBrand = brand === "ทั้งหมด" || product.brandName === brand;
+
+    const matchStock =
+      stock === "ALL" ||
+      (stock === "IN_STOCK" ? quantity > 0 : quantity === 0);
+
+    return matchSearch && matchCategory && matchBrand && matchStock;
   });
 
+  const paged = usePagination(filteredProducts);
+
   const categoryTabs = ["ทั้งหมด", ...categories.map((c) => c.categoryNameTh)];
+
+  const brandNames = [
+    ...new Set(products.map((product) => product.brandName).filter(Boolean)),
+  ].sort((a, b) => a.localeCompare(b, "th"));
 
   return (
     <Panel className="overflow-hidden">
@@ -89,8 +109,13 @@ export default function Page() {
         search={search}
         activeCategory={activeCategory}
         categories={categoryTabs}
+        brand={brand}
+        brands={brandNames}
+        stock={stock}
         onSearchChange={setSearch}
         onCategoryChange={setActiveCategory}
+        onBrandChange={setBrand}
+        onStockChange={setStock}
       />
 
       {error !== "" && products.length > 0 ? (
@@ -100,7 +125,7 @@ export default function Page() {
       ) : null}
 
       <ProductsTable
-        products={filteredProducts}
+        products={paged.rows}
         search={search}
         loading={loading}
         error={products.length === 0 ? error : ""}
@@ -114,6 +139,20 @@ export default function Page() {
           onCancelDelete: () => setConfirmId(null),
         }}
       />
+
+      {!loading && filteredProducts.length > 0 ? (
+        <Pagination
+          page={paged.page}
+          pageCount={paged.pageCount}
+          pageSize={paged.pageSize}
+          total={paged.total}
+          from={paged.from}
+          to={paged.to}
+          unit="รายการ"
+          onPageChange={paged.setPage}
+          onPageSizeChange={paged.setPageSize}
+        />
+      ) : null}
     </Panel>
   );
 }

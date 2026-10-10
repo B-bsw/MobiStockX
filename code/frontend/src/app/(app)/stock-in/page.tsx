@@ -16,9 +16,12 @@ import {
 } from "@/components/ui/data-table";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Panel, PanelHeader } from "@/components/ui/panel";
+import { Pagination } from "@/components/ui/pagination";
 import { SearchInput } from "@/components/ui/search-input";
 import { Segmented } from "@/components/ui/segmented";
+import { usePagination } from "@/lib/use-pagination";
 import {
+  CONDITION_LABEL,
   ITEM_STATUS_LABEL,
   ITEM_STATUS_TONE,
   type ItemStatus,
@@ -27,6 +30,13 @@ import {
 } from "@/types/stock/types";
 
 type StatusFilter = "ALL" | ItemStatus;
+type ConditionFilter = "ALL" | "NEW" | "SECOND_HAND";
+
+const CONDITION_FILTERS: readonly { value: ConditionFilter; label: string }[] = [
+  { value: "ALL", label: "ทุกสภาพ" },
+  { value: "NEW", label: CONDITION_LABEL.NEW },
+  { value: "SECOND_HAND", label: CONDITION_LABEL.SECOND_HAND },
+];
 
 const FILTERS: readonly { value: StatusFilter; label: string }[] = [
   { value: "ALL", label: "ทั้งหมด" },
@@ -41,6 +51,7 @@ export default function Page() {
   const [items, setItems] = useState<ProductItem[]>([]);
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState<StatusFilter>("ALL");
+  const [condition, setCondition] = useState<ConditionFilter>("ALL");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -125,8 +136,12 @@ export default function Page() {
       (value) => (value ?? "").toLowerCase().includes(keyword),
     );
     const matchStatus = status === "ALL" || item.status === status;
-    return matchSearch && matchStatus;
+    const matchCondition =
+      condition === "ALL" || item.condition === condition;
+    return matchSearch && matchStatus && matchCondition;
   });
+
+  const paged = usePagination(filtered);
 
   const available = items.filter((item) => item.status === "AVAILABLE").length;
 
@@ -214,27 +229,35 @@ export default function Page() {
         </div>
       )}
 
-      <div className="flex flex-col gap-3 border-b px-4 py-3 lg:flex-row lg:items-center lg:gap-4 lg:px-6">
-        <SearchInput
-          label="ค้นหาเครื่องในสต๊อก"
-          placeholder="ค้นหารุ่น Serial หรือ IMEI"
-          value={search}
-          onValueChange={setSearch}
-          className="lg:max-w-sm lg:flex-1"
-        />
+      <div className="flex flex-col gap-3 border-b px-4 py-3 lg:px-6">
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-4">
+          <SearchInput
+            label="ค้นหาเครื่องในสต๊อก"
+            placeholder="ค้นหารุ่น Serial หรือ IMEI"
+            value={search}
+            onValueChange={setSearch}
+            className="lg:max-w-sm lg:flex-1"
+          />
+          <Segmented
+            label="กรองตามสถานะ"
+            options={FILTERS}
+            value={status}
+            onValueChange={setStatus}
+            className="lg:ml-auto"
+          />
+        </div>
         <Segmented
-          label="กรองตามสถานะ"
-          options={FILTERS}
-          value={status}
-          onValueChange={setStatus}
-          className="lg:ml-auto"
+          label="กรองตามสภาพเครื่อง"
+          options={CONDITION_FILTERS}
+          value={condition}
+          onValueChange={setCondition}
         />
       </div>
 
       <DataTable
         caption="รายการเครื่องในสต๊อกรายตัว พร้อม Serial IMEI เกรด ราคาขาย และสถานะ"
         columns={columns}
-        rows={filtered}
+        rows={paged.rows}
         rowKey={(item) => item.itemId}
         loading={loading}
         error={error}
@@ -286,6 +309,20 @@ export default function Page() {
           )
         }
       />
+
+      {!loading && filtered.length > 0 ? (
+        <Pagination
+          page={paged.page}
+          pageCount={paged.pageCount}
+          pageSize={paged.pageSize}
+          total={paged.total}
+          from={paged.from}
+          to={paged.to}
+          unit="เครื่อง"
+          onPageChange={paged.setPage}
+          onPageSizeChange={paged.setPageSize}
+        />
+      ) : null}
 
       <StockEditSheet
         item={editing}
