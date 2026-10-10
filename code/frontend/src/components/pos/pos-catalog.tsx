@@ -4,13 +4,19 @@ import { SearchInput } from "@/components/ui/search-input";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { CartItem, PosProduct } from "@/types/pos/types";
 import { PosProductCard } from "./pos-product-card";
+import { PosScanBox } from "./pos-item-picker";
 
 interface PosCatalogProps {
   products: PosProduct[];
   items: CartItem[];
   search: string;
+  scan: string;
+  scanning: boolean;
+  scanError: string;
   loading?: boolean;
   onSearchChange: (value: string) => void;
+  onScanChange: (value: string) => void;
+  onScanSubmit: () => void;
   onAdd: (product: PosProduct) => void;
 }
 
@@ -18,8 +24,13 @@ export function PosCatalog({
   products,
   items,
   search,
+  scan,
+  scanning,
+  scanError,
   loading = false,
   onSearchChange,
+  onScanChange,
+  onScanSubmit,
   onAdd,
 }: PosCatalogProps) {
   const searching = search.trim() !== "";
@@ -36,6 +47,14 @@ export function PosCatalog({
         onValueChange={onSearchChange}
       />
 
+      <PosScanBox
+        value={scan}
+        pending={scanning}
+        error={scanError}
+        onValueChange={onScanChange}
+        onSubmit={onScanSubmit}
+      />
+
       <div className="mt-4 lg:min-h-0 lg:flex-1 lg:overflow-y-auto">
         {loading ? (
           <div
@@ -50,8 +69,6 @@ export function PosCatalog({
             ))}
           </div>
         ) : products.length > 0 ? (
-          /* auto-fill keeps the tile size honest from 375px to a 27" counter
-             display without a single breakpoint. */
           <div className="grid grid-cols-[repeat(auto-fill,minmax(13rem,1fr))] gap-3">
             {products.map((product) => (
               <PosProductCard
@@ -59,8 +76,9 @@ export function PosCatalog({
                 product={product}
                 remaining={
                   product.stock -
-                  (items.find((item) => item.product.id === product.id)
-                    ?.quantity ?? 0)
+                  items
+                    .filter((item) => item.product.id === product.id)
+                    .reduce((sum, item) => sum + item.quantity, 0)
                 }
                 onAdd={onAdd}
               />
