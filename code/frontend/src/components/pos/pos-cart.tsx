@@ -1,6 +1,6 @@
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { formatMoney } from "@/lib/format";
-import type { CartItem } from "@/types/pos/types";
+import { itemLabel, type CartItem } from "@/types/pos/types";
 import type {
   Customer,
   PaymentMethod,
@@ -24,8 +24,12 @@ interface PosCartProps {
   onPaymentMethodChange: (value: PaymentMethod) => void;
   onTaxInvoiceToggle: (enabled: boolean) => void;
   onTaxInvoiceConfirm: (values: TaxInvoiceForm) => void;
-  onQuantityChange: (id: number, quantity: number) => void;
+  onQuantityChange: (lineId: string, quantity: number) => void;
   onCheckout: () => void;
+}
+
+function unitPrice(line: CartItem) {
+  return line.item?.price ?? line.product.price;
 }
 
 export function PosCart({
@@ -49,7 +53,7 @@ export function PosCart({
 }: PosCartProps) {
   const count = items.reduce((sum, item) => sum + item.quantity, 0);
   const total = items.reduce(
-    (sum, item) => sum + item.product.price * item.quantity,
+    (sum, line) => sum + unitPrice(line) * line.quantity,
     0,
   );
 
@@ -75,44 +79,61 @@ export function PosCart({
         </div>
       ) : (
         <div className="max-h-[40dvh] min-h-0 flex-1 space-y-4 overflow-y-auto p-5 lg:max-h-none">
-          {items.map(({ product, quantity }) => (
-            <div key={product.id} className="border-b border-[#EBEBEB] pb-4">
-              <div className="flex items-start justify-between gap-2">
-                <p className="text-[15px] text-gray-900">{product.name}</p>
-                <button
-                  type="button"
-                  onClick={() => onQuantityChange(product.id, 0)}
-                  aria-label={`ลบ ${product.name}`}
-                  className="p-1 text-gray-400 hover:text-red-500"
-                >
-                  <Trash2 size={16} />
-                </button>
-              </div>
-              <div className="mt-2 flex items-center justify-between text-sm text-gray-600">
-                <div className="flex items-center gap-3">
+          {items.map((line) => {
+            const { lineId, product, item, quantity } = line;
+            const name = item ? `${product.name} · ${itemLabel(item)}` : product.name;
+
+            return (
+              <div key={lineId} className="border-b border-[#EBEBEB] pb-4">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0">
+                    <p className="text-[15px] text-gray-900">{product.name}</p>
+                    {item && (
+                      <p className="mt-0.5 break-all font-mono text-[13px] text-gray-500">
+                        {itemLabel(item)}
+                      </p>
+                    )}
+                  </div>
                   <button
                     type="button"
-                    onClick={() => onQuantityChange(product.id, quantity - 1)}
-                    aria-label={`ลดจำนวน ${product.name}`}
-                    className="rounded-full border border-gray-200 p-1"
+                    onClick={() => onQuantityChange(lineId, 0)}
+                    aria-label={`ลบ ${name}`}
+                    className="p-1 text-gray-400 hover:text-red-500"
                   >
-                    <Minus size={14} />
-                  </button>
-                  <span>{quantity}</span>
-                  <button
-                    type="button"
-                    disabled={quantity >= product.stock}
-                    onClick={() => onQuantityChange(product.id, quantity + 1)}
-                    aria-label={`เพิ่มจำนวน ${product.name}`}
-                    className="rounded-full border border-gray-200 p-1 disabled:opacity-30"
-                  >
-                    <Plus size={14} />
+                    <Trash2 size={16} />
                   </button>
                 </div>
-                <span>{formatMoney(product.price * quantity)}</span>
+                <div className="mt-2 flex items-center justify-between text-sm text-gray-600">
+                  {/* A picked unit is one physical phone: no quantity stepper. */}
+                  {item ? (
+                    <span>1 เครื่อง</span>
+                  ) : (
+                    <div className="flex items-center gap-3">
+                      <button
+                        type="button"
+                        onClick={() => onQuantityChange(lineId, quantity - 1)}
+                        aria-label={`ลดจำนวน ${name}`}
+                        className="rounded-full border border-gray-200 p-1"
+                      >
+                        <Minus size={14} />
+                      </button>
+                      <span>{quantity}</span>
+                      <button
+                        type="button"
+                        disabled={quantity >= product.stock}
+                        onClick={() => onQuantityChange(lineId, quantity + 1)}
+                        aria-label={`เพิ่มจำนวน ${name}`}
+                        className="rounded-full border border-gray-200 p-1 disabled:opacity-30"
+                      >
+                        <Plus size={14} />
+                      </button>
+                    </div>
+                  )}
+                  <span>{formatMoney(unitPrice(line) * quantity)}</span>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
