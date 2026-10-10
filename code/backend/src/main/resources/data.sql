@@ -3,7 +3,7 @@
 -- Stable IDs make reruns skip existing records; this script never overwrites them.
 -- All dates are relative to execution: master data ~8 months old, sales over the past 6 months.
 -- Counts: 9 users, 10 brands, 6 categories, 60 models, 56 customers, 377 stock units,
---         143 orders, 203 sale lines, 123 payments/warranties, 62 tax invoices.
+--         123 orders, 183 sale lines, 123 payments/warranties, 62 tax invoices, 3 claims.
 -- Requested users (IDs 5-9): password 11223344, BCrypt-encoded; phone unspecified.
 -- Original demo users (IDs 1-4): password Mobistock@123, BCrypt-encoded.
 -- Catalog prices, contact details and transactions are fictional demo data.
@@ -66,16 +66,16 @@ VALUES
 (13, 'vivo V30 5G', 'Shell White', '256GB', 12, true, 1, 10900.00, 13999.00, 'https://cdn.mobistockx.co.th/models/vivo-v30.png', 5, 1, CURRENT_TIMESTAMP - INTERVAL '227 days', CURRENT_TIMESTAMP - INTERVAL '14 days'),
 (14, 'Apple 20W USB-C Power Adapter', 'White', '-', 12, false, 25, 520.00, 790.00, 'https://cdn.mobistockx.co.th/models/apple-20w-adapter.png', 1, 4, CURRENT_TIMESTAMP - INTERVAL '226 days', CURRENT_TIMESTAMP - INTERVAL '1 days'),
 (15, 'Samsung 45W Power Adapter', 'Black', '-', 6, false, 18, 790.00, 1290.00, 'https://cdn.mobistockx.co.th/models/samsung-45w-adapter.png', 2, 4, CURRENT_TIMESTAMP - INTERVAL '225 days', CURRENT_TIMESTAMP - INTERVAL '2 days'),
-(16, 'iPhone 16 Pro Max', 'Desert Titanium', '256GB', 12, true, 7, 41500.00, 48900.00, NULL, 1, 1, CURRENT_TIMESTAMP - INTERVAL '210 days', CURRENT_TIMESTAMP - INTERVAL '1 day'),
-(17, 'iPhone 16 Pro', 'Black Titanium', '512GB', 12, true, 7, 45000.00, 52900.00, NULL, 1, 1, CURRENT_TIMESTAMP - INTERVAL '210 days', CURRENT_TIMESTAMP - INTERVAL '1 day'),
-(18, 'iPhone 16 Plus', 'Ultramarine', '256GB', 12, true, 7, 32000.00, 37900.00, NULL, 1, 1, CURRENT_TIMESTAMP - INTERVAL '210 days', CURRENT_TIMESTAMP - INTERVAL '1 day'),
-(19, 'iPhone 15 Pro', 'White Titanium', '256GB', 12, true, 7, 28000.00, 33900.00, NULL, 1, 1, CURRENT_TIMESTAMP - INTERVAL '210 days', CURRENT_TIMESTAMP - INTERVAL '1 day'),
-(20, 'iPad Pro 11 (M4)', 'Space Black', '256GB', 12, true, 6, 31500.00, 38900.00, NULL, 1, 2, CURRENT_TIMESTAMP - INTERVAL '210 days', CURRENT_TIMESTAMP - INTERVAL '1 day'),
-(21, 'iPad mini (A17 Pro)', 'Purple', '128GB', 12, true, 6, 14500.00, 17900.00, NULL, 1, 2, CURRENT_TIMESTAMP - INTERVAL '210 days', CURRENT_TIMESTAMP - INTERVAL '1 day'),
-(22, 'Apple Watch SE 44mm', 'Midnight', '32GB', 12, true, 7, 7500.00, 9900.00, NULL, 1, 3, CURRENT_TIMESTAMP - INTERVAL '210 days', CURRENT_TIMESTAMP - INTERVAL '1 day'),
-(23, 'Galaxy S24', 'Onyx Black', '256GB', 12, true, 7, 22500.00, 27900.00, NULL, 2, 1, CURRENT_TIMESTAMP - INTERVAL '210 days', CURRENT_TIMESTAMP - INTERVAL '1 day'),
-(24, 'Galaxy S24+', 'Cobalt Violet', '256GB', 12, true, 7, 27500.00, 32900.00, NULL, 2, 1, CURRENT_TIMESTAMP - INTERVAL '210 days', CURRENT_TIMESTAMP - INTERVAL '1 day'),
-(25, 'Galaxy Z Flip6', 'Silver Shadow', '256GB', 12, true, 6, 28500.00, 35900.00, NULL, 2, 1, CURRENT_TIMESTAMP - INTERVAL '210 days', CURRENT_TIMESTAMP - INTERVAL '1 day'),
+(16, 'iPhone 16 Pro Max', 'Desert Titanium', '256GB', 12, true, 8, 41500.00, 48900.00, NULL, 1, 1, CURRENT_TIMESTAMP - INTERVAL '210 days', CURRENT_TIMESTAMP - INTERVAL '1 day'),
+(17, 'iPhone 16 Pro', 'Black Titanium', '512GB', 12, true, 8, 45000.00, 52900.00, NULL, 1, 1, CURRENT_TIMESTAMP - INTERVAL '210 days', CURRENT_TIMESTAMP - INTERVAL '1 day'),
+(18, 'iPhone 16 Plus', 'Ultramarine', '256GB', 12, true, 8, 32000.00, 37900.00, NULL, 1, 1, CURRENT_TIMESTAMP - INTERVAL '210 days', CURRENT_TIMESTAMP - INTERVAL '1 day'),
+(19, 'iPhone 15 Pro', 'White Titanium', '256GB', 12, true, 8, 28000.00, 33900.00, NULL, 1, 1, CURRENT_TIMESTAMP - INTERVAL '210 days', CURRENT_TIMESTAMP - INTERVAL '1 day'),
+(20, 'iPad Pro 11 (M4)', 'Space Black', '256GB', 12, true, 7, 31500.00, 38900.00, NULL, 1, 2, CURRENT_TIMESTAMP - INTERVAL '210 days', CURRENT_TIMESTAMP - INTERVAL '1 day'),
+(21, 'iPad mini (A17 Pro)', 'Purple', '128GB', 12, true, 7, 14500.00, 17900.00, NULL, 1, 2, CURRENT_TIMESTAMP - INTERVAL '210 days', CURRENT_TIMESTAMP - INTERVAL '1 day'),
+(22, 'Apple Watch SE 44mm', 'Midnight', '32GB', 12, true, 8, 7500.00, 9900.00, NULL, 1, 3, CURRENT_TIMESTAMP - INTERVAL '210 days', CURRENT_TIMESTAMP - INTERVAL '1 day'),
+(23, 'Galaxy S24', 'Onyx Black', '256GB', 12, true, 8, 22500.00, 27900.00, NULL, 2, 1, CURRENT_TIMESTAMP - INTERVAL '210 days', CURRENT_TIMESTAMP - INTERVAL '1 day'),
+(24, 'Galaxy S24+', 'Cobalt Violet', '256GB', 12, true, 8, 27500.00, 32900.00, NULL, 2, 1, CURRENT_TIMESTAMP - INTERVAL '210 days', CURRENT_TIMESTAMP - INTERVAL '1 day'),
+(25, 'Galaxy Z Flip6', 'Silver Shadow', '256GB', 12, true, 7, 28500.00, 35900.00, NULL, 2, 1, CURRENT_TIMESTAMP - INTERVAL '210 days', CURRENT_TIMESTAMP - INTERVAL '1 day'),
 (26, 'Galaxy Z Fold6', 'Navy', '512GB', 12, true, 7, 52000.00, 63900.00, NULL, 2, 1, CURRENT_TIMESTAMP - INTERVAL '210 days', CURRENT_TIMESTAMP - INTERVAL '1 day'),
 (27, 'Galaxy A35 5G', 'Awesome Lilac', '128GB', 12, true, 7, 7500.00, 9999.00, NULL, 2, 1, CURRENT_TIMESTAMP - INTERVAL '210 days', CURRENT_TIMESTAMP - INTERVAL '1 day'),
 (28, 'Galaxy Tab A9+', 'Silver', '128GB', 12, true, 6, 6000.00, 7990.00, NULL, 2, 2, CURRENT_TIMESTAMP - INTERVAL '210 days', CURRENT_TIMESTAMP - INTERVAL '1 day'),
@@ -197,23 +197,22 @@ VALUES
 ON CONFLICT (item_id) DO NOTHING;
 
 -- 7. HISTORICAL SERIALIZED STOCK: 12 units per added model, 360 extra units.
--- Four sold, one reserved, occasional damaged/claiming units, remaining available.
+-- Four sold, selected reserved/damaged/claiming units, remaining available.
 -- Stable keys allow reruns; dates are relative to the day the seed is executed.
+-- Every demo device has a unique synthetic 15-digit IMEI.
 INSERT INTO product_item (item_id, model_id, item_serial_number, item_imei,
     item_condition, item_grade, battery_health, cost_price, selling_price,
     item_status, warranty_expire_date, created_at, updated_at)
 SELECT 18 + (m.model_id - 16) * 12 + u.n - 1, m.model_id,
        'DEMO-SN-' || m.model_id || '-' || LPAD(u.n::text, 3, '0'),
-       CASE WHEN m.category_id = 1
-            THEN '990' || LPAD((18 + (m.model_id - 16) * 12 + u.n - 1)::text, 12, '0')
-            ELSE NULL END,
+       '990' || LPAD((18 + (m.model_id - 16) * 12 + u.n - 1)::text, 12, '0'),
        CASE WHEN u.n % 2 = 0 THEN 'SECOND_HAND' ELSE 'NEW' END,
        CASE WHEN u.n % 2 = 0 THEN 'B' ELSE 'A+' END,
        CASE WHEN u.n % 2 = 0 THEN 82 + ((m.model_id + u.n) % 14) ELSE 100 END,
        ROUND(m.standard_cost * CASE WHEN u.n % 2 = 0 THEN 0.70 ELSE 1 END, 2),
        ROUND(m.standard_price * CASE WHEN u.n % 2 = 0 THEN 0.80 ELSE 1 END, 2),
        CASE WHEN u.n <= 4 THEN 'SOLD'
-            WHEN u.n = 5 THEN 'RESERVED'
+            WHEN u.n = 5 AND m.model_id >= 26 THEN 'RESERVED'
             WHEN u.n = 6 AND m.model_id % 5 = 0 THEN 'DAMAGED'
             WHEN u.n = 7 AND m.model_id % 7 = 0 THEN 'CLAIMING'
             ELSE 'AVAILABLE' END,
@@ -228,7 +227,7 @@ WHERE m.model_id BETWEEN 16 AND 45
 ON CONFLICT (item_id) DO NOTHING;
 
 -- 8. SALE ORDER: repeat customers and activity over the past 180 days.
--- 123 completed orders, 10 pending reservations and 10 cancelled orders.
+-- 123 completed orders only.
 INSERT INTO sale_order (sale_id, sale_code, sale_date, subtotal_amount,
     discount_amount, total_amount, sale_status, customer_id, created_by, created_at, updated_at)
 WITH sales AS (
@@ -240,12 +239,6 @@ WITH sales AS (
            1 + ((m * 7 + u * 11) % 56), CASE WHEN u % 2 = 0 THEN 6 ELSE 3 END,
            1 + ((m - 16) * 17 + u * 11) % 180, (u % 3) * 100
     FROM generate_series(16, 45) AS m CROSS JOIN generate_series(1, 4) AS u
-    UNION ALL
-    SELECT 124 + n, 18 + n * 12 + 4, 1 + n % 56, 6, n % 5, 0
-    FROM generate_series(0, 9) AS n
-    UNION ALL
-    SELECT 134 + n, 18 + (10 + n) * 12 + 11, 1 + (n * 3) % 56, 3, 10 + n, 0
-    FROM generate_series(0, 9) AS n
 ), amounts AS (
     SELECT s.*, i.selling_price + CASE WHEN s.id BETWEEN 4 AND 123 AND s.id % 2 = 0
            THEN (1 + s.id % 3) * a.standard_price ELSE 0 END AS subtotal
@@ -254,22 +247,19 @@ WITH sales AS (
 )
 SELECT id, 'DEMO-SO-' || LPAD(id::text, 5, '0'),
        CURRENT_TIMESTAMP - (age_days * INTERVAL '1 day'), subtotal, discount, subtotal - discount,
-       CASE WHEN id >= 134 THEN 'CANCELLED' WHEN id >= 124 THEN 'PENDING' ELSE 'COMPLETED' END,
+       'COMPLETED',
        customer_id, staff_id, CURRENT_TIMESTAMP - (age_days * INTERVAL '1 day'),
        CURRENT_TIMESTAMP - (age_days * INTERVAL '1 day')
 FROM amounts
 ON CONFLICT (sale_id) DO NOTHING;
 
--- 9. SALE ORDER ITEM: 143 serialized lines plus 60 accessory lines.
+-- 9. SALE ORDER ITEM: 123 serialized lines plus 60 accessory lines.
 INSERT INTO sale_order_item (sale_item_id, sale_id, model_id, item_id, quantity,
     unit_cost, unit_price, discount_amount, warranty_expire_date, created_at, updated_at)
 WITH lines AS (
     SELECT s.sale_id, CASE s.sale_id WHEN 1 THEN 1 WHEN 2 THEN 10 WHEN 3 THEN 6
-           ELSE CASE WHEN s.sale_id <= 123 THEN
-               18 + ((s.sale_id - 4) / 4) * 12 + (s.sale_id - 4) % 4
-           WHEN s.sale_id <= 133 THEN 18 + (s.sale_id - 124) * 12 + 4
-           ELSE 18 + (10 + s.sale_id - 134) * 12 + 11 END END AS item_id
-    FROM sale_order s WHERE s.sale_id BETWEEN 1 AND 143
+           ELSE 18 + ((s.sale_id - 4) / 4) * 12 + (s.sale_id - 4) % 4 END AS item_id
+    FROM sale_order s WHERE s.sale_id BETWEEN 1 AND 123
 )
 SELECT s.sale_id, s.sale_id, i.model_id, i.item_id, 1,
        i.cost_price, i.selling_price, s.discount_amount,
@@ -289,7 +279,7 @@ FROM sale_order s JOIN product_model a ON a.model_id = 46 + s.sale_id % 15
 WHERE s.sale_id BETWEEN 4 AND 123 AND s.sale_id % 2 = 0
 ON CONFLICT (sale_item_id) DO NOTHING;
 
--- 10. PAYMENTS: all four payment methods; no receipts for pending/cancelled sales.
+-- 10. PAYMENTS: all four payment methods for completed sales.
 INSERT INTO payment (payment_id, sale_id, payment_method, amount, payment_status,
     reference_no, payment_date, received_by, created_at, updated_at)
 SELECT s.sale_id, s.sale_id,
@@ -330,7 +320,66 @@ WHERE s.sale_id BETWEEN 1 AND 123 AND s.sale_status = 'COMPLETED'
   AND (s.sale_id % 2 = 0 OR s.sale_id = 1)
 ON CONFLICT (invoice_id) DO NOTHING;
 
--- 13. Generated IDs must continue after explicitly seeded IDs.
+-- 13. WARRANTY CLAIMS: 3 historical cases: open, under repair and repaired.
+-- Match by warranty code and staff username so this section also works on an existing DB.
+-- Only eligible demo warranties are selected; existing claims are preserved on reruns.
+WITH eligible AS (
+    SELECT w.warranty_id, w.start_date, w.warranty_code,
+           ROW_NUMBER() OVER (ORDER BY w.warranty_code) AS n
+    FROM product_warranty w
+    JOIN sale_order_item si ON si.sale_item_id = w.sale_item_id
+    JOIN sale_order s ON s.sale_id = si.sale_id
+    JOIN product_item i ON i.item_id = si.item_id
+    WHERE s.sale_code LIKE 'DEMO-SO-%' AND s.sale_status = 'COMPLETED'
+      AND w.item_imei IS NOT NULL
+      AND ((w.warranty_status = 'ACTIVE' AND w.expire_date >= CURRENT_DATE AND i.item_status = 'SOLD')
+           OR EXISTS (SELECT 1 FROM warranty_claim c WHERE c.warranty_id = w.warranty_id AND c.claim_code LIKE 'DEMO-CLM-%'))
+      AND NOT EXISTS (SELECT 1 FROM warranty_claim c WHERE c.warranty_id = w.warranty_id AND c.claim_code NOT LIKE 'DEMO-CLM-%')
+), cases AS (
+    SELECT e.*, GREATEST(e.start_date + 1, CURRENT_DATE - (2 + e.n % 28)::int) AS received_date,
+           CASE (e.n - 1) % 5 WHEN 0 THEN 'OPEN' WHEN 1 THEN 'UNDER_REPAIR'
+                WHEN 2 THEN 'REPAIRED' WHEN 3 THEN 'REPLACED' ELSE 'REJECTED' END AS status
+    FROM eligible e WHERE e.n <= 3
+), inserted AS (
+    INSERT INTO warranty_claim (claim_code, warranty_id, claim_date, symptom,
+        resolution, claim_status, closed_date, created_by, created_at, updated_at)
+    SELECT 'DEMO-CLM-' || LPAD(c.n::text, 5, '0'), c.warranty_id, c.received_date,
+           CASE c.n % 6 WHEN 0 THEN 'เครื่องดับเองระหว่างใช้งานและเปิดติดยาก'
+                WHEN 1 THEN 'หน้าจอสัมผัสไม่ตอบสนองบางตำแหน่ง'
+                WHEN 2 THEN 'แบตเตอรี่หมดเร็วและตัวเครื่องร้อนผิดปกติ'
+                WHEN 3 THEN 'พอร์ตชาร์จหลวม ชาร์จไฟเข้าเป็นบางครั้ง'
+                WHEN 4 THEN 'กล้องหลังโฟกัสไม่ได้และภาพสั่น'
+                ELSE 'ลำโพงเสียงแตกขณะสนทนา' END,
+           CASE c.status WHEN 'OPEN' THEN NULL
+                WHEN 'UNDER_REPAIR' THEN 'ช่างตรวจพบอุปกรณ์ผิดปกติ อยู่ระหว่างตรวจซ่อมและรออะไหล่'
+                WHEN 'REPAIRED' THEN 'เปลี่ยนอะไหล่ที่ชำรุด ทดสอบการใช้งานและส่งคืนลูกค้าแล้ว'
+                WHEN 'REPLACED' THEN 'อนุมัติเปลี่ยนเครื่อง ส่งเครื่องเดิมคืนผู้ผลิตและปิดประกันเครื่องเดิม'
+                ELSE 'ตรวจพบความเสียหายจากของเหลวซึ่งอยู่นอกเงื่อนไขประกัน แจ้งลูกค้าและคืนเครื่องแล้ว' END,
+           c.status,
+           CASE WHEN c.status IN ('REPAIRED','REPLACED','REJECTED')
+                THEN LEAST(CURRENT_DATE, c.received_date + (2 + c.n % 5)::int) ELSE NULL END,
+           u.user_id, c.received_date::timestamp,
+           CASE WHEN c.status IN ('REPAIRED','REPLACED','REJECTED')
+                THEN LEAST(CURRENT_DATE, c.received_date + (2 + c.n % 5)::int)::timestamp
+                ELSE c.received_date::timestamp END
+    FROM cases c JOIN app_user u ON u.username = CASE WHEN c.n % 2 = 0 THEN 'sorawit.th' ELSE 'aekkarin.b' END
+    ON CONFLICT (claim_code) DO NOTHING
+    RETURNING warranty_id, claim_status
+), sync_items AS (
+    UPDATE product_item i SET item_status = CASE c.claim_status
+        WHEN 'UNDER_REPAIR' THEN 'CLAIMING' WHEN 'REPLACED' THEN 'DAMAGED' ELSE 'SOLD' END,
+        updated_at = CURRENT_TIMESTAMP
+    FROM inserted c JOIN product_warranty w ON w.warranty_id = c.warranty_id
+    WHERE i.item_imei = w.item_imei AND c.claim_status <> 'OPEN'
+    RETURNING i.item_id
+), sync_warranties AS (
+    UPDATE product_warranty w SET warranty_status = 'CLAIMED', updated_at = CURRENT_TIMESTAMP
+    FROM inserted c WHERE c.warranty_id = w.warranty_id AND c.claim_status = 'REPLACED'
+    RETURNING w.warranty_id
+)
+SELECT COUNT(*) AS added_demo_claims FROM inserted;
+
+-- 14. Generated IDs must continue after explicitly seeded IDs.
 -- Preserve higher sequence values when this script is rerun.
 SELECT setval(pg_get_serial_sequence('app_user', 'user_id'),
     GREATEST((SELECT MAX(user_id) FROM app_user),
@@ -365,3 +414,6 @@ SELECT setval(pg_get_serial_sequence('product_warranty', 'warranty_id'),
 SELECT setval(pg_get_serial_sequence('tax_invoice', 'invoice_id'),
     GREATEST((SELECT MAX(invoice_id) FROM tax_invoice),
         pg_sequence_last_value(pg_get_serial_sequence('tax_invoice', 'invoice_id')::regclass)), true);
+SELECT setval(pg_get_serial_sequence('warranty_claim', 'claim_id'),
+    GREATEST((SELECT MAX(claim_id) FROM warranty_claim),
+        pg_sequence_last_value(pg_get_serial_sequence('warranty_claim', 'claim_id')::regclass)), true);
