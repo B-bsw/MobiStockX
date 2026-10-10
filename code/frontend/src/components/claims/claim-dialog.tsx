@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { ShieldCheck, ShieldX } from "lucide-react";
 import { api } from "@/lib/api";
 import { Alert } from "@/components/ui/alert";
@@ -17,7 +17,12 @@ import {
 } from "@/components/ui/dialog";
 import { Field, controlClass } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
-import { isWarrantyValid, type WarrantyRecord } from "@/types/claims/types";
+import {
+  isWarrantyValid,
+  type ImeiOption,
+  type WarrantyRecord,
+} from "@/types/claims/types";
+import { ImeiCombobox, fetchClaimableImeis } from "./imei-combobox";
 
 interface ClaimDialogProps {
   open: boolean;
@@ -79,8 +84,33 @@ function ClaimFields({ saving, error, onCancel, onSave }: ClaimFieldsProps) {
   const [checking, setChecking] = useState(false);
   const [lookupError, setLookupError] = useState("");
 
-  async function checkWarranty() {
-    const value = imei.trim();
+  const [options, setOptions] = useState<ImeiOption[]>([]);
+  const [optionsLoading, setOptionsLoading] = useState(true);
+
+  // Mounted only while the dialog is open, so this runs once per open.
+  useEffect(() => {
+    let active = true;
+
+    const getOptions = async () => {
+      try {
+        const loaded = await fetchClaimableImeis();
+        if (active) setOptions(loaded);
+      } catch {
+        // The field still accepts a typed IMEI, so a failed list isn't fatal.
+        if (active) setOptions([]);
+      } finally {
+        if (active) setOptionsLoading(false);
+      }
+    };
+
+    getOptions();
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  async function checkWarranty(code = imei) {
+    const value = code.trim();
 
     if (!/^\d{15}$/.test(value)) {
       setErrors((current) => ({ ...current, imei: "IMEI ต้องเป็นตัวเลข 15 หลัก" }));
@@ -138,31 +168,39 @@ function ClaimFields({ saving, error, onCancel, onSave }: ClaimFieldsProps) {
           label="IMEI เครื่อง"
           required
           error={errors.imei}
-          hint="กรอก 15 หลักแล้วกดตรวจสอบประกัน"
+          hint="พิมพ์เพื่อค้นหา หรือเลือกจากรายการ IMEI ของเครื่องที่ขายแล้ว"
         >
           <div className="flex gap-2">
-            <input
-              id="claim-imei"
-              type="text"
-              inputMode="numeric"
-              autoFocus
-              maxLength={15}
-              value={imei}
-              aria-invalid={Boolean(errors.imei)}
-              aria-describedby={errors.imei ? "claim-imei-error" : undefined}
-              className={controlClass}
-              onChange={(event) => {
-                setImei(event.target.value.replace(/\D/g, ""));
-                setErrors((current) => ({ ...current, imei: undefined }));
-                setWarranty(null);
-                setLookupError("");
-              }}
-            />
+            <div className="min-w-0 flex-1">
+              <ImeiCombobox
+                id="claim-imei"
+                value={imei}
+                options={options}
+                loading={optionsLoading}
+                disabled={saving}
+                invalid={Boolean(errors.imei)}
+                describedBy={errors.imei ? "claim-imei-error" : undefined}
+                onValueChange={(next) => {
+                  setImei(next);
+                  setErrors((current) => ({ ...current, imei: undefined }));
+                  setWarranty(null);
+                  setLookupError("");
+                }}
+                onSelect={(option) => {
+                  // Picking from the list is an explicit choice: check it now.
+                  setErrors((current) => ({ ...current, imei: undefined }));
+                  setWarranty(null);
+                  setLookupError("");
+                  checkWarranty(option.imei);
+                }}
+              />
+            </div>
             <Button
               type="button"
               variant="secondary"
+              className="shrink-0"
               disabled={checking || saving}
-              onClick={checkWarranty}
+              onClick={() => checkWarranty()}
             >
               {checking ? "กำลังตรวจ…" : "ตรวจสอบ"}
             </Button>
