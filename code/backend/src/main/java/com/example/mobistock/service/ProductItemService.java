@@ -2,6 +2,7 @@ package com.example.mobistock.service;
 
 import com.example.mobistock.domain.enums.ItemStatus;
 import com.example.mobistock.dto.request.CreateProductItemRequest;
+import com.example.mobistock.dto.request.UpdateProductItemRequest;
 import com.example.mobistock.dto.request.UpdateProductItemStatusRequest;
 import com.example.mobistock.dto.response.ProductItemResponse;
 import org.springframework.data.domain.Page;
@@ -17,5 +18,6 @@ public interface ProductItemService {
     List<ProductItemResponse> getItemsByModelAndStatus(Long modelId, ItemStatus status);
     Page<ProductItemResponse> getItemsByStatus(ItemStatus status, Pageable pageable);
     ProductItemResponse updateItemStatus(Long itemId, UpdateProductItemStatusRequest request);
+    ProductItemResponse updateProductItem(Long itemId, UpdateProductItemRequest request);
     void deleteProductItem(Long itemId);
 }
