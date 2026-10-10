@@ -90,8 +90,11 @@ public class ProductItemServiceImpl implements ProductItemService {
     @Override
     @Transactional(readOnly = true)
     public Page<ProductItemResponse> getItemsByStatus(ItemStatus status, Pageable pageable) {
-        return productItemRepository.findByStatus(status, pageable)
-                .map(stockMapper::toProductItemResponse);
+        Page<ProductItem> page = status == null
+                ? productItemRepository.findAll(pageable)
+                : productItemRepository.findByStatus(status, pageable);
+
+        return page.map(stockMapper::toProductItemResponse);
     }
 
     @Override

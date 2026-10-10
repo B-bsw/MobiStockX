@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
+  Contact,
   LayoutDashboard,
   Smartphone,
   PlusSquare,
@@ -61,6 +62,7 @@ const NAV_GROUPS: { label: string; items: NavItem[] }[] = [
   {
     label: "การขาย",
     items: [
+      { href: "/customers", label: "ข้อมูลลูกค้า", icon: Contact },
       { href: "/pos", label: "ขายสินค้า / POS", icon: ShoppingCart },
       { href: "/sales", label: "ประวัติการขาย", icon: ReceiptText },
     ],
