@@ -15,6 +15,8 @@ import java.util.Optional;
 @Repository
 public interface SaleOrderRepository extends JpaRepository<SaleOrder, Long> {
 
+    boolean existsByCreatedByUserId(Long userId);
+
     Optional<SaleOrder> findBySaleCode(String saleCode);
 
     /*
