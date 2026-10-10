@@ -15,16 +15,28 @@ import {
 } from "@/components/ui/data-table";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Panel, PanelHeader } from "@/components/ui/panel";
+import { Pagination } from "@/components/ui/pagination";
 import { SearchInput } from "@/components/ui/search-input";
+import { Segmented } from "@/components/ui/segmented";
+import { usePagination } from "@/lib/use-pagination";
 import {
   customerName,
   type CustomerFormValues,
   type CustomerRecord,
 } from "@/types/customers/types";
 
+type TaxFilter = "ALL" | "WITH_TAX" | "WITHOUT_TAX";
+
+const TAX_FILTERS: readonly { value: TaxFilter; label: string }[] = [
+  { value: "ALL", label: "ทั้งหมด" },
+  { value: "WITH_TAX", label: "มีเลขผู้เสียภาษี" },
+  { value: "WITHOUT_TAX", label: "ไม่มีเลขผู้เสียภาษี" },
+];
+
 export default function Page() {
   const [customers, setCustomers] = useState<CustomerRecord[]>([]);
   const [search, setSearch] = useState("");
+  const [taxFilter, setTaxFilter] = useState<TaxFilter>("ALL");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -146,14 +158,24 @@ export default function Page() {
   }
 
   const keyword = search.trim().toLowerCase();
-  const filtered = customers.filter((customer) =>
-    [
+  const filtered = customers.filter((customer) => {
+    const hasTax = (customer.taxNumber ?? "") !== "";
+
+    const matchSearch = [
       customerName(customer),
       customer.phone,
       customer.taxNumber ?? "",
       customer.address ?? "",
-    ].some((value) => value.toLowerCase().includes(keyword)),
-  );
+    ].some((value) => value.toLowerCase().includes(keyword));
+
+    const matchTax =
+      taxFilter === "ALL" ||
+      (taxFilter === "WITH_TAX" ? hasTax : !hasTax);
+
+    return matchSearch && matchTax;
+  });
+
+  const paged = usePagination(filtered);
 
   const withTaxNumber = customers.filter(
     (customer) => (customer.taxNumber ?? "") !== "",
@@ -292,20 +314,27 @@ export default function Page() {
         </div>
       ) : null}
 
-      <div className="border-b px-4 py-3 sm:px-6">
+      <div className="flex flex-col gap-3 border-b px-4 py-3 lg:flex-row lg:items-center lg:gap-4 lg:px-6">
         <SearchInput
           label="ค้นหาลูกค้า"
           placeholder="ค้นหาชื่อ เบอร์โทร หรือเลขผู้เสียภาษี"
           value={search}
           onValueChange={setSearch}
-          className="sm:max-w-sm"
+          className="lg:max-w-sm lg:flex-1"
+        />
+        <Segmented
+          label="กรองตามเลขผู้เสียภาษี"
+          options={TAX_FILTERS}
+          value={taxFilter}
+          onValueChange={setTaxFilter}
+          className="lg:ml-auto"
         />
       </div>
 
       <DataTable
         caption="รายชื่อลูกค้าพร้อมเบอร์โทรศัพท์ เลขผู้เสียภาษี และที่อยู่"
         columns={columns}
-        rows={filtered}
+        rows={paged.rows}
         rowKey={(customer) => customer.customerId}
         loading={loading}
         error={customers.length === 0 ? error : ""}
@@ -348,6 +377,20 @@ export default function Page() {
           )
         }
       />
+
+      {!loading && filtered.length > 0 ? (
+        <Pagination
+          page={paged.page}
+          pageCount={paged.pageCount}
+          pageSize={paged.pageSize}
+          total={paged.total}
+          from={paged.from}
+          to={paged.to}
+          unit="ราย"
+          onPageChange={paged.setPage}
+          onPageSizeChange={paged.setPageSize}
+        />
+      ) : null}
 
       <CustomerDialog
         open={dialogOpen}
