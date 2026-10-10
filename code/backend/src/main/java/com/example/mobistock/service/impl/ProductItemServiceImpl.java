@@ -4,8 +4,10 @@ import com.example.mobistock.domain.entity.ProductItem;
 import com.example.mobistock.domain.entity.ProductModel;
 import com.example.mobistock.domain.enums.ItemStatus;
 import com.example.mobistock.dto.request.CreateProductItemRequest;
+import com.example.mobistock.dto.request.UpdateProductItemRequest;
 import com.example.mobistock.dto.request.UpdateProductItemStatusRequest;
 import com.example.mobistock.dto.response.ProductItemResponse;
+import com.example.mobistock.exception.BadRequestException;
 import com.example.mobistock.exception.ConflictException;
 import com.example.mobistock.exception.ResourceNotFoundException;
 import com.example.mobistock.mapper.StockMapper;
@@ -116,6 +118,70 @@ public class ProductItemServiceImpl implements ProductItemService {
 
         ProductItem updatedItem = productItemRepository.save(item);
         return stockMapper.toProductItemResponse(updatedItem);
+    }
+
+    @Override
+    @Transactional
+    public ProductItemResponse updateProductItem(Long itemId, UpdateProductItemRequest request) {
+        ProductItem item = productItemRepository.findWithModelByItemId(itemId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product item not found with id: " + itemId));
+
+        String serialNumber = normalize(request.getSerialNumber());
+        String imei = normalize(request.getImei());
+
+        if (imei != null && productItemRepository.existsByImeiAndItemIdNot(imei, itemId)) {
+            throw new ConflictException("Device with IMEI '" + imei + "' already exists");
+        }
+
+        if (serialNumber != null && productItemRepository.existsBySerialNumberAndItemIdNot(serialNumber, itemId)) {
+            throw new ConflictException("Device with Serial Number '" + serialNumber + "' already exists");
+        }
+
+        if (item.getStatus() == ItemStatus.SOLD && request.getStatus() != ItemStatus.SOLD) {
+            throw new BadRequestException("A sold item cannot be returned to stock by editing; use a claim or return instead");
+        }
+
+        item.setSerialNumber(serialNumber);
+        item.setImei(imei);
+        item.setGrade(normalize(request.getGrade()));
+        item.setBatteryHealth(request.getBatteryHealth());
+        item.setCostPrice(request.getCostPrice());
+        item.setSellingPrice(request.getSellingPrice());
+
+        if (request.getCondition() != null) {
+            item.setCondition(request.getCondition());
+        }
+
+        applyStatusChange(item, request.getStatus());
+
+        return stockMapper.toProductItemResponse(productItemRepository.save(item));
+    }
+
+    private void applyStatusChange(ProductItem item, ItemStatus newStatus) {
+        ItemStatus oldStatus = item.getStatus();
+        if (oldStatus == newStatus) {
+            return;
+        }
+
+        item.setStatus(newStatus);
+        ProductModel model = item.getProductModel();
+
+        if (oldStatus == ItemStatus.AVAILABLE) {
+            model.setStockQuantity(Math.max(0, model.getStockQuantity() - 1));
+            productModelRepository.save(model);
+        } else if (newStatus == ItemStatus.AVAILABLE) {
+            model.setStockQuantity(model.getStockQuantity() + 1);
+            productModelRepository.save(model);
+        }
+    }
+
+    private String normalize(String value) {
+        if (value == null) {
+            return null;
+        }
+
+        String trimmed = value.trim();
+        return trimmed.isEmpty() ? null : trimmed;
     }
 
     @Override

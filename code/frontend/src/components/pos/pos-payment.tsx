@@ -3,7 +3,10 @@ import {
   PAYMENT_METHODS,
   type Customer,
   type PaymentMethod,
+  type TaxInvoiceErrors,
+  type TaxInvoiceForm,
 } from "@/types/sales/types";
+import { PosTaxInvoice } from "./pos-tax-invoice";
 
 interface PosPaymentProps {
   total: number;
@@ -11,6 +14,9 @@ interface PosPaymentProps {
   customers: Customer[];
   customerId: string;
   paymentMethod: PaymentMethod;
+  taxInvoiceEnabled: boolean;
+  taxInvoice: TaxInvoiceForm;
+  taxInvoiceErrors: TaxInvoiceErrors;
   saving: boolean;
   message: string;
   isError: boolean;
@@ -18,6 +24,11 @@ interface PosPaymentProps {
   onReceivedChange: (value: string) => void;
   onCustomerChange: (value: string) => void;
   onPaymentMethodChange: (value: PaymentMethod) => void;
+  onTaxInvoiceToggle: (enabled: boolean) => void;
+  onTaxInvoiceChange: <K extends keyof TaxInvoiceForm>(
+    field: K,
+    value: TaxInvoiceForm[K],
+  ) => void;
   onCheckout: () => void;
 }
 
@@ -30,6 +41,9 @@ export function PosPayment({
   customers,
   customerId,
   paymentMethod,
+  taxInvoiceEnabled,
+  taxInvoice,
+  taxInvoiceErrors,
   saving,
   message,
   isError,
@@ -37,6 +51,8 @@ export function PosPayment({
   onReceivedChange,
   onCustomerChange,
   onPaymentMethodChange,
+  onTaxInvoiceToggle,
+  onTaxInvoiceChange,
   onCheckout,
 }: PosPaymentProps) {
   const isCash = paymentMethod === "CASH";
@@ -110,6 +126,16 @@ export function PosPayment({
           )}
         </>
       )}
+
+      <PosTaxInvoice
+        enabled={taxInvoiceEnabled}
+        values={taxInvoice}
+        errors={taxInvoiceErrors}
+        total={total}
+        disabled={saving}
+        onToggle={onTaxInvoiceToggle}
+        onChange={onTaxInvoiceChange}
+      />
 
       <button
         type="button"
