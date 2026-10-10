@@ -4,7 +4,6 @@ import type { CartItem } from "@/types/pos/types";
 import type {
   Customer,
   PaymentMethod,
-  TaxInvoiceErrors,
   TaxInvoiceForm,
 } from "@/types/sales/types";
 import { PosPayment } from "./pos-payment";
@@ -17,7 +16,6 @@ interface PosCartProps {
   paymentMethod: PaymentMethod;
   taxInvoiceEnabled: boolean;
   taxInvoice: TaxInvoiceForm;
-  taxInvoiceErrors: TaxInvoiceErrors;
   saving: boolean;
   message: string;
   isError: boolean;
@@ -25,10 +23,7 @@ interface PosCartProps {
   onCustomerChange: (value: string) => void;
   onPaymentMethodChange: (value: PaymentMethod) => void;
   onTaxInvoiceToggle: (enabled: boolean) => void;
-  onTaxInvoiceChange: <K extends keyof TaxInvoiceForm>(
-    field: K,
-    value: TaxInvoiceForm[K],
-  ) => void;
+  onTaxInvoiceConfirm: (values: TaxInvoiceForm) => void;
   onQuantityChange: (id: number, quantity: number) => void;
   onCheckout: () => void;
 }
@@ -41,7 +36,6 @@ export function PosCart({
   paymentMethod,
   taxInvoiceEnabled,
   taxInvoice,
-  taxInvoiceErrors,
   saving,
   message,
   isError,
@@ -49,7 +43,7 @@ export function PosCart({
   onCustomerChange,
   onPaymentMethodChange,
   onTaxInvoiceToggle,
-  onTaxInvoiceChange,
+  onTaxInvoiceConfirm,
   onQuantityChange,
   onCheckout,
 }: PosCartProps) {
@@ -130,7 +124,6 @@ export function PosCart({
         paymentMethod={paymentMethod}
         taxInvoiceEnabled={taxInvoiceEnabled}
         taxInvoice={taxInvoice}
-        taxInvoiceErrors={taxInvoiceErrors}
         saving={saving}
         message={message}
         isError={isError}
@@ -139,7 +132,7 @@ export function PosCart({
         onCustomerChange={onCustomerChange}
         onPaymentMethodChange={onPaymentMethodChange}
         onTaxInvoiceToggle={onTaxInvoiceToggle}
-        onTaxInvoiceChange={onTaxInvoiceChange}
+        onTaxInvoiceConfirm={onTaxInvoiceConfirm}
         onCheckout={onCheckout}
       />
     </aside>

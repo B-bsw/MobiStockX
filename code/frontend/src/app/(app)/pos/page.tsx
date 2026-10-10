@@ -15,7 +15,6 @@ import {
   type Customer,
   type PaymentMethod,
   type SaleOrder,
-  type TaxInvoiceErrors,
   type TaxInvoiceForm,
 } from "@/types/sales/types";
 
@@ -50,9 +49,6 @@ export default function Page() {
   const [taxInvoiceEnabled, setTaxInvoiceEnabled] = useState(false);
   const [taxInvoice, setTaxInvoice] =
     useState<TaxInvoiceForm>(EMPTY_TAX_INVOICE);
-  const [taxInvoiceErrors, setTaxInvoiceErrors] = useState<TaxInvoiceErrors>(
-    {},
-  );
 
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState("");
@@ -148,7 +144,6 @@ export default function Page() {
 
   function toggleTaxInvoice(enabled: boolean) {
     setTaxInvoiceEnabled(enabled);
-    setTaxInvoiceErrors({});
     setMessage("");
     setTaxInvoice(enabled ? prefillFrom(customerId) : EMPTY_TAX_INVOICE);
   }
@@ -158,16 +153,12 @@ export default function Page() {
 
     if (taxInvoiceEnabled) {
       setTaxInvoice(prefillFrom(value));
-      setTaxInvoiceErrors({});
     }
   }
 
-  function changeTaxInvoice<K extends keyof TaxInvoiceForm>(
-    field: K,
-    value: TaxInvoiceForm[K],
-  ) {
-    setTaxInvoice((current) => ({ ...current, [field]: value }));
-    setTaxInvoiceErrors((current) => ({ ...current, [field]: undefined }));
+  function confirmTaxInvoice(values: TaxInvoiceForm) {
+    setTaxInvoice(values);
+    setMessage("");
   }
 
   async function checkout() {
@@ -177,7 +168,6 @@ export default function Page() {
       const found = validateTaxInvoice(taxInvoice);
 
       if (Object.keys(found).length > 0) {
-        setTaxInvoiceErrors(found);
         setIsError(true);
         setMessage("กรุณากรอกข้อมูลใบกำกับภาษีให้ครบถ้วน");
         return;
@@ -228,7 +218,6 @@ export default function Page() {
       setReceived("");
       setTaxInvoiceEnabled(false);
       setTaxInvoice(EMPTY_TAX_INVOICE);
-      setTaxInvoiceErrors({});
       setMessage(
         invoiceNumber
           ? `ขายสำเร็จ เลขที่บิล ${saleCode} · ใบกำกับภาษี ${invoiceNumber}`
@@ -272,7 +261,6 @@ export default function Page() {
             paymentMethod={paymentMethod}
             taxInvoiceEnabled={taxInvoiceEnabled}
             taxInvoice={taxInvoice}
-            taxInvoiceErrors={taxInvoiceErrors}
             saving={saving}
             message={message}
             isError={isError}
@@ -280,7 +268,7 @@ export default function Page() {
             onCustomerChange={changeCustomer}
             onPaymentMethodChange={setPaymentMethod}
             onTaxInvoiceToggle={toggleTaxInvoice}
-            onTaxInvoiceChange={changeTaxInvoice}
+            onTaxInvoiceConfirm={confirmTaxInvoice}
             onQuantityChange={changeQuantity}
             onCheckout={checkout}
           />

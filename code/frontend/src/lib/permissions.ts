@@ -12,6 +12,7 @@ export type AppRoute =
   | "/products/edit"
   | "/stock-in"
   | "/receive"
+  | "/customers"
   | "/pos"
   | "/sales"
   | "/users";
@@ -33,6 +34,7 @@ export const ROLE_ROUTES: Record<UserRole, readonly AppRoute[]> = {
     "/products/edit",
     "/stock-in",
     "/receive",
+    "/customers",
     "/pos",
     "/sales",
     "/users",
@@ -44,10 +46,11 @@ export const ROLE_ROUTES: Record<UserRole, readonly AppRoute[]> = {
     "/products/edit",
     "/stock-in",
     "/receive",
+    "/customers",
     "/pos",
     "/sales",
   ],
-  CASHIER: ["/", "/products", "/stock-in", "/pos", "/sales"],
+  CASHIER: ["/", "/products", "/stock-in", "/customers", "/pos", "/sales"],
   TECHNICIAN: ["/", "/products", "/stock-in", "/receive"],
 };
 
@@ -59,6 +62,7 @@ export const ROUTE_LABEL: Record<AppRoute, string> = {
   "/products/edit": "แก้ไขสินค้า",
   "/stock-in": "จัดการสต๊อก",
   "/receive": "รับสินค้าเข้า",
+  "/customers": "ข้อมูลลูกค้า",
   "/pos": "ขายสินค้า / POS",
   "/sales": "ประวัติการขาย",
   "/users": "จัดการผู้ใช้",
