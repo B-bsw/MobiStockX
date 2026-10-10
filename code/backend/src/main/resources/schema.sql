@@ -90,6 +90,7 @@ CREATE TABLE IF NOT EXISTS product_warranty (
     warranty_id BIGSERIAL PRIMARY KEY,
     warranty_code VARCHAR(50) NOT NULL UNIQUE,
     item_imei VARCHAR(20) NOT NULL,
+    sale_item_id BIGINT NOT NULL UNIQUE,
     start_date DATE NOT NULL,
     expire_date DATE NOT NULL,
     terms_conditions TEXT,
@@ -100,6 +101,24 @@ CREATE TABLE IF NOT EXISTS product_warranty (
 
 CREATE INDEX IF NOT EXISTS idx_warranty_code ON product_warranty(warranty_code);
 CREATE INDEX IF NOT EXISTS idx_warranty_imei ON product_warranty(item_imei);
+
+-- 7.1 Warranty Claim
+CREATE TABLE IF NOT EXISTS warranty_claim (
+    claim_id BIGSERIAL PRIMARY KEY,
+    claim_code VARCHAR(50) NOT NULL UNIQUE,
+    warranty_id BIGINT NOT NULL REFERENCES product_warranty(warranty_id),
+    claim_date DATE NOT NULL,
+    symptom TEXT NOT NULL,
+    resolution TEXT,
+    claim_status VARCHAR(20) NOT NULL DEFAULT 'OPEN',
+    closed_date DATE,
+    created_by BIGINT NOT NULL REFERENCES app_user(user_id),
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_claim_warranty ON warranty_claim(warranty_id);
+CREATE INDEX IF NOT EXISTS idx_claim_status ON warranty_claim(claim_status);
 
 -- 8. Sale Order
 CREATE TABLE IF NOT EXISTS sale_order (
