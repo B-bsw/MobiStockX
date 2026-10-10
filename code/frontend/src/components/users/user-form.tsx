@@ -19,6 +19,8 @@ export interface UserFormValues {
   role: UserRole | "";
 }
 
+export type UserFormErrors = Partial<Record<keyof UserFormValues, string>>;
+
 export const EMPTY_USER_FORM: UserFormValues = {
   username: "",
   fullName: "",
@@ -28,7 +30,7 @@ export const EMPTY_USER_FORM: UserFormValues = {
   role: "",
 };
 
-type FormErrors = Partial<Record<keyof UserFormValues, string>>;
+type FormErrors = UserFormErrors;
 
 /** Order matters: the first invalid field in this list gets focus on submit. */
 const FIELD_ORDER: (keyof UserFormValues)[] = [
@@ -41,7 +43,10 @@ const FIELD_ORDER: (keyof UserFormValues)[] = [
 ];
 
 /** Mirrors the server rules in CreateUserRequest so the user is told sooner. */
-export function validateUserForm(values: UserFormValues): FormErrors {
+export function validateUserForm(
+  values: UserFormValues,
+  passwordOptional = false,
+): FormErrors {
   const errors: FormErrors = {};
 
   const username = values.username.trim();
@@ -68,7 +73,7 @@ export function validateUserForm(values: UserFormValues): FormErrors {
   }
 
   if (values.password === "") {
-    errors.password = "กรุณากรอกรหัสผ่าน";
+    if (!passwordOptional) errors.password = "กรุณากรอกรหัสผ่าน";
   } else if (values.password.length < 8) {
     errors.password = "รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร";
   }

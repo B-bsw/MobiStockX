@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { UsersRound } from "lucide-react";
+import { Pencil, Trash2, UsersRound } from "lucide-react";
 import { api } from "@/lib/api";
-import { ROLE_LABEL } from "@/lib/auth-context";
+import { ROLE_LABEL, useAuth } from "@/lib/auth-context";
 import { Alert } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   CardField,
   CardFields,
@@ -15,6 +16,10 @@ import {
 import { EmptyState } from "@/components/ui/empty-state";
 import { Panel, PanelHeader } from "@/components/ui/panel";
 import {
+  UserEditDialog,
+  type UserEditValues,
+} from "@/components/users/user-edit-dialog";
+import {
   EMPTY_USER_FORM,
   UserForm,
   type UserFormValues,
@@ -22,6 +27,7 @@ import {
 import { ROLE_TONE, type AppUserRow } from "@/types/users/types";
 
 export default function UsersPage() {
+  const { user: currentUser } = useAuth();
   const [users, setUsers] = useState<AppUserRow[]>([]);
   const [values, setValues] = useState<UserFormValues>(EMPTY_USER_FORM);
   const [loading, setLoading] = useState(true);
@@ -29,6 +35,12 @@ export default function UsersPage() {
   const [listError, setListError] = useState("");
   const [formError, setFormError] = useState("");
   const [created, setCreated] = useState("");
+
+  const [editing, setEditing] = useState<AppUserRow | null>(null);
+  const [editSaving, setEditSaving] = useState(false);
+  const [editError, setEditError] = useState("");
+  const [confirmId, setConfirmId] = useState<number | null>(null);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
 
   /** Shared by the first load and the refresh after a successful create. */
   const loadUsers = async () => {
@@ -93,6 +105,157 @@ export default function UsersPage() {
     }
   };
 
+  const saveEdit = async (next: UserEditValues) => {
+    if (!editing) return;
+
+    setEditSaving(true);
+    setEditError("");
+
+    const phone = next.phone.trim();
+
+    try {
+      const response = await api.put(`/users/${editing.userId}`, {
+        username: next.username.trim(),
+        email: next.email.trim(),
+        password: next.password === "" ? null : next.password,
+        fullName: next.fullName.trim(),
+        phone: phone === "" ? null : phone,
+        role: next.role,
+        isActive: next.isActive,
+      });
+
+      const updated: AppUserRow = response.data.data;
+
+      setUsers((current) =>
+        current.map((user) =>
+          user.userId === editing.userId ? updated : user,
+        ),
+      );
+      setCreated(`บันทึกข้อมูล ${updated.username} แล้ว`);
+      setEditing(null);
+    } catch (error) {
+      const status = (error as { response?: { status?: number } }).response
+        ?.status;
+      const detail = (
+        error as { response?: { data?: { message?: string } } }
+      ).response?.data?.message;
+
+      setEditError(
+        status === 409
+          ? "ชื่อผู้ใช้หรืออีเมลนี้ถูกใช้แล้ว กรุณาใช้ค่าอื่น"
+          : status === 400
+            ? (detail ?? "").includes("last active administrator")
+              ? "ต้องมีผู้ดูแลระบบที่เปิดใช้งานอย่างน้อยหนึ่งคน"
+              : "ข้อมูลไม่ถูกต้อง กรุณาตรวจสอบอีกครั้ง"
+            : status === 403
+              ? "เฉพาะผู้ดูแลระบบเท่านั้นที่แก้ไขผู้ใช้ได้"
+              : "บันทึกข้อมูลผู้ใช้ไม่สำเร็จ กรุณาลองอีกครั้ง",
+      );
+    } finally {
+      setEditSaving(false);
+    }
+  };
+
+  const removeUser = async (user: AppUserRow) => {
+    setDeletingId(user.userId);
+    setListError("");
+
+    try {
+      await api.delete(`/users/${user.userId}`);
+
+      setUsers((current) =>
+        current.filter((item) => item.userId !== user.userId),
+      );
+      setCreated(`ลบผู้ใช้ ${user.username} แล้ว`);
+      setConfirmId(null);
+    } catch (error) {
+      const status = (error as { response?: { status?: number } }).response
+        ?.status;
+      const detail = (
+        error as { response?: { data?: { message?: string } } }
+      ).response?.data?.message;
+
+      setListError(
+        status === 400
+          ? (detail ?? "").includes("sales history")
+            ? "ผู้ใช้รายนี้มีประวัติการขายอยู่ จึงลบไม่ได้ กรุณาปิดใช้งานบัญชีแทน"
+            : (detail ?? "").includes("last active administrator")
+              ? "ไม่สามารถลบผู้ดูแลระบบคนสุดท้ายได้"
+              : (detail ?? "").includes("your own account")
+                ? "ไม่สามารถลบบัญชีของตัวเองได้"
+                : "ไม่สามารถลบผู้ใช้รายนี้ได้"
+          : status === 403
+            ? "เฉพาะผู้ดูแลระบบเท่านั้นที่ลบผู้ใช้ได้"
+            : "ลบผู้ใช้ไม่สำเร็จ กรุณาลองอีกครั้ง",
+      );
+      setConfirmId(null);
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
+  const actions = (user: AppUserRow, className?: string) => {
+    const isSelf = currentUser?.userId === user.userId;
+    const deleting = deletingId === user.userId;
+
+    if (confirmId === user.userId) {
+      return (
+        <div className={className}>
+          <div className="flex flex-wrap items-center justify-end gap-2">
+            <Button
+              size="sm"
+              variant="destructive"
+              disabled={deleting}
+              onClick={() => removeUser(user)}
+            >
+              {deleting ? "กำลังลบ…" : "ยืนยันลบ"}
+            </Button>
+            <Button
+              size="sm"
+              variant="ghost"
+              disabled={deleting}
+              onClick={() => setConfirmId(null)}
+            >
+              ยกเลิก
+            </Button>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className={className}>
+        <div className="flex items-center justify-end gap-1">
+          <Button
+            size="icon-sm"
+            variant="ghost"
+            title="แก้ไข"
+            aria-label={`แก้ไข ${user.username}`}
+            className="text-muted-foreground hover:bg-[#DCEEFF] hover:text-[#2580D9]"
+            onClick={() => {
+              setEditError("");
+              setCreated("");
+              setEditing(user);
+            }}
+          >
+            <Pencil aria-hidden="true" />
+          </Button>
+          <Button
+            size="icon-sm"
+            variant="ghost"
+            title={isSelf ? "ไม่สามารถลบบัญชีตัวเองได้" : "ลบ"}
+            aria-label={`ลบ ${user.username}`}
+            disabled={isSelf}
+            className="text-muted-foreground hover:bg-danger-bg hover:text-danger"
+            onClick={() => setConfirmId(user.userId)}
+          >
+            <Trash2 aria-hidden="true" />
+          </Button>
+        </div>
+      </div>
+    );
+  };
+
   const columns: Column<AppUserRow>[] = [
     {
       id: "fullName",
@@ -144,6 +307,12 @@ export default function UsersPage() {
         </Badge>
       ),
     },
+    {
+      id: "actions",
+      header: <span className="sr-only">การจัดการ</span>,
+      align: "end",
+      cell: (user) => actions(user),
+    },
   ];
 
   return (
@@ -190,7 +359,7 @@ export default function UsersPage() {
         rowKey={(user) => user.userId}
         loading={loading}
         error={listError}
-        minWidthClass="min-w-[58rem]"
+        minWidthClass="min-w-[64rem]"
         maxHeightClass="max-h-144"
         className="mt-3"
         mobileCard={(user) => (
@@ -213,6 +382,7 @@ export default function UsersPage() {
                 {user.isActive ? "ใช้งาน" : "ปิดใช้งาน"}
               </CardField>
             </CardFields>
+            {actions(user, "mt-3")}
           </div>
         )}
         empty={
@@ -222,6 +392,14 @@ export default function UsersPage() {
             description="กรอกแบบฟอร์มด้านบนเพื่อสร้างบัญชีพนักงานคนแรก"
           />
         }
+      />
+
+      <UserEditDialog
+        user={editing}
+        saving={editSaving}
+        error={editError}
+        onClose={() => setEditing(null)}
+        onSave={saveEdit}
       />
     </Panel>
   );
