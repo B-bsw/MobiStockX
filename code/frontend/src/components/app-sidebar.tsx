@@ -14,6 +14,7 @@ import {
   LogOut,
   UserRound,
   Users,
+  Wrench,
   X,
   type LucideIcon,
 } from "lucide-react";
@@ -66,6 +67,10 @@ const NAV_GROUPS: { label: string; items: NavItem[] }[] = [
       { href: "/pos", label: "ขายสินค้า / POS", icon: ShoppingCart },
       { href: "/sales", label: "ประวัติการขาย", icon: ReceiptText },
     ],
+  },
+  {
+    label: "บริการหลังการขาย",
+    items: [{ href: "/claims", label: "เคลมสินค้า / ประกัน", icon: Wrench }],
   },
   {
     label: "ผู้ใช้งาน",
