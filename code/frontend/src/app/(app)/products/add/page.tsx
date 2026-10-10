@@ -55,7 +55,7 @@ export default function AddProductPage() {
         isSerialized: true,
         standardCost: Number(values.cost),
         standardPrice: Number(values.price),
-        imageUrl: null,
+        imageUrl: values.imageUrl.trim() || null,
         brandId: Number(values.brandId),
         categoryId: Number(values.categoryId),
       });

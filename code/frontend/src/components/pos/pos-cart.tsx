@@ -1,4 +1,5 @@
 import { Minus, Plus, Trash2 } from "lucide-react";
+import { ProductImage } from "@/components/products/product-image";
 import { formatMoney } from "@/lib/format";
 import { itemLabel, type CartItem } from "@/types/pos/types";
 import type {
@@ -86,13 +87,21 @@ export function PosCart({
             return (
               <div key={lineId} className="border-b border-[#EBEBEB] pb-4">
                 <div className="flex items-start justify-between gap-2">
-                  <div className="min-w-0">
-                    <p className="text-[15px] text-gray-900">{product.name}</p>
-                    {item && (
-                      <p className="mt-0.5 break-all font-mono text-[13px] text-gray-500">
-                        {itemLabel(item)}
-                      </p>
-                    )}
+                  <div className="flex min-w-0 gap-2.5">
+                    <ProductImage
+                      url={product.imageUrl}
+                      name={product.name}
+                      className="size-10"
+                      iconSize={16}
+                    />
+                    <div className="min-w-0">
+                      <p className="text-[15px] text-gray-900">{product.name}</p>
+                      {item && (
+                        <p className="mt-0.5 break-all font-mono text-[13px] text-gray-500">
+                          {itemLabel(item)}
+                        </p>
+                      )}
+                    </div>
                   </div>
                   <button
                     type="button"
