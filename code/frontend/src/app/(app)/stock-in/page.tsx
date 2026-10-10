@@ -31,8 +31,10 @@ type StatusFilter = "ALL" | ItemStatus;
 const FILTERS: readonly { value: StatusFilter; label: string }[] = [
   { value: "ALL", label: "ทั้งหมด" },
   { value: "AVAILABLE", label: "พร้อมขาย" },
+  { value: "RESERVED", label: "จองแล้ว" },
   { value: "SOLD", label: "ขายแล้ว" },
   { value: "DAMAGED", label: "ชำรุด" },
+  { value: "CLAIMING", label: "เคลมอยู่" },
 ];
 
 export default function Page() {
@@ -148,7 +150,6 @@ export default function Page() {
     {
       id: "imei",
       header: "IMEI",
-      className: "hidden xl:table-cell",
       cell: (item) => (
         <span className="text-muted-foreground tabular-nums">
           {item.imei || "—"}

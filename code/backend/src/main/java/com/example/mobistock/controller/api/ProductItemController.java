@@ -70,7 +70,7 @@ public class ProductItemController {
 
     @GetMapping
     public ResponseEntity<ApiResponse<PageResponse<ProductItemResponse>>> getItemsByStatus(
-            @RequestParam(defaultValue = "AVAILABLE") ItemStatus status,
+            @RequestParam(required = false) ItemStatus status,
             @PageableDefault(size = 20, sort = "itemId", direction = Sort.Direction.DESC) Pageable pageable) {
         return ResponseEntity.ok(ApiResponse.success(
                 PageResponse.from(productItemService.getItemsByStatus(status, pageable))));
