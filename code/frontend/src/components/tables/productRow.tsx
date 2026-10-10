@@ -4,6 +4,7 @@ import { Pencil, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CardField, CardFields } from "@/components/ui/data-table";
+import { ProductImage } from "@/components/products/product-image";
 import { formatMoney } from "@/lib/format";
 import type { ProductModel } from "@/types/products/types";
 
@@ -107,13 +108,20 @@ export function ProductMobileCard({
   return (
     <div>
       <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <p className="truncate text-sm font-medium text-foreground">
-            {product.modelName}
-          </p>
-          <p className="truncate text-xs text-muted-foreground">
-            {product.brandName} · {productSpec(product)}
-          </p>
+        <div className="flex min-w-0 items-center gap-3">
+          <ProductImage
+            url={product.imageUrl}
+            name={product.modelName}
+            className="size-12"
+          />
+          <div className="min-w-0">
+            <p className="truncate text-sm font-medium text-foreground">
+              {product.modelName}
+            </p>
+            <p className="truncate text-xs text-muted-foreground">
+              {product.brandName} · {productSpec(product)}
+            </p>
+          </div>
         </div>
         <Badge tone={quantity === 0 ? "danger" : quantity <= 3 ? "warning" : "success"}>
           {quantity === 0 ? "หมด" : `สต๊อก ${quantity}`}

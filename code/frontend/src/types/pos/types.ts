@@ -5,6 +5,7 @@ export interface PosProduct {
   model: string;
   price: number;
   stock: number;
+  imageUrl: string | null;
   /** Serialized models are sold per unit, picked by serial number / IMEI. */
   isSerialized: boolean;
 }

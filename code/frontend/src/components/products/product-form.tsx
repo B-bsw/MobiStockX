@@ -7,6 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Field, SelectControl, controlClass } from "@/components/ui/field";
 import { Panel, PanelHeader, PanelSection } from "@/components/ui/panel";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  ProductImage,
+  isDisplayableImageUrl,
+} from "@/components/products/product-image";
 import type { Brand, Category } from "@/types/products/types";
 
 export interface ProductFormValues {
@@ -18,6 +22,7 @@ export interface ProductFormValues {
   warranty: string;
   price: string;
   cost: string;
+  imageUrl: string;
 }
 
 export const EMPTY_PRODUCT_FORM: ProductFormValues = {
@@ -29,6 +34,7 @@ export const EMPTY_PRODUCT_FORM: ProductFormValues = {
   warranty: "12",
   price: "",
   cost: "",
+  imageUrl: "",
 };
 
 type FormErrors = Partial<Record<keyof ProductFormValues, string>>;
@@ -40,6 +46,7 @@ const FIELD_ORDER: (keyof ProductFormValues)[] = [
   "categoryId",
   "price",
   "cost",
+  "imageUrl",
 ];
 
 export function validateProductForm(values: ProductFormValues): FormErrors {
@@ -67,6 +74,17 @@ export function validateProductForm(values: ProductFormValues): FormErrors {
     errors.cost = "กรุณากรอกราคาต้นทุน";
   } else if (!Number.isFinite(cost) || cost < 0) {
     errors.cost = "ราคาต้นทุนต้องไม่ติดลบ";
+  }
+
+  // Optional, but a typo should be caught here rather than saved and shown
+  // as a broken image on every page that lists the product.
+  const imageUrl = values.imageUrl.trim();
+  if (imageUrl !== "") {
+    if (!isDisplayableImageUrl(imageUrl)) {
+      errors.imageUrl = "ลิงก์รูปต้องเริ่มด้วย http:// หรือ https://";
+    } else if (imageUrl.length > 500) {
+      errors.imageUrl = "ลิงก์รูปยาวเกิน 500 ตัวอักษร";
+    }
   }
 
   return errors;
@@ -284,6 +302,42 @@ export function ProductForm({
                   value={values.warranty}
                   aria-describedby="product-warranty-hint"
                   onChange={(event) => onChange("warranty", event.target.value)}
+                  className={controlClass}
+                />
+              </Field>
+            </div>
+          </PanelSection>
+
+          <PanelSection
+            title="รูปสินค้า"
+            description="วางลิงก์รูปภาพเพื่อให้แสดงในรายการสินค้าและหน้าขาย"
+          >
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
+              <ProductImage
+                url={values.imageUrl.trim() || null}
+                name={values.name.trim() || "สินค้า"}
+                className="size-24 border border-border sm:size-28"
+                iconSize={32}
+              />
+
+              <Field
+                id="product-imageUrl"
+                label="ลิงก์รูปสินค้า"
+                hint="เว้นว่างไว้ได้ ระบบจะแสดงไอคอนแทน"
+                error={errors.imageUrl}
+                className="flex-1"
+              >
+                <input
+                  id="product-imageUrl"
+                  type="url"
+                  inputMode="url"
+                  placeholder="https://example.com/iphone-15-pro.jpg"
+                  value={values.imageUrl}
+                  aria-invalid={Boolean(errors.imageUrl)}
+                  aria-describedby={
+                    describedBy("imageUrl") ?? "product-imageUrl-hint"
+                  }
+                  onChange={(event) => onChange("imageUrl", event.target.value)}
                   className={controlClass}
                 />
               </Field>
