@@ -16,6 +16,14 @@ export interface WarrantyRecord {
   createdAt: string;
 }
 
+/** One IMEI the cashier can pick when opening a claim. */
+export interface ImeiOption {
+  itemId: number;
+  imei: string;
+  modelName: string;
+  serialNumber: string | null;
+}
+
 export interface ClaimRecord {
   claimId: number;
   claimCode: string;
