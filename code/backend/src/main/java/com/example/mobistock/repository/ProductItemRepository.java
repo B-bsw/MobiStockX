@@ -43,4 +43,8 @@ public interface ProductItemRepository extends JpaRepository<ProductItem, Long> 
     boolean existsByImei(String imei);
 
     boolean existsBySerialNumber(String serialNumber);
+
+    boolean existsByImeiAndItemIdNot(String imei, Long itemId);
+
+    boolean existsBySerialNumberAndItemIdNot(String serialNumber, Long itemId);
 }

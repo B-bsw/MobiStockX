@@ -4,6 +4,7 @@ import com.example.mobistock.common.ApiResponse;
 import com.example.mobistock.common.PageResponse;
 import com.example.mobistock.domain.enums.ItemStatus;
 import com.example.mobistock.dto.request.CreateProductItemRequest;
+import com.example.mobistock.dto.request.UpdateProductItemRequest;
 import com.example.mobistock.dto.request.UpdateProductItemStatusRequest;
 import com.example.mobistock.dto.response.ProductItemResponse;
 import com.example.mobistock.service.ProductItemService;
@@ -81,6 +82,14 @@ public class ProductItemController {
             @Valid @RequestBody UpdateProductItemStatusRequest request) {
         ProductItemResponse response = productItemService.updateItemStatus(id, request);
         return ResponseEntity.ok(ApiResponse.success("Item status updated successfully", response));
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ApiResponse<ProductItemResponse>> updateProductItem(
+            @PathVariable Long id,
+            @Valid @RequestBody UpdateProductItemRequest request) {
+        ProductItemResponse response = productItemService.updateProductItem(id, request);
+        return ResponseEntity.ok(ApiResponse.success("Product item updated successfully", response));
     }
 
     @DeleteMapping("/{id}")
