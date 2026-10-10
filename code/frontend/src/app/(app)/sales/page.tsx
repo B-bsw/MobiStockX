@@ -1,10 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ReceiptText, SearchX } from "lucide-react";
+import { Eye, ReceiptText, SearchX } from "lucide-react";
 import { api } from "@/lib/api";
 import { formatDateTime, formatMoney } from "@/lib/format";
+import { SaleDetailDialog } from "@/components/sales/sale-detail-dialog";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { CardField, CardFields, DataTable, type Column } from "@/components/ui/data-table";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Panel, PanelHeader } from "@/components/ui/panel";
@@ -20,6 +22,7 @@ export default function Page() {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [selected, setSelected] = useState<SaleOrder | null>(null);
 
   useEffect(() => {
     const getData = async () => {
@@ -44,9 +47,16 @@ export default function Page() {
 
   const keyword = search.trim().toLowerCase();
   const filtered = sales.filter((sale) =>
-    [sale.saleCode, sale.customerName, sale.customerPhone].some((value) =>
-      (value ?? "").toLowerCase().includes(keyword),
-    ),
+    [
+      sale.saleCode,
+      sale.customerName,
+      sale.customerPhone,
+      ...(sale.items ?? []).flatMap((item) => [
+        item.modelName,
+        item.itemImei,
+        item.itemSerialNumber,
+      ]),
+    ].some((value) => (value ?? "").toLowerCase().includes(keyword)),
   );
 
   const totalRevenue = sales
@@ -86,14 +96,32 @@ export default function Page() {
     },
     {
       id: "items",
-      header: "รายการ",
-      align: "end",
-      className: "hidden xl:table-cell",
-      cell: (sale) => (
-        <span className="tabular-nums text-muted-foreground">
-          {(sale.items ?? []).length} รายการ
-        </span>
-      ),
+      header: "สินค้าที่ขาย",
+      cell: (sale) => {
+        const items = sale.items ?? [];
+        const units = items.reduce(
+          (sum, item) => sum + Number(item.quantity ?? 0),
+          0,
+        );
+
+        if (items.length === 0) {
+          return <span className="text-muted-foreground">—</span>;
+        }
+
+        return (
+          <div className="min-w-0">
+            <p className="truncate">
+              {items[0].modelName}
+              {items.length > 1 ? ` +${items.length - 1} รายการ` : ""}
+            </p>
+            <p className="truncate text-xs tabular-nums text-muted-foreground">
+              {items[0].itemImei
+                ? `IMEI ${items[0].itemImei}`
+                : `${formatMoney(units)} ชิ้น`}
+            </p>
+          </div>
+        );
+      },
     },
     {
       id: "total",
@@ -115,6 +143,23 @@ export default function Page() {
         </Badge>
       ),
     },
+    {
+      id: "detail",
+      header: <span className="sr-only">รายละเอียด</span>,
+      align: "end",
+      cell: (sale) => (
+        <Button
+          size="icon-sm"
+          variant="ghost"
+          title="ดูรายละเอียด"
+          aria-label={`ดูรายละเอียดบิล ${sale.saleCode}`}
+          className="text-muted-foreground hover:bg-[#DCEEFF] hover:text-[#2580D9]"
+          onClick={() => setSelected(sale)}
+        >
+          <Eye aria-hidden="true" />
+        </Button>
+      ),
+    },
   ];
 
   return (
@@ -127,7 +172,7 @@ export default function Page() {
       <div className="border-b px-4 py-3 lg:px-6">
         <SearchInput
           label="ค้นหาบิลขาย"
-          placeholder="ค้นหาเลขที่บิล ชื่อลูกค้า หรือเบอร์โทร"
+          placeholder="ค้นหาเลขที่บิล ลูกค้า รุ่นสินค้า หรือ IMEI"
           value={search}
           onValueChange={setSearch}
           className="lg:max-w-sm"
@@ -135,13 +180,13 @@ export default function Page() {
       </div>
 
       <DataTable
-        caption="ประวัติบิลขายทั้งหมด พร้อมวันที่ ลูกค้า ยอดรวม และสถานะ"
+        caption="ประวัติบิลขายทั้งหมด พร้อมวันที่ ลูกค้า สินค้าที่ขาย ยอดรวม และสถานะ"
         columns={columns}
         rows={filtered}
         rowKey={(sale) => sale.saleId}
         loading={loading}
         error={error}
-        minWidthClass="min-w-[58rem]"
+        minWidthClass="min-w-[64rem]"
         maxHeightClass="max-h-[36rem]"
         mobileCard={(sale) => (
           <div>
@@ -161,13 +206,25 @@ export default function Page() {
             <CardFields>
               <CardField label="ลูกค้า">{sale.customerName}</CardField>
               <CardField label="เบอร์โทร">{sale.customerPhone}</CardField>
-              <CardField label="รายการ">
-                {(sale.items ?? []).length} รายการ
+              <CardField label="สินค้า">
+                {(sale.items ?? [])[0]?.modelName ?? "—"}
+                {(sale.items ?? []).length > 1
+                  ? ` +${(sale.items ?? []).length - 1}`
+                  : ""}
               </CardField>
               <CardField label="ยอดรวม">
                 ฿{formatMoney(sale.totalAmount)}
               </CardField>
             </CardFields>
+            <Button
+              size="sm"
+              variant="outline"
+              className="mt-3 w-full"
+              onClick={() => setSelected(sale)}
+            >
+              <Eye aria-hidden="true" />
+              ดูรายละเอียดสินค้า
+            </Button>
           </div>
         )}
         empty={
@@ -175,7 +232,7 @@ export default function Page() {
             <EmptyState
               icon={SearchX}
               title="ไม่พบบิลที่ค้นหา"
-              description={`ไม่มีเลขที่บิล ชื่อลูกค้า หรือเบอร์โทรที่ตรงกับ "${search.trim()}"`}
+              description={`ไม่มีบิล ลูกค้า รุ่นสินค้า หรือ IMEI ที่ตรงกับ "${search.trim()}"`}
             />
           ) : (
             <EmptyState
@@ -186,6 +243,8 @@ export default function Page() {
           )
         }
       />
+
+      <SaleDetailDialog sale={selected} onClose={() => setSelected(null)} />
     </Panel>
   );
 }
