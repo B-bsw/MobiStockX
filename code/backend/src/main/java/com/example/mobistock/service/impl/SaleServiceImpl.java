@@ -189,7 +189,15 @@ public class SaleServiceImpl implements SaleService {
                 .build();
         saleOrder.addPayment(payment);
 
-        if (Boolean.TRUE.equals(request.getRequiresTaxInvoice()) && request.getTaxInvoice() != null) {
+        /*
+         * ใบกำกับภาษีเป็น optional — แต่ถ้าขอมาแล้วไม่ส่งรายละเอียด ต้อง reject
+         * ของเดิมเงียบ ๆ ข้ามไป ทำให้บิลจบโดยไม่มีใบกำกับทั้งที่ POS ขอ
+         */
+        if (Boolean.TRUE.equals(request.getRequiresTaxInvoice())) {
+            if (request.getTaxInvoice() == null) {
+                throw new BadRequestException("Tax invoice details are required when requiresTaxInvoice is true");
+            }
+
             TaxInvoice taxInvoice = taxInvoiceFactory.createTaxInvoice(
                     generateInvoiceNumber(), request.getTaxInvoice(), grandTotal);
             saleOrder.setTaxInvoice(taxInvoice);
