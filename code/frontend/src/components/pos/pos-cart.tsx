@@ -1,7 +1,12 @@
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { formatMoney } from "@/lib/format";
 import type { CartItem } from "@/types/pos/types";
-import type { Customer, PaymentMethod } from "@/types/sales/types";
+import type {
+  Customer,
+  PaymentMethod,
+  TaxInvoiceErrors,
+  TaxInvoiceForm,
+} from "@/types/sales/types";
 import { PosPayment } from "./pos-payment";
 
 interface PosCartProps {
@@ -10,12 +15,20 @@ interface PosCartProps {
   customers: Customer[];
   customerId: string;
   paymentMethod: PaymentMethod;
+  taxInvoiceEnabled: boolean;
+  taxInvoice: TaxInvoiceForm;
+  taxInvoiceErrors: TaxInvoiceErrors;
   saving: boolean;
   message: string;
   isError: boolean;
   onReceivedChange: (value: string) => void;
   onCustomerChange: (value: string) => void;
   onPaymentMethodChange: (value: PaymentMethod) => void;
+  onTaxInvoiceToggle: (enabled: boolean) => void;
+  onTaxInvoiceChange: <K extends keyof TaxInvoiceForm>(
+    field: K,
+    value: TaxInvoiceForm[K],
+  ) => void;
   onQuantityChange: (id: number, quantity: number) => void;
   onCheckout: () => void;
 }
@@ -26,12 +39,17 @@ export function PosCart({
   customers,
   customerId,
   paymentMethod,
+  taxInvoiceEnabled,
+  taxInvoice,
+  taxInvoiceErrors,
   saving,
   message,
   isError,
   onReceivedChange,
   onCustomerChange,
   onPaymentMethodChange,
+  onTaxInvoiceToggle,
+  onTaxInvoiceChange,
   onQuantityChange,
   onCheckout,
 }: PosCartProps) {
@@ -110,6 +128,9 @@ export function PosCart({
         customers={customers}
         customerId={customerId}
         paymentMethod={paymentMethod}
+        taxInvoiceEnabled={taxInvoiceEnabled}
+        taxInvoice={taxInvoice}
+        taxInvoiceErrors={taxInvoiceErrors}
         saving={saving}
         message={message}
         isError={isError}
@@ -117,6 +138,8 @@ export function PosCart({
         onReceivedChange={onReceivedChange}
         onCustomerChange={onCustomerChange}
         onPaymentMethodChange={onPaymentMethodChange}
+        onTaxInvoiceToggle={onTaxInvoiceToggle}
+        onTaxInvoiceChange={onTaxInvoiceChange}
         onCheckout={onCheckout}
       />
     </aside>

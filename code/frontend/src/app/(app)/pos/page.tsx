@@ -9,10 +9,14 @@ import { PosHistory } from "@/components/pos/pos-history";
 import { useAuth } from "@/lib/auth-context";
 import type { CartItem, PosProduct, PosTab } from "@/types/pos/types";
 import type { ProductModel } from "@/types/products/types";
-import type {
-  Customer,
-  PaymentMethod,
-  SaleOrder,
+import {
+  EMPTY_TAX_INVOICE,
+  validateTaxInvoice,
+  type Customer,
+  type PaymentMethod,
+  type SaleOrder,
+  type TaxInvoiceErrors,
+  type TaxInvoiceForm,
 } from "@/types/sales/types";
 
 function toPosProduct(model: ProductModel): PosProduct {
@@ -42,6 +46,13 @@ export default function Page() {
   const [sales, setSales] = useState<SaleOrder[]>([]);
   const [customerId, setCustomerId] = useState("");
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("CASH");
+
+  const [taxInvoiceEnabled, setTaxInvoiceEnabled] = useState(false);
+  const [taxInvoice, setTaxInvoice] =
+    useState<TaxInvoiceForm>(EMPTY_TAX_INVOICE);
+  const [taxInvoiceErrors, setTaxInvoiceErrors] = useState<TaxInvoiceErrors>(
+    {},
+  );
 
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState("");
@@ -119,8 +130,59 @@ export default function Page() {
     );
   }
 
+
+  function prefillFrom(selectedCustomerId: string): TaxInvoiceForm {
+    const customer = customers.find(
+      (candidate) => String(candidate.customerId) === selectedCustomerId,
+    );
+
+    return {
+      ...EMPTY_TAX_INVOICE,
+      companyOrBuyerName: customer
+        ? `${customer.firstName} ${customer.lastName}`.trim()
+        : "",
+      taxId: customer?.taxNumber ?? "",
+      address: customer?.address ?? "",
+    };
+  }
+
+  function toggleTaxInvoice(enabled: boolean) {
+    setTaxInvoiceEnabled(enabled);
+    setTaxInvoiceErrors({});
+    setMessage("");
+    setTaxInvoice(enabled ? prefillFrom(customerId) : EMPTY_TAX_INVOICE);
+  }
+
+  function changeCustomer(value: string) {
+    setCustomerId(value);
+
+    if (taxInvoiceEnabled) {
+      setTaxInvoice(prefillFrom(value));
+      setTaxInvoiceErrors({});
+    }
+  }
+
+  function changeTaxInvoice<K extends keyof TaxInvoiceForm>(
+    field: K,
+    value: TaxInvoiceForm[K],
+  ) {
+    setTaxInvoice((current) => ({ ...current, [field]: value }));
+    setTaxInvoiceErrors((current) => ({ ...current, [field]: undefined }));
+  }
+
   async function checkout() {
     if (items.length === 0 || customerId === "" || !user) return;
+
+    if (taxInvoiceEnabled) {
+      const found = validateTaxInvoice(taxInvoice);
+
+      if (Object.keys(found).length > 0) {
+        setTaxInvoiceErrors(found);
+        setIsError(true);
+        setMessage("กรุณากรอกข้อมูลใบกำกับภาษีให้ครบถ้วน");
+        return;
+      }
+    }
 
     const total = items.reduce(
       (sum, item) => sum + item.product.price * item.quantity,
@@ -148,14 +210,30 @@ export default function Page() {
           amount: total,
           referenceNo: null,
         },
-        requiresTaxInvoice: false,
+        requiresTaxInvoice: taxInvoiceEnabled,
+        taxInvoice: taxInvoiceEnabled
+          ? {
+              companyOrBuyerName: taxInvoice.companyOrBuyerName.trim(),
+              taxId: taxInvoice.taxId.replace(/[\s-]/g, ""),
+              branchNumber: taxInvoice.branchNumber.trim() || "00000",
+              address: taxInvoice.address.trim(),
+            }
+          : null,
       });
 
       const saleCode = response.data?.data?.saleCode ?? "";
+      const invoiceNumber = response.data?.data?.taxInvoice?.invoiceNumber ?? "";
 
       setItems([]);
       setReceived("");
-      setMessage(`ขายสำเร็จ เลขที่บิล ${saleCode}`);
+      setTaxInvoiceEnabled(false);
+      setTaxInvoice(EMPTY_TAX_INVOICE);
+      setTaxInvoiceErrors({});
+      setMessage(
+        invoiceNumber
+          ? `ขายสำเร็จ เลขที่บิล ${saleCode} · ใบกำกับภาษี ${invoiceNumber}`
+          : `ขายสำเร็จ เลขที่บิล ${saleCode}`,
+      );
       setReloadToken((token) => token + 1);
     } catch {
       setIsError(true);
@@ -192,12 +270,17 @@ export default function Page() {
             customers={customers}
             customerId={customerId}
             paymentMethod={paymentMethod}
+            taxInvoiceEnabled={taxInvoiceEnabled}
+            taxInvoice={taxInvoice}
+            taxInvoiceErrors={taxInvoiceErrors}
             saving={saving}
             message={message}
             isError={isError}
             onReceivedChange={setReceived}
-            onCustomerChange={setCustomerId}
+            onCustomerChange={changeCustomer}
             onPaymentMethodChange={setPaymentMethod}
+            onTaxInvoiceToggle={toggleTaxInvoice}
+            onTaxInvoiceChange={changeTaxInvoice}
             onQuantityChange={changeQuantity}
             onCheckout={checkout}
           />
