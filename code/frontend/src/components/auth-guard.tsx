@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, type ReactNode } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Panel } from "@/components/ui/panel";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@/lib/auth-context";
+import { canAccess, landingRoute, routeForPath } from "@/lib/permissions";
 
 /**
  * Shows the shape of the page that is about to arrive rather than a line of
@@ -34,12 +35,24 @@ function PageSkeleton({ message }: { message: string }) {
 export function AuthGuard({ children }: { children: ReactNode }) {
   const { user, loading } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
+
+  const route = routeForPath(pathname);
+  // An unknown path is left to the 404 handler; a known one must be permitted.
+  const permitted = !user || route === null || canAccess(user.role, route);
 
   useEffect(() => {
-    if (!loading && !user) {
+    if (loading) return;
+
+    if (!user) {
       router.replace("/auth/login");
+      return;
     }
-  }, [loading, user, router]);
+
+    if (!permitted) {
+      router.replace(landingRoute(user.role));
+    }
+  }, [loading, user, permitted, router]);
 
   if (loading) {
     return <PageSkeleton message="กำลังตรวจสอบสิทธิ์" />;
@@ -47,6 +60,10 @@ export function AuthGuard({ children }: { children: ReactNode }) {
 
   if (!user) {
     return <PageSkeleton message="กำลังพาไปหน้าเข้าสู่ระบบ" />;
+  }
+
+  if (!permitted) {
+    return <PageSkeleton message="ไม่มีสิทธิ์เข้าถึงหน้านี้ กำลังพากลับ" />;
   }
 
   return <>{children}</>;

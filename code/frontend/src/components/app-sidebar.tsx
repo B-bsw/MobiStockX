@@ -12,6 +12,7 @@ import {
   ReceiptText,
   LogOut,
   UserRound,
+  Users,
   X,
   type LucideIcon,
 } from "lucide-react";
@@ -28,18 +29,20 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { ROLE_LABEL, useAuth } from "@/lib/auth-context";
+import { ROLE_ROUTES, type AppRoute } from "@/lib/permissions";
 import Image from "next/image";
 import logo from "@/../public/logo.png";
 
 interface NavItem {
-  href: string;
+  href: AppRoute;
   label: string;
   icon: LucideIcon;
 }
 
 /**
- * Grouped so the seven destinations read as three decisions instead of one
- * undifferentiated list.
+ * Grouped so the destinations read as a few decisions instead of one
+ * undifferentiated list. What each role actually sees is filtered from
+ * ROLE_ROUTES below, so this stays the full catalogue.
  */
 const NAV_GROUPS: { label: string; items: NavItem[] }[] = [
   {
@@ -62,17 +65,29 @@ const NAV_GROUPS: { label: string; items: NavItem[] }[] = [
       { href: "/sales", label: "ประวัติการขาย", icon: ReceiptText },
     ],
   },
+  {
+    label: "ผู้ใช้งาน",
+    items: [{ href: "/users", label: "จัดการผู้ใช้", icon: Users }],
+  },
 ];
-
-const ALL_ITEMS = NAV_GROUPS.flatMap((group) => group.items);
 
 export function AppSidebar() {
   const pathname = usePathname();
   const { setOpenMobile } = useSidebar();
   const { user, logout } = useAuth();
 
+  // Only the destinations this role may open. A group with nothing left in it
+  // drops out entirely rather than leaving an orphan heading.
+  const allowed = user ? ROLE_ROUTES[user.role] : [];
+  const groups = NAV_GROUPS.map((group) => ({
+    ...group,
+    items: group.items.filter((item) => allowed.includes(item.href)),
+  })).filter((group) => group.items.length > 0);
+
+  const visibleItems = groups.flatMap((group) => group.items);
+
   // Longest matching prefix wins, so /products/add does not also light up /products.
-  const activeHref = ALL_ITEMS.filter(
+  const activeHref = visibleItems.filter(
     ({ href }) =>
       pathname === href || (href !== "/" && pathname.startsWith(href + "/")),
   ).sort((a, b) => b.href.length - a.href.length)[0]?.href;
@@ -105,7 +120,7 @@ export function AppSidebar() {
 
       <SidebarContent className="gap-0 px-6">
         <nav aria-label="เมนูหลัก">
-          {NAV_GROUPS.map((group) => (
+          {groups.map((group) => (
             <SidebarGroup key={group.label} className="px-0 py-1.5">
               <SidebarGroupLabel className="px-3 text-xs font-medium text-sidebar-muted">
                 {group.label}
